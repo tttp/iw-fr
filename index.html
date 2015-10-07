@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>FR Integrity Watch</title>
+<title>Integrity Watch FRANCE</title>
 <link rel="shortcut icon" href="favicon.ico">
 <link href="css/bower.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/dc.css"/>
@@ -37,7 +37,7 @@
 <script>
 function getCost (d) { 
   //return +d.cout_de_lobbying;
-  return +d.max;
+  return +d.min;
 } 
 
 $( document ).ready(function() {
@@ -118,24 +118,6 @@ function grid (selector,data) {
 		}
 		
 
-var mainCategories = {"1":"Consultants","2":"Corporate","3":"NGOs","4":"Think tanks","5":"Churches","6":"Municipal"};
-
-var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Self-employed consultants","21":"Companies & groups","22":"Trade and business associations",
-"24":"Other organisations",
-"25":"Trade and business organisations",
-"26":"Trade unions",
-"27":"Other in house lobbyists",  
-"31":"Non-governmental organisations, platforms and networks and similar","41":"Think tanks and research institutions","42":"Academic institutions","51":"Churches & religious communities","61":"Local, regional and municipal authorities (at sub-national level)","62":"Other public or mixed entities, etc.","444":"Trade unions and professional associations","446":"Trade unions and professional associations","450":"Regional structures","66":"Other public or mixed entities, etc","466":"Trade unions and professional associations","469":"Trade unions and professional associations","477":"Other public or mixed entities, created by law whose purpose is to act in the public interest","480":"Trade unions and professional associations","501":"Trade unions and professional associations","504":"Other public or mixed entities, created by law whose purpose is to act in the public interest","506":"Trade unions and professional associations","508":"Trade unions and professional associations","5055":"Trade unions and professional associations","5060":"Trade unions and professional associations","5062":"Other public or mixed entities, created by law whose purpose is to act in the public interest","5065":"Trade unions and professional associations","5073":"Trade unions and professional associations","5074":"Regional structures","5075":"Trade unions and professional associations","5085":"Regional structures","5087":"Trade unions and professional associations","5089":"Trade unions and professional associations","5095":"Trade unions and professional associations","5099":"Transnational associations and networks of public regional or other sub-national authorities","5105":"Trade unions and professional associations","5110":"Trade unions and professional associations","5115":"Trade unions and professional associations","5130":"Trade unions and professional associations","5133":"Regional structures","5141":"Other public or mixed entities, created by law whose purpose is to act in the public interest","5157":"Transnational associations and networks of public regional or other sub-national authorities","5159":"Trade unions and professional associations","5171":"Trade unions and professional associations","5172":"Other public or mixed entities, created by law whose purpose is to act in the public interest","5197":"Regional structures","5205":"Trade unions and professional associations","5226":"Trade unions and professional associations","5227":"Trade unions and professional associations","5230":"Trade unions and professional associations","5256":"Trade unions and professional associations","5262":"Regional structures","5356":"Trade unions and professional associations","5371":"Trade unions and professional associations","5374":"Trade unions and professional associations","5390":"Regional structures","5400":"Trade unions and professional associations",
-"62": "Other public or mixed",
-"63": "Regional structures",
-"64": "Other sub-national public authorities",
-"65": "Transnational public networks",
-"66": "Other public or mixed entities", 
-
-};
-
-
-
 
 
 	rep = ndx.dimension(function(d) {
@@ -145,20 +127,12 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
 	drawTable();
 	drawMainCategory();
   	drawCounter();
-//	drawSector();
-//	drawExpense();
+	drawSector();
+	drawExpense();
 //	drawNbMeetings();
-//	drawNbLobbyists();
-//  	drawNbBadges();
+	drawNbLobbyists();
+  	drawNbBadges();
 //    drawCostByFTE();
-//	drawCountry();
-/*	drawDate();
-	drawMeetings();
-	drawWeekDay();
-	drawHost();
-	drawHostType();
-	drawRange();
-*/
 
 	function rotateBarChartLabels(chart) {
 		chart.svg().selectAll('.axis.x text')
@@ -176,140 +150,37 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
     //group.order (function(p){return p.nb});
   	var count = dc.dataCount(".org-count")
 		.dimension(ndx)
-	  .group (ndx.groupAll());
+	  .group (ndx.groupAll())
+	  .on("renderlet.all", function(c) {
 
       RefreshTable();
-
+    });
 //			$(".resetall").attr("disabled",disabled);
 //			ga && ga('send', 'event', 'filter', 'subset', filtered);
 
   }
 
-	function drawCountry () {
-	var dim = ndx.dimension (function(d) {
-			c = countries[d.contact_country][1];
-			if(c == "Belgium"){
-				c = "Belgium / FR"
-			};
-			return c;
-	});
-
-	var group   = dim.group().reduceSum(function(d) {   
-			return 1; });
-
-		var filteredGroup = (function(source_group) {
-			return {
-				all: function() {
-					return source_group.top(10).filter(function(d) {
-						return (d.key != "Not mentioned" && d.value != 0);
-					});
-				}
-			};
-      })(dim.group().reduceSum(function(d) {return 1; }));
-
-		var graph = dc.rowChart(".country")   
-			.margins({top: 0, right: 3, bottom: 20, left: 3})
-			.height(340)
-			.gap(2)
-			.x(d3.scale.ordinal())
-			.elasticX(true)
-			.colorCalculator(function(d, i) {
-				return "#ecb005";
-			})
-			.ordering(function(d){return -d.value})
-			.dimension(dim)
-			.group(filteredGroup);
-
-	}
-
-
-
 
 	function drawExpense () {
 		var dim = ndx.dimension (function(d) {
-
-/*      if ((+d.meetings + +d.accredited + +d.cost_min +d.cost_absolute) == 0){
-        console.log ("filtered");
-        return "";
-      }
-*/
         return getCost(d);
-//      return d.id;
 	});
   
-    var group   = dim.group().reduceSum( function(d) {return +d.meetings;});
-
-    /*
-  var group   = dim.group().reduce(
-      function(p,d) {  
-        p.nb +=1;
-        p.fte += +d.fte;
-        p.accredited += +d.accredited;
-        p.cost += +getCost(d);
-        p.meetings += +d.meetings;
-        return p;
-      },
-      function(p,d) {  
-        p.nb -=1;
-        p.fte += d.fte;
-        p.accredited += +d.accredited;
-        p.cost-= +getCost(d);
-        p.meetings -= +d.meetings;
-        return p;
-      },
-      function(p,d) {  
-        return {nb:0,fte:0,accredited:0,cost:0, meetings:0}; 
-      }
-    )
-    .order(function (p) {return p.nb});
-
-		var filteredGroup = (function(source_group) {
-			return {
-				top: function() {
-					return source_group.top(Infinity).filter(function(d) {
-						return (d.key != "");
-					});
-				}
-			};
-      })(group);
-
-	var graph = dc.bubbleChart (".expense")   
-//		.colorCalculator(function(d, i) { return blue;})
-		.width(750)
-		.height(250)
-		.margins({top: 20, right: 20, bottom: 20, left: 30})
-		.yAxisLabel("Nb Meetings")
-		.dimension(dim)
-		.group(filteredGroup)
-		.keyAccessor(function (d) {
-        return d.value.cost;
-		})
-		.valueAccessor(function (d) {
-				return d.value.meetings;
-		})
-		.radiusValueAccessor(function (d) {
-        if (d.value.fte  > 40) return 40;
-				return d.value.fte;
-		})
-		.x(d3.scale.linear().domain([0, 10000000]))
-		.y(d3.scale.linear().domain([0, 40]))
-		.r(d3.scale.linear().domain([0, 1000]))
-		.minRadiusWithLabel(5000)
-*/
+    var group   = dim.group().reduceSum( function(d) {return 1;});
 
   var formatInteger = d3.format(".0f");
-  var maxBudget=20000000;
+  var maxBudget=5000000;
 	var graph = dc.barChart (".expense")   
 		.height(340)
-		.width(530)
-		.gap(0)
+		.width(830)
+		.gap(1)
     .on("preRender",(function(chart,filter){
     }))
 		.margins({top: 0, right: 10, bottom: 20, left: 40})
-		.x(d3.scale.sqrt().domain([0, maxBudget]))
- //   .x(d3.scale.ordinal())
-//    .xUnits(dc.units.ordinal)
-//		.elasticX(true)
+	//	.x(d3.scale.sqrt().domain([0, maxBudget]))
+    .x(d3.scale.ordinal())
+    .xUnits(dc.units.ordinal)
+		.elasticX(true)
 		.elasticY(true)
 				.brushOn(true)
 		//.yAxisLabel("Lobbying expense")
@@ -319,7 +190,7 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
 		.dimension(dim)
 		.group(group);
 		//graph.xAxis().ticks(5).tickFormat(d3.format(",.0f"));
-    graph.xAxis().ticks(5).tickFormat(function(d) {return formatInteger(d / 1e6) + "M";});
+    graph.xAxis().ticks(5).tickFormat(function(d) {return formatInteger(d / 1e3) + "k€";});
 
 		graph.yAxis().ticks(3).tickFormat(d3.format(",.0f"));
 	}
@@ -368,10 +239,10 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
 
 	function drawNbBadges () {
 		var dim = ndx.dimension (function(d) {
-        if (!d.accredited) return 0;
-        if (d.accredited>4)
+        if (!d.nb_card) return 0;
+        if (d.nb_card>4)
           return 5;
-			  return d.accredited;
+			  return d.nb_card;
 		});
 
 		var group   = dim.group().reduceSum(function(d) {   return 1; });
@@ -382,6 +253,7 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
 		var chart = dc.pieChart(".accreditations")
 			.innerRadius(50).radius(100)
 			.height(200)
+			.width(200)
 			.minAngleForLabel(.2)
 			.label(function(d){ 
 	          if (d.key == 5)
@@ -412,17 +284,17 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
 		var color = d3.scale.ordinal()
 		    .range(["#f9e5ad", "#f1ca58","#ecb007","#e7960e","#e37e17","#de631f"]);
 		var dim = ndx.dimension (function(d) {
-        if (d.fte>4)
+        if (d.nb_personne>4)
           return 5;
-			  return (+d.fte).toFixed();
+			  return (+d.nb_personne).toFixed();
 		});
 
 		var group   = dim.group().reduceSum(function(d) {   return 1; });
 
 		var chart = dc.pieChart(".nblobbyists")
 			.innerRadius(50).radius(100)
+			.width(200)
 			.height(200)
-			.width(220)
 			.label(function(d){ 
 	          if (d.key == 5)
 	            return ">5";
@@ -430,15 +302,15 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
 				.title (function(d){ 
 	         switch(d.key) {
 	           case 0:
-	             return "no staff";
+	             return "pas de lobbyiste";
 	           case 1:
-	             return d.key + " staff: " + d.value;
+	             return d.key + " lobbyistes: " + d.value;
 	             break;
 	           case 5:
-	             return ">5 staff: " + d.value;
+	             return ">5 lobbyistes: " + d.value;
 	             break;
 	           default:
-	             return d.key + " staffs: " + d.value;
+	             return d.key + " lobbyistes: " + d.value;
 	         }
 	       })
 			.dimension(dim)
@@ -448,107 +320,58 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
 			});
 	}
 
-	function drawCostByFTE () {
-		var dim = ndx.dimension (function(d) {
-        if (d.costbyfte>=500000)
-          return 500000;
-        if (d.costbyfte == 0 && (+d.fte)<1)
-          return "-1";
-        if (d.costbyfte == 0)
-          return 0;
-        return 1;
-			  return d.fte;
-		});
-
-		var group   = dim.group().reduceSum(function(d) {   return 1; });
-
-    var nameRange = function (d) {
-      var names={
-      "-1":"no cost & < 1 fte",
-      0:"some lobbyist but no cost",
-      1:"some cost",
-      500000:">500k by lobbyist"
-      }
-      return names[d.key];
-    }
-		var chart = dc.pieChart(".costbyfte")
-			.innerRadius(0).radius(80)
-			.height(200)
-			.label(function(d){ 
-          return nameRange(d);
-      })
-			.title (function(d){ 
-          return nameRange(d) + ": "+d.value;
-       })
-			.dimension(dim)
-			.group(group);
-	}
-
 	function drawMainCategory () {
 		var dim = ndx.dimension (function(d) {
 			  return d.categorie;
 		});
 
 		var group   = dim.group().reduceSum(function(d) {   return 1; });
+	var lobby_sector_colors = {	
+		"Entreprise":"#cf270e",//Corporate
+		"Association d'entreprises":"#cf270e",//Corporate
+		"Conseil privé":"#d74517",//Consultants
+		"Self-employed consultants":"#d74517",//Consultants
+		"Association, ONG":"#ecb005",//NGOs
+		"Entreprise publique":"#de6320",//
+		"Organisation représentative":"#f6d882",//Churches
+		"Organisme public ou parapublic":"#e58a13",//Municipal
+
+		"Unknown":"#cccccc"
+	}
 		
 		var chart = dc.pieChart(".categorie")
 			.innerRadius(50).radius(100)
-			.height(200)
+			.width(200)
 			.label(function(d){ return d.categorie })
 			.dimension(dim)
-      .legend(dc.legend())
+    .colorCalculator(function(d, i) {
+			return lobby_sector_colors[d.key];
+		})
+      .legend(dc.legend().y(20).x(220))
 			.group(group);
 	}
 
 	function drawSector () {
 	var dim = ndx.dimension (function(d) {
-			return d.sub_category;
+			return d.secteur;
 	});
 
 	var group   = dim.group().reduceSum(function(d) {   return 1; });
-		/*
-			 //return [representatives[d.guestid].categorie,representatives[d.guestid].categorie_title];
-			 var t={};
-			 group.all().forEach (function (d) {if (d.key[0]) t[d.key[0]]=d.key[1]})
-			 JSON.stringify(t);
-		*/
 		
-	var lobby_sector_colors = {	
-		"Companies & groups":"#cf270e",//Corporate
-		"Trade and business organisations":"#cf270e",//Corporate
-		"Other Business organisations":"#cf270e",//Corporate
-		"Trade unions":"#cf270e",//Corporate
-		"Other in house lobbyists":"#cf270e",//Corporate
-		"Law firms":"#d74517",//Consultants
-		"Professional consultancies":"#d74517",//Consultants
-		"Self-employed consultants":"#d74517",//Consultants
-		"Non-governmental organisations, platforms and networks and similar":"#ecb005",//NGOs
-		"Think tanks and research institutions":"#de6320",//Think tanks
-		"Academic institutions":"#de6320",//Think tanks
-		"Churches & religious communities":"#f6d882",//Churches
-		"Local, regional and municipal authorities (at sub-national level)":"#e58a13",//Municipal
-		"Regional structures":"#e58a13",//Municipal
-		"Other sub-national public authorities":"#e58a13",//Municipal
-		"Transnational public networks":"#e58a13",//Municipal
-		"Other public or mixed entities":"#e58a13",//Municipal
-
-		"Unknown":"#cccccc"
-	}
 
 	var graph = dc.rowChart (".sector")   
-		.height(380)
+		.height(850)
 		//.width(350)
 		.gap(1)
 		.margins({top: 0, right: 0, bottom: 0, left: 0})
 		.x(d3.scale.ordinal())
-		.label(function(d){ return subCategories[d.key] || d.key })
-		.title (function(d){ return subCategories[d.key] +" "+d.value })
+		.label(function(d){ return d.key })
+		.title (function(d){ return d.key +" "+d.value })
 		.elasticX(true)
-		.colorCalculator(function(d, i) {
-			if (d.key == "Not mentioned" || d.key == "Unknown" || d.key == "Not registered")
+    .colorCalculator(function(d, i) {
+			if (d.key == "NULL" || d.key == "")
 				return "#cccccc";
-			return lobby_sector_colors[subCategories[d.key]]
-			//return "#ecb005";
+			return "#ecb005";
 		})
 		.dimension(dim)
 		.group(group)
@@ -583,35 +406,56 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
                 }
               //data: "name",  
               },{
-              "searchable": false,
-              "orderable": true,
-              "type":"num-fmt",
-              "targets": 4,
-              "className": "number",
-              "render": function ( data, type, row ) { 
-                return d3.format(",g")(data);
-              },
-              data: function (row, type, val, meta) { if (!row) {return "";} ;return getCost(row);}
-              },{
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
               "targets": 2,
-              data: "secteur",  
-              },{
-              "defaultContent":"No data",
-              "searchable": false,
-              "orderable": true,
-              "targets": 5,
               "data": "categorie"
               },{
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
-              "type":"num-fmt",
               "targets": 3,
-              data: "nb_personne_activite_ri",  
-              } 
+              data: "secteur",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "type":"num-fmt",
+              "targets": 4,
+              data: "nb_personne",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "type":"num-fmt",
+              "targets": 5,
+              data: "nb_card",  
+              },{
+              "searchable": false,
+              "orderable": true,
+              "type":"num-fmt",
+              "targets": 6,
+              "className": "number",
+              "render": function ( data, type, row ) { 
+                return d3.format(",g")(data);
+              },
+              data: function (row, type, val, meta) { if (!row) {return "";} ;
+                  return getCost(row);
+                }
+              },{
+              "searchable": false,
+              "orderable": true,
+              "type":"num-fmt",
+              "targets": 7,
+              "className": "number",
+              "render": function ( data, type, row ) { 
+                return d3.format(",g")(data);
+              },
+              data: function (row, type, val, meta) { if (!row) {return "";} ;
+                  return row.max;
+                }
+              }
             ],
             "iDisplayLength" : 100,
             "bPaginate": true,
@@ -634,34 +478,19 @@ var subCategories = {"11":"Professional consultancies","12":"Law firms","13":"Se
     	if (d.acronyme != "") {
     		acr = "("+d.acronyme+")"
     	}
-    	s += "<div class='l_name'><label>Name</label> "+d.raison_sociale+" "+acr+"</div>";
-    	s += "<div class='l_category'><label>Type</label> "+mainCategories[d.categorie]+": "+subCategories[d.sub_category]+"</div>";
-    	s += "<div class='l_country'><label>Country</label> "+countries[d.contact_country][1]+"</div>"
-    	s += "<div class='l_cost'><label>Lobby Budget (&euro;)</label> "
-	    	if (d.cost_absolute == "") {
-	    		s += "min "+d.min+" / max "+d.max
-	    	}else {
-	    		s += d.cost_absolute
-	    	}
-    	s += "</div>";
-    	s += "<div class='l_fte'><label>Total Lobbyist</label> "+d.fte+"</div>";
-    	s += "<div class='l_accredited'><label>Accredited Lobbyist</label> "+d.accredited+"</div>";
-    	s += "<div class='l_meetings'><label>Reported Meetings</label> "+d.meetings+"</div>";
-    	s += "<div class='l_declaration'><label>Transparency Register Declaration</label> "+"<a href='http://ec.europa.eu/transparencyregister/public/consultation/displaylobbyist.do?id="+d.code+"' target='_blank'>Transparency registry</a></div>";
-    	s += "<div class='l_initiatives'><label>Main FR initiatives, policies and legislative files followed by the organisation</label> <span id='initiatives"+d.id+"'></span></div>";
+    	s += "<div class='l_name'><label>Raison sociale</label> "+d.raison_sociale+" "+acr+"</div>";
+    	s += "<div class='l_category'><label>Catégorie</label> "+d.categorie+"</div>";
+    	s += "<div class='l_cost'><label>Budget Lobbying(&euro;)</label>"+d.cout_lobbying+ "</div>";
+    	s += "<div class='l_cost'><label>Chiffre d'affaire(&euro;)</label>"+d.budget_global+ "</div>";
+    	s += "<div class='l_year'><label>Pour l'année comptable</label> "+d.annee+"</div>";
+    	s += "<div class='l_year'><label>Nombre de badges</label> "+d.nb_card+"</div>";
+    	s += "<div class='l_fte'><label>Nombre lobbyistes</label> "+d.nb_personne+"</div>";
+    	s += "<div class='l_initiatives'><label>Activités de lobbying</label>"+d.initiative_assemblee+"</div>";
+    	s += "<div class='l_code'><label>Code de conduite</label> "+d.code+"</div>";
+    	s += "<div class='l_code_autre'><label>Charte de lobbying</label> "+d.code_de_conduite+"</div>";
+    	s += "<div class='l_declaration'><label>Déclaration originale</label> "+"<a href='http://www2.assemblee-nationale.fr/representant/representant_interet_detail/"+d.id_representant+"' target='_blank'>Fiche à l'Assemblée nationale</a></div>";
     	s += "</div>";
     	return s;
-      /*var s="<div>More details on:";
-      if (!d.code)
-        return "Data missing to display";
-      
-      s += '<div class="btn-group" qdata-toggle="buttons">';
-      s += "<button class='btn btn-sm btn-primary' data-type='event'>Events</button>";
-      s += "<button class='btn btn-sm btn-primary' data-type='accreditation'>Accreditations</button>";
-      s += "<button class='btn btn-sm btn-primary' data-type='financial_data'>Financial declarations</button>";
-      s += "<button class='btn btn-sm btn-primary' data-type='representative'>Details</button>";
-      s += "<a href='http://ec.europa.eu/transparencyregister/public/consultation/displaylobbyist.do?id="+d.code+"' class='btn btn-sm' target='_blank'>Transparency registry</a>";
-      return s+"</div></div>"+"<pre>"+JSON.stringify(d,null,2)+"</pre>";*/
     }
 
     datatable.on('click', 'button', function () {
@@ -789,7 +618,7 @@ function eventpopup (epid) {
 					<li id="mi_tool_btn"><a href="ep.html"><strong>MEP</strong> <br />incomes</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="about.html">About</a></li>
+					<li><a href="about.html">A propos</a></li>
 					<li><a href="contact.html">Contact</a></li>
 				</ul>
 			</div>
@@ -802,9 +631,12 @@ function eventpopup (epid) {
 			<div class="col-md-3 col-lg-3" id="about_content_icon">
 			</div>
 			<div class="col-md-6 col-lg-6" id="about_content">
-				<p>This is a user-friendly interactive database that provides a unique overview of the lobby organisations registered in the FR Transparency Register – the register of Brussels lobbyists.
-				<br /><a href="about.html" class="more">Read more</a></p>
-				<p>By simply clicking on the graph or list below users can rank, sort and filter the FR lobby organisations.</p>
+				<p>
+        Ceci est une base de données interactive et facile à utiliser fournissant un aperçu unique des groupes de pression, représentants d’intérêts et organismes de lobbying enregistrés auprès de L’Assemblée Nationale en France. 
+				<br /><a href="about.html" class="more">Voir plus</a></p>
+				<p>
+        L’utilisation de cet outil est simple: en cliquant sur les graphes ou les titres de la liste ci-dessous l’outil peut classer, trier et filtrer les organisations de lobbyistes français.
+        </p>
 			</div>
 			<div class="col-md-3" id="about_social">
 				<br/>
@@ -850,20 +682,12 @@ function eventpopup (epid) {
 			</div>
 			<div class="col-sm-7 col-md-7" id="filter_numbers">
 				<div class="row">
-					<div class="col-md-2" id="currently_selected_text"><p>Currently selected:</p></div>
+					<div class="col-md-2" id="currently_selected_text"><p>Sélectionné:</p></div>
 					<div class="col-md-2 filter_number">
 						<div id="mep_number" class="dc-data-count org-count">
-							<span id="abig_number" class="big_number filter-count"></span>out of <strong class="total-count"></strong> organisations
+							<span id="abig_number" class="big_number filter-count"></span>parmi <strong class="total-count"></strong> organisations
 						</div>
 					</div>
-					
-					
-            		<!--div class="col-md-2 filter_number">
-            			<div title="full time equivalent"><span class="big_number afilter_long nbcost"></span> Lobby budget</div>
-            		</div-->
-            		<div class="col-md-4 filter_number">
-            			<div class="dc-data-count org-count"><span class="big_number afilter_long nbaccredited"></span> out of <strong>6,053</strong> Lobbyists accredited with the European Parliament</div>
-            		</div>
 				</div>
 			</div>
 			<div class="col-xs-3 col-sm-3 col-md-1" id="resetall_container">
@@ -877,35 +701,30 @@ function eventpopup (epid) {
 	<div class="container_wrap" id="main_charts_wrap">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-3 chart_box">
-					<h3>Top 10 Countries</h3>
-					<div class="info_chart">
-						<span class="info">info</span>
-						<p class="desc">Countries where organisations are headquartered according to their filings with the FR Transparency Register. Graph indicates the number of organisations headquartered in each country.
-						</p>
-					</div>
-					<div class="country">
-					</div>
-					<br class="clear" />
-					<div class="label">Number of organisations</div>
-				</div>
-				<div class="col-md-6 chart_box" id="lobbying_expense">
-					<h3>Lobbying expense</h3>
-					<div class="info_chart">
-						<span class="info">info</span>
-						<p class="desc">Lobby budget as declared by the organisation in the FR Transparency Register under estimate of the annual costs related to activities covered by the register. According to the official guidelines estimates should include staff costs, office, administrative and operational expenses, outsourced activities, memberships and other relevant costs.
-						</p>
-					</div>
-					<div class="expense">
-					</div>
-					<label>Nb Organisations</label>
-				</div>
-				
-				<div class="col-md-3 chart_box">
+          		<div class="col-md-4">
+          			<div class="chart_box">
+          				<h3>Secteur</h3>
+          				<div class="info_chart">
+          					<span class="info">info</span>
+          					<p class="desc">
+      Les classifications dans ce graphe sont basés sur les déclarations auprès de l’Assemblée. Pour pouvoir les visualiser dans ce graph certains catégories ont été regroupés, simplifiés et pour certains organisations une seule catégorie parmi plusieurs a été sélectionnée.
+
+       
+          					</p>
+          				</div>
+          				<div class="sector range chart-full"></div>
+          				<br class="clear" />
+          			</div>
+          	</div>
+       <div class="col-md-8">
+       <div class="row">
+
+				<div class="col-md-8 chart_box">
 					<h3>Categorie</h3>
 					<div class="info_chart">
 						<span class="info">info</span>
-						<p class="desc">The classifications in this graph reflect the categories established by the FR Transparency Register. Names have been shortened. The shares of the pie reflect the number of registered organisations per category.
+						<p class="desc">
+            Les classifications dans ce graphe reflètent les catégories établies par le registre de l’Assemblée. Les noms ont été raccourcis et parfois groupés. Les sections du camembert reflètent le nombre d'organisations enregistrées par catégorie.
 						</p>
 					</div>
 					<div class="categorie"></div>
@@ -914,67 +733,43 @@ function eventpopup (epid) {
 					</div>
 					<br class="clear" />
 				</div>
-			</div>
-			<div class="row">
-				<!--<div class="col-md-3 chart_box">
-					<h3>Portfolio</h3>
-					<div class="host range chart-full"></div>
-					<br class="clear" />
-				</div>-->
-				<!--div class="col-md-6 chart_box">
-					<h3>Cost by lobbyist</h3>
-				  	<div class="costbyfte">
-		   			</div>
-          		</div-->
-          		<div class="col-md-8">
-          			<div class="row">
 	          			<div class="col-md-4 chart_box" id="hosttype">
-	          					<h3>Parliament accreditations<!--span class="info">info</span--></h3>
+                    <div>
+	          					<h3>Cartes de représentants<!--span class="info">info</span--></h3>
 	          					<div class="info_chart">
 	          						<span class="info">info</span>
-	          						<p class="desc">Number of access badges to the European Parliament per lobby organisation. All registered lobby organisations can obtain access badges to the European Parliament – numbers are not caped. Share of the pie indicates the number of organisations that have this many badges.
+	          						<p class="desc">
+                        Nombre de cartes d’accès pour l’Assemblée déclarés par les organisations mêmes auprès du registre de l’Assemblée.
 	          						</p>
 	          					</div>
 	          					<div class="accreditations"></div>
 	          					<br class="clear" />
 	          				</div>
-	      				<div class="col-md-4 chart_box">
-	      					<h3>Number of meetings</h3>
-	      					<div class="info_chart">
-	      						<span class="info">info</span>
-	      						<p class="desc">Number of high-level lobby meetings with the European Commission per lobby organisation. Share of pie indicates the number of organisations that have this many meetings.
-	      						</p>
-	      					</div>
-	      					<div class="meetings">
-	      					</div>
-	      				</div>
-	      				<div class="col-md-4 chart_box">
-	      					<h3>Lobbyists</h3>
+	      				<div class="nncol-md-4 chart_box">
+	      					<h3>Nb lobbyistes</h3>
 	      					<div class="nblobbyists"></div>
 	      				</div>
-      				</div>
-          		</div>
-          		<div class="col-md-4">
-          			<div class="chart_box">
-          				<h3>Sub-Category of lobby organisation<!--span class="info">info</span--></h3>
-          				<div class="info_chart">
-          					<span class="info">info</span>
-          					<p class="desc">The classifications in this graph reflect the sub-categories established by the FR Transparency Register. Some names have been shortened. Graph indicates the number of registered lobby organisations per sub-category.
-          					</p>
-          				</div>
-          				<div class="sector range chart-full"></div>
-          				<br class="clear" />
-          			</div>
-			  	</div>
+	          				</div>
 				
-			</div>
-			<!--div class="row">
-				<div class="col-md-12 chart_box">
-					<h3>Date</h3>
-					<div class="date">
+			  	</div>
+
+      <div class="row">
+				<div class="col-md-12 chart_box" id="lobbying_expense">
+					<h3>Budget lobbying</h3>
+					<div class="info_chart">
+						<span class="info">info</span>
+						<p class="desc">
+            Coûts liés aux activités directes de représentation d'intérêts auprès du Parlement comme déclaré par les organisations mêmes auprès de l’Assemblée. En cas de fourchette nous avons utilisé la valeur basse. Valeurs en euro par an.
+						</p>
 					</div>
+					<div class="expense">
+					</div>
+					<label>Nombre d'organisations</label>
 				</div>
-			</div-->
+
+      				</div>
+				
+          		</div>
 		</div>
 	</div>	
 </div>
@@ -984,7 +779,6 @@ function eventpopup (epid) {
 	<div class="container">
 		<div class="row">
 			<div class="content" id="list_content">
-				<h2 class="table_title">Registered Lobby Organisations</h2><div id="last_update">Last updated: 3 July 2015</div>
 				<div id="info_table_container">
 					<div class="info_chart info_table" id="meetings_info">
 						<span class="info">info</span>
@@ -1015,11 +809,13 @@ function eventpopup (epid) {
 					<thead>
 						<tr class=header>
 							<th class="header">Nr</th> 
-							<th class="header col-md-4">Nom </th> 
+							<th class="header col-md-4">Nom</th> 
+							<th class="header">Categories</th> 							
 							<th class="header">Secteurs</th>
 							<th class="header">Nb lobbyistes</th>
-							<th class="header">Coût lobby</th>
-							<th class="header">Categories</th> 							
+							<th class="header">Nb cartes</th>
+              <th class="header">Budget lobbying (min)</th>
+							<th class="header">(max)</th>
 						</tr>
 					</thead>
 				</table>
@@ -1030,9 +826,7 @@ function eventpopup (epid) {
 
 <script>
 'use strict';
-	var events=[];
 	var representatives={};
-  var countries={};
 
 	$(function() {
 		var renderLoaded  = _.after(1,  function () { 

@@ -1,10 +1,3 @@
-/* @override 
-	http://doi.ap:8888/css/style.css
-	http://localhost:8888/transp_doi/doi/css/style.css
-	http://doi.ap:8888/doifork/css/style.css
-	http://localhost:8888/transp_doi/doifork/css/style.css
-	http://doi.ap:8888/doi/css/style.css
-	http://doi.lattecreative.com/doi/css/style.css */
 
 @import url("http://fast.fonts.net/lt/1.css?apiType=css&c=7bacdeec-00ae-4450-bf23-75f7f74f9628&fontids=739810,739467");
 @font-face{
@@ -1369,3 +1362,5 @@ td.number{
 	left: 20px;
 	position: absolute;
 }
+
+.categorie svg {width:450px;}
