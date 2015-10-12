@@ -457,7 +457,7 @@ function grid (selector,data) {
                 }
               }
             ],
-            "iDisplayLength" : 100,
+            "iDisplayLength" : 500,
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": false,
@@ -606,16 +606,20 @@ function eventpopup (epid) {
 					<span class="icon-bar"></span>
 				</button>
 				<div class="navbar-brand" id="ti_logo_container">
-						<a id="ti_logo" href="http://www.transparencyinternational.eu">Transparency International</a>
+						<a id="ti_logo" href="http://www.transparency-france.org">Transparency International</a>
 						<a id="page_title" href="/" target="_blank"><strong>FR</strong> Integrity<br />Watch</a>
 				</div>
 			</div>
 		
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li id="cm_tool_btn"><a href="ec.html"><strong>Commission</strong> <br />meetings</a></li>
-					<li class="active" id="bl_tool_btn"><a href="lobbist.html"><strong>FR</strong><br />Lobbyists</a></li>
-					<li id="mi_tool_btn"><a href="ep.html"><strong>MEP</strong> <br />incomes</a></li>
+					<li class="active" id="bl_tool_btn"><a href="/"><strong>FR</strong><br />Lobbyistes</a></li>
+          <li class="dropdown">
+            <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Autres sites<span class="caret"></span></a>
+             <ul class="dropdown-menu">
+               <li><a href="http://www.integritywatch.eu">IntegrityWatch EU</a></li>
+            </ul>
+          </li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="about.html">A propos</a></li>
@@ -640,11 +644,11 @@ function eventpopup (epid) {
 			</div>
 			<div class="col-md-3" id="about_social">
 				<br/>
-				<a href="https://twitter.com/share" class="twitter-share-button" data-via="TI_FR" data-text="Who’s #lobbying the @FR_Commission and how much are they spending? Check #integritywatch #transparency">Tweet</a>
+				<a href="https://twitter.com/share" class="twitter-share-button" data-via="TI_France" data-text="Who’s #lobbying the @AssembleeNat and what do they spend? Check #integritywatch #transparency www.integritywatch.fr via @TI_France @TI_EU">Tweet</a>
 				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 				<br/>
 				<br/>
-				<div class="fb-like" data-show-faces="false"  data-href="http://www.integritywatch.eu/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+				<div class="fb-like" data-show-faces="false"  data-href="http://www.integritywatch.fr/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 
 				<div id="fb-root"></div>
 				<script>(function(d, s, id) {
@@ -675,9 +679,9 @@ function eventpopup (epid) {
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-9 col-sm-9 col-md-4" id="filter_field_container">
-				<p>Search or filter:</p>
+				<p>Recherche:</p>
 				<div class="input-group">
-					<input type="text" id="search-input" class="form-control input-lg" placeholder="Filter by Lobbyist, Host, Subject">
+					<input type="text" id="search-input" class="form-control input-lg" placeholder="Nom d'organisation ou lobbyiste">
 				</div>
 			</div>
 			<div class="col-sm-7 col-md-7" id="filter_numbers">
@@ -688,6 +692,12 @@ function eventpopup (epid) {
 							<span id="abig_number" class="big_number filter-count"></span>parmi <strong class="total-count"></strong> organisations
 						</div>
 					</div>
+            		<div class="col-md-4 filter_number">
+            			<div class="dc-data-count org-count"><span class="big_number afilter_long nbaccredited"></span>Nb Lobbyistes</div>
+            		</div>
+            		<div class="col-md-4 filter_number">
+            			<div class="dc-data-count org-count"><span class="big_number afilter_long total_budget"></span>Budget lobbying</div>
+            		</div>
 				</div>
 			</div>
 			<div class="col-xs-3 col-sm-3 col-md-1" id="resetall_container">
