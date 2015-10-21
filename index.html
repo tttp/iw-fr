@@ -172,7 +172,7 @@ function grid (selector,data) {
   var maxBudget=5000000;
 	var graph = dc.barChart (".expense")   
 		.height(340)
-		.width(830)
+		.width(730)
 		.gap(1)
     .on("preRender",(function(chart,filter){
     }))
@@ -637,10 +637,10 @@ function eventpopup (epid) {
 			</div>
 			<div class="col-md-6 col-lg-6" id="about_content">
 				<p>
-        Ceci est une base de données interactive et facile à utiliser fournissant un aperçu unique des groupes de pression, représentants d’intérêts et organismes de lobbying enregistrés auprès de L’Assemblée Nationale en France. 
-				<br /><a href="about.html" class="more">Voir plus</a></p>
+ Integrity Watch France est une base de données interactive sur le lobbying qui offre un aperçu unique des organisations inscrites sur le registre des représentants d’intérêts de l’Assemblée nationale. 
+				<br /><a href="about.html" class="more">En savoir plus</a></p>
 				<p>
-        L’utilisation de cet outil est simple: en cliquant sur les graphes ou les titres de la liste ci-dessous l’outil peut classer, trier et filtrer les organisations de lobbyistes français.
+      Simple d’utilisation, il suffit de cliquer sur les éléments des infographies pour filtrer, trier et classer les organisations.
         </p>
 			</div>
 			<div class="col-md-3" id="about_social">
@@ -687,7 +687,7 @@ function eventpopup (epid) {
 			</div>
 			<div class="col-sm-7 col-md-7" id="filter_numbers">
 				<div class="row">
-					<div class="col-md-2" id="currently_selected_text"><p>Sélectionné:</p></div>
+					<div class="col-md-2" id="currently_selected_text"><p>Filtres actuels:</p></div>
 					<div class="col-md-2 filter_number">
 						<div id="mep_number" class="dc-data-count org-count">
 							<span id="abig_number" class="big_number filter-count"></span>parmi <strong class="total-count"></strong> organisations
@@ -697,12 +697,12 @@ function eventpopup (epid) {
             			<div class="dc-data-count org-count"><span class="big_number afilter_long nbaccredited"></span>Nb Lobbyistes</div>
             		</div>
             		<div class="col-md-4 filter_number">
-            			<div class="dc-data-count org-count"><span class="big_number afilter_long total_budget"></span>Budget lobbying</div>
+            			<div class="dc-data-count org-count"><span class="big_number afilter_long total_budget"></span>Dépenses de lobbying</div>
             		</div>
 				</div>
 			</div>
 			<div class="col-xs-3 col-sm-3 col-md-1" id="resetall_container">
-				<button class="btn resetall">ANNULE<br />LES FILTRES</button>
+				<button class="btn resetall">Enlever<br />les filtres</button>
 			</div>
 		</div>
 	</div>
@@ -718,8 +718,7 @@ function eventpopup (epid) {
           				<div class="info_chart">
           					<span class="info">info</span>
           					<p class="desc">
-      Les classifications dans ce graphe sont basés sur les déclarations auprès de l’Assemblée. Pour pouvoir les visualiser dans ce graph certains catégories ont été regroupés, simplifiés et pour certains organisations une seule catégorie parmi plusieurs a été sélectionnée.
-
+                    La répartition par secteur est basée sur les informations déclarées sur le registre au titre des domaines d'activité et centres d'intérêt. Afin de permettre leur visualisation, certains secteurs ont été regroupés et simplifiés. Un seul domaine d’activité, correspondant au secteur d’activité principal de l’organisation, a été retenu.
        
           					</p>
           				</div>
@@ -735,8 +734,7 @@ function eventpopup (epid) {
 					<div class="info_chart">
 						<span class="info">info</span>
 						<p class="desc">
-            Les classifications dans ce graphe reflètent les catégories établies par le registre de l’Assemblée. Les noms ont été raccourcis et parfois groupés. Les sections du camembert reflètent le nombre d'organisations enregistrées par catégorie.
-						</p>
+					La répartition est fondée sur la typologie développée par Transparency International France dans le cadre d’une étude avec Regards Citoyens. Cette typologie, différente de celle de l’Assemblée nationale, permet de réunir les acteurs par finalité et non par statut juridique. Les sections du camembert reflètent le nombre d'organisations enregistrées par catégorie.	</p>
 					</div>
 					<div class="categorie"></div>
 					<div class="legend">
@@ -749,14 +747,17 @@ function eventpopup (epid) {
 	          					<div class="info_chart">
 	          						<span class="info">info</span>
 	          						<p class="desc">
-                        Nombre de cartes d’accès pour l’Assemblée déclarés par les organisations mêmes auprès du registre de l’Assemblée.
-	          						</p>
+	      Nombre de bénéficiaires de la carte de représentants d’intérêts déclarés par les organisations inscrites sur le registre. Cette carte permet de faciliter les formalités d’accueil à l’Assemblée nationale. Les organisations ne peuvent pas déclarer plus de 5 bénéficiaires.    						</p>
 	          					</div>
 	          					<div class="accreditations"></div>
 	          					<br class="clear" />
 	          				</div>
 	      				<div class="col-md-4 chart_box">
 	      					<h3>Nb lobbyistes</h3>
+	          						<span class="info">info</span>
+	          						<p class="desc">
+Nombre de personnes participant aux activités relevant du champ d'application du registre des représentants tel que déclaré par les organisations inscrites.
+                        </p>
 	      					<div class="nblobbyists"></div>
 	      				</div>
 				
@@ -764,12 +765,12 @@ function eventpopup (epid) {
 
       <div class="row">
 				<div class="col-md-12 chart_box" id="lobbying_expense">
-					<h3>Budget lobbying</h3>
+					<h3>DÉPENSES DE LOBBYING</h3>
 					<div class="info_chart">
 						<span class="info">info</span>
 						<p class="desc">
-            Coûts liés aux activités directes de représentation d'intérêts auprès du Parlement comme déclaré par les organisations mêmes auprès de l’Assemblée. En cas de fourchette nous avons utilisé la valeur basse. Valeurs en euro par an.
-						</p>
+					Coûts liés aux activités directes de représentation d'intérêts auprès du Parlement déclarés par les organisations inscrites sur le registre, hors conseils privés. En cas d’estimation par tranche, nous avons utilisé la valeur basse. Valeurs en euros, base annuelle. Selon le vadémécum de l’Assemblée, cela concerne les dépenses suivantes liées au lobbying : salaires, locaux, événements, honoraires versés à des sociétés de conseil.
+            </p>
 					</div>
 					<div class="expense">
 					</div>
