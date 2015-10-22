@@ -143,22 +143,66 @@ function grid (selector,data) {
 
   function drawCounter (){
 		var dim = ndx.dimension (function(d) {
-      return d.id;
+      return d.id_representant;
 		});
 
+    var group   = dim.group().reduce(
+      function(p,d) {  
+        p.nb +=1;
+        p.nb_personne = +d.nb_personne;
+        p.nb_card = +d.nb_card;
+        p.cost = +getCost(d);
+        return p;
+      },
+      function(p,d) {  
+        p.nb -=1;
+        p.nb_personne = -d.nb_personne;
+        p.nb_card = -d.nb_card;
+        p.cost = -getCost(d);
+        return p;
+      },
+      function(p,d) {  
+        return {nb:0,nb_personne:0,nb_card:0,cost:0}; 
+      }
+    );
 
-    //group.order (function(p){return p.nb});
+    group.order (function(p){return p.nb});
+    var fte=0;
+    var cost=0;
+    var accredited=0;
   	var count = dc.dataCount(".org-count")
-		.dimension(ndx)
-	  .group (ndx.groupAll())
+		.dimension(group)
+		.group({value: function() {
+			return group.all().filter(function(kv) {
+        if (kv.value.nb >0) {
+          fte += +kv.value.nb_personne;
+          accredited += +kv.value.nb_card;
+          cost += +kv.value.cost;
+        }
+
+				return kv.value.nb>0; 
+			}).length;
+     }
+    })
 	  .on("renderlet.all", function(c) {
+        $(".nbfte").html(fte);
+        $(".nbaccredited").html(accredited);
+        $(".nbcost").html(cost);
+        cost=0;
+        fte=0;
+        accredited=0;
+			var total=c.dimension().size();
+			var filtered= c.group().value();
+			var disabled= (total == filtered);
 
       RefreshTable();
-    });
-//			$(".resetall").attr("disabled",disabled);
-//			ga && ga('send', 'event', 'filter', 'subset', filtered);
 
-  }
+			$(".resetall").attr("disabled",disabled);
+			ga && ga('send', 'event', 'filter', 'subset', filtered);
+
+	});
+
+}
 
 
 	function drawExpense () {
@@ -439,6 +483,7 @@ function grid (selector,data) {
               "targets": 6,
               "className": "number",
               "render": function ( data, type, row ) { 
+                return data;
                 return d3.format(",g")(data);
               },
               data: function (row, type, val, meta) { if (!row) {return "";} ;
@@ -697,7 +742,7 @@ function eventpopup (epid) {
             			<div class="dc-data-count org-count"><span class="big_number afilter_long nbaccredited"></span>Nb Lobbyistes</div>
             		</div>
             		<div class="col-md-4 filter_number">
-            			<div class="dc-data-count org-count"><span class="big_number afilter_long total_budget"></span>Dépenses de lobbying</div>
+            			<div class="dc-data-count org-count"><span class="big_number afilter_long nbcost">?</span>Dépenses de lobbying</div>
             		</div>
 				</div>
 			</div>
