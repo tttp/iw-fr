@@ -155,14 +155,14 @@ function grid (selector,data) {
         p.nb +=1;
         p.nb_personne += +d.nb_personne;
         p.nb_card += +d.nb_card;
-        p.cost += +getCost(d);
+        p.cost += getCost(d);
         return p;
       },
       function(p,d) {  
         p.nb -= 1;
         p.nb_personne -= +d.nb_personne;
         p.nb_card -= +d.nb_card;
-        p.cost -= +getCost(d);
+        p.cost -= getCost(d);
         return p;
       },
       function(p,d) {  
@@ -190,10 +190,8 @@ function grid (selector,data) {
     })
     .on("preRedraw",function(c) {
     var fte= cost= accredited = 0;
-    console.log("pre render");
     })
 	  .on("renderlet.all", function(c) {
-    console.log("renderlet");
         $(".nbfte").html(fte);
         $(".nbaccredited").html(accredited);
         $(".nbcost").html(cost);
@@ -931,6 +929,11 @@ Nombre de personnes participant aux activités relevant du champ d'application d
         representatives = rows;
 				 _.each (representatives, function (d,i) {
 						//representatives[d.identification_code]=d;
+           if (d.categorie == "Conseil privé"){
+             d.min = +d.min_consultancies.replace(',','');
+             //d.max = +d.max_consultancies.replace(',','');
+           }
+
             ridx[d.id]=i;
 			});
 			   grid ("#ec",representatives);
