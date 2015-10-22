@@ -614,6 +614,9 @@ function grid (selector,data) {
             dc.events.trigger(function () {
                 alldata = rep.top(Infinity);
                 datatable.fnClearTable();
+                if (!alldata.length)
+                  return;
+            console.log ("redraw")
                 datatable.fnAddData(alldata);
                 datatable.fnDraw();
             });
