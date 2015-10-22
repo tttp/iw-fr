@@ -211,6 +211,8 @@ function grid (selector,data) {
 
 	function drawExpense () {
 		var dim = ndx.dimension (function(d) {
+        if (!$.isNumeric(d.min) ) 
+          return -1;
         return getCost(d);
 	});
   
@@ -224,7 +226,7 @@ function grid (selector,data) {
 		.gap(1)
     .on("preRender",(function(chart,filter){
     }))
-		.margins({top: 0, right: 10, bottom: 20, left: 40})
+		.margins({top: 10, right: 10, bottom: 20, left: 40})
 	//	.x(d3.scale.sqrt().domain([0, maxBudget]))
     .x(d3.scale.ordinal())
     .xUnits(dc.units.ordinal)
@@ -233,12 +235,16 @@ function grid (selector,data) {
 				.brushOn(true)
 		//.yAxisLabel("Lobbying expense")
 		.colorCalculator(function(d, i) {
+      if (d.key < 0)
+        return "#666";
 			return "#f1ca58";
 		})
 		.dimension(dim)
 		.group(group);
 		//graph.xAxis().ticks(5).tickFormat(d3.format(",.0f"));
-    graph.xAxis().ticks(5).tickFormat(function(d) {return formatInteger(d / 1e3) + "k€";});
+    graph.xAxis().ticks(5).tickFormat(function(d) {
+        if (d<0) return "N/A";
+        return formatInteger(d / 1e3) + "k€";});
 
 		graph.yAxis().ticks(3).tickFormat(d3.format(",.0f"));
 	}
@@ -391,14 +397,14 @@ function grid (selector,data) {
 			.innerRadius(50).radius(100)
 			.width(200)
 			.height(200)
-      .keyAccessor(function(d){return 10})
+      .minAngleForLabel(.05)
       .label(function(d){ return lobby_sector[d.key][2];})
 			.dimension(dim)
     .colorCalculator(function(d, i) {
         return lobby_sector[d.key][0];
 		})
       .ordering(function(d){return lobby_sector[d.key][1];})
-      .legend(dc.legend().y(220).x(10))
+  //    .legend(dc.legend().y(220).x(10))
 			.group(group);
 	}
 
@@ -411,10 +417,10 @@ function grid (selector,data) {
 		
 
 	var graph = dc.rowChart (".sector")   
-		.height(850)
+		.height(670)
 		//.width(350)
 		.gap(1)
-		.margins({top: 0, right: 0, bottom: 0, left: 0})
+		.margins({top: 0, right: 0, bottom: 20, left: 5})
 		.x(d3.scale.ordinal())
 		.label(function(d){ return d.key })
 		.title (function(d){ return d.key +" "+d.value })
@@ -489,11 +495,13 @@ function grid (selector,data) {
               "targets": 6,
               "className": "number",
               "render": function ( data, type, row ) { 
-                return data;
+                if (isNaN(row.min)) return "";
+                //return data;
                 return d3.format(",g")(data);
               },
               data: function (row, type, val, meta) { if (!row) {return "";} ;
-                  return getCost(row);
+                if (isNaN(row.min)) return "";
+                return row.min;
                 }
               },{
               "searchable": false,
@@ -501,10 +509,12 @@ function grid (selector,data) {
               "type":"num-fmt",
               "targets": 7,
               "className": "number",
-              "render": function ( data, type, row ) { 
+              "render": function ( data, type, row ) {
+                if (isNaN(row.min)) return "";
                 return d3.format(",g")(data);
               },
               data: function (row, type, val, meta) { if (!row) {return "";} ;
+                  if (isNaN(row.min)) return "";
                   return row.max;
                 }
               }
@@ -527,6 +537,7 @@ function grid (selector,data) {
     	
     	s  = "<div class='l_data_container'>";
     	acr = "";
+      if (!d) return;
     	if (d.acronyme != "") {
     		acr = "("+d.acronyme+")"
     	}
