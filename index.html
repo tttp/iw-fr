@@ -369,33 +369,35 @@ function grid (selector,data) {
 	}
 
 	function drawMainCategory () {
+	var lobby_sector = {	
+    "Entreprise":["#cf270e", "3","Entreprise"],//Corporate
+    "Association d'entreprises":["#cf270e", "2","Asso. Entreprise"],//Corporate
+		"Conseil privé":["#d74517", "1","Conseil"],//Consultants
+		"Association, ONG":["#ecb005", "7","ONG"],//NGOs
+		"Entreprise publique":["#de6320", "4","Entreprise pub."],//
+    "Organisation représentative":["#f6d882", "6","Org. rep."],//Churches
+    "Organisme public ou parapublic":["#e58a13", "5","Org. public"],//Municipal
+		"Unknown":"#cccccc"
+	}
+
+
 		var dim = ndx.dimension (function(d) {
-			  return d.categorie;
+        //return lobby_sector[d.categorie];
+        return d.categorie;
 		});
 
 		var group   = dim.group().reduceSum(function(d) {   return 1; });
-	var lobby_sector_colors = {	
-		"Entreprise":"#cf270e",//Corporate
-		"Association d'entreprises":"#cf270e",//Corporate
-		"Conseil privé":"#d74517",//Consultants
-		"Self-employed consultants":"#d74517",//Consultants
-		"Association, ONG":"#ecb005",//NGOs
-		"Entreprise publique":"#de6320",//
-		"Organisation représentative":"#f6d882",//Churches
-		"Organisme public ou parapublic":"#e58a13",//Municipal
-
-		"Unknown":"#cccccc"
-	}
-		
 		var chart = dc.pieChart(".categorie")
 			.innerRadius(50).radius(100)
 			.width(200)
 			.height(200)
-			.label(function(d){ return d.categorie })
+      .keyAccessor(function(d){return 10})
+      .label(function(d){ return lobby_sector[d.key][2];})
 			.dimension(dim)
     .colorCalculator(function(d, i) {
-			return lobby_sector_colors[d.key];
+        return lobby_sector[d.key][0];
 		})
+      .ordering(function(d){return lobby_sector[d.key][1];})
       .legend(dc.legend().y(220).x(10))
 			.group(group);
 	}
@@ -616,7 +618,6 @@ function grid (selector,data) {
                 datatable.fnClearTable();
                 if (!alldata.length)
                   return;
-            console.log ("redraw")
                 datatable.fnAddData(alldata);
                 datatable.fnDraw();
             });
