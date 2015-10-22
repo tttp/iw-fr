@@ -929,6 +929,7 @@ Nombre de personnes participant aux activités relevant du champ d'application d
 	$(".resetall").click(function() {
 		$("#search-input").val("");
 		$(".resetall").attr("disabled",true);
+    rep.filter(null); //needs to be explicitely reset
 		dc.filterAll();
 		dc.renderAll();
 
