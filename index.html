@@ -153,16 +153,16 @@ function grid (selector,data) {
     var group   = dim.group().reduce(
       function(p,d) {  
         p.nb +=1;
-        p.nb_personne = +d.nb_personne;
-        p.nb_card = +d.nb_card;
-        p.cost = +getCost(d);
+        p.nb_personne += +d.nb_personne;
+        p.nb_card += +d.nb_card;
+        p.cost += +getCost(d);
         return p;
       },
       function(p,d) {  
-        p.nb -=1;
-        p.nb_personne = -d.nb_personne;
-        p.nb_card = -d.nb_card;
-        p.cost = -getCost(d);
+        p.nb -= 1;
+        p.nb_personne -= +d.nb_personne;
+        p.nb_card -= +d.nb_card;
+        p.cost -= +getCost(d);
         return p;
       },
       function(p,d) {  
@@ -188,7 +188,12 @@ function grid (selector,data) {
 			}).length;
      }
     })
+    .on("preRedraw",function(c) {
+    var fte= cost= accredited = 0;
+    console.log("pre render");
+    })
 	  .on("renderlet.all", function(c) {
+    console.log("renderlet");
         $(".nbfte").html(fte);
         $(".nbaccredited").html(accredited);
         $(".nbcost").html(cost);
@@ -338,6 +343,8 @@ function grid (selector,data) {
 		var color = d3.scale.ordinal()
 		    .range(["#f9e5ad", "#f1ca58","#ecb007","#e7960e","#e37e17","#de631f"]);
 		var dim = ndx.dimension (function(d) {
+        if (!$.isNumeric(d.nb_personne))
+          return 0;
         if (d.nb_personne>4)
           return 5;
 			  return (+d.nb_personne).toFixed();
@@ -350,6 +357,8 @@ function grid (selector,data) {
 			.width(200)
 			.height(200)
 			.label(function(d){ 
+          if (d.key < 0)
+	            return "?";
 	          if (d.key == 5)
 	            return ">5";
 	          return d.key })
@@ -478,9 +487,13 @@ function grid (selector,data) {
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
-              "type":"num-fmt",
+              "type":"num",
               "targets": 4,
               data: "nb_personne",  
+              data: function (row, type, val, meta) {
+                if (!$.isNumeric(row.nb_personne)) return "";
+                return row.nb_personne;
+                }
               },{
               "defaultContent":"No data",
               "searchable": false,
@@ -523,7 +536,7 @@ function grid (selector,data) {
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": false,
-            "order": [[ 2, "desc" ]],
+            "order": [[ 6, "desc" ]],
             "bSort": true,
             "bInfo": false,
             "bAutoWidth": false,
@@ -602,7 +615,7 @@ function grid (selector,data) {
     datatable.on('click', 'tr[role="row"]', function () {
         var tr = $(this);
         var row = datatable.DataTable().row( tr );
- 
+        if (!row.data()) return; 
         if ( row.child.isShown() ) {
             // This row is already open - close it
             row.child.hide();
@@ -760,7 +773,7 @@ function eventpopup (epid) {
 						</div>
 					</div>
             		<div class="col-md-4 filter_number">
-            			<div class="dc-data-count org-count"><span class="big_number afilter_long nbaccredited"></span>Nb Lobbyistes</div>
+            			<div><span class="big_number afilter_long nbaccredited"></span>Nb Lobbyistes</div>
             		</div>
             		<div class="col-md-4 filter_number">
             			<div class="dc-data-count org-count"><span class="big_number afilter_long nbcost">?</span>Dépenses de lobbying</div>
@@ -820,10 +833,12 @@ function eventpopup (epid) {
 	          				</div>
 	      				<div class="col-md-4 chart_box">
 	      					<h3>Nb lobbyistes</h3>
+	          					<div class="info_chart">
 	          						<span class="info">info</span>
 	          						<p class="desc">
 Nombre de personnes participant aux activités relevant du champ d'application du registre des représentants tel que déclaré par les organisations inscrites.
                         </p>
+	          					</div>
 	      					<div class="nblobbyists"></div>
 	      				</div>
 				
@@ -881,6 +896,7 @@ Nombre de personnes participant aux activités relevant du champ d'application d
 			</div>
 			
 			<div class="col-md-12 table-responsive">
+				<h2 class="table_title">Représentants d'intérêts à l'Assemblée Nationale</h2>
 				<table class="table table-hover dc-data-grid tablesorter-bootstrap">
 					<thead>
 						<tr class=header>
@@ -895,6 +911,7 @@ Nombre de personnes participant aux activités relevant du champ d'application d
 						</tr>
 					</thead>
 				</table>
+        <div id="last_update">Mise à jour: 22 Oct 2015</div>
 			</div>
 		</div>
 	</div>
@@ -914,9 +931,7 @@ Nombre de personnes participant aux activités relevant du champ d'application d
         representatives = rows;
 				 _.each (representatives, function (d,i) {
 						//representatives[d.identification_code]=d;
-            d.costbyfte = (+getCost(d)/+d.fte).toFixed();
             ridx[d.id]=i;
-						d.meetings=0;
 			});
 			   grid ("#ec",representatives);
 		});     
