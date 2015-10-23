@@ -97,6 +97,10 @@ th{
 	cursor: pointer;
 }
 
+.info.important {
+  border:1px solid #ee2222;
+}
+
 .info.opened{
 	padding-bottom: 16px;
 	background: #e6e6e6 url(../img/close_info.svg) no-repeat center top;
@@ -1358,8 +1362,9 @@ td.number{
 	font-size: .8em;
 	font-weight: normal;
 	-webkit-transform: rotate(90deg);
-	top: 95px;
-	left: 20px;
+	transform: rotate(90deg);
+	top: 105px;
+	left: -35px;
 	position: absolute;
 }
 

@@ -222,7 +222,6 @@ function grid (selector,data) {
     var group   = dim.group().reduceSum( function(d) {return 1;});
 
   var formatInteger = d3.format(".0f");
-  var maxBudget=5000000;
 	var graph = dc.barChart (".expense")   
 		.height(340)
 		.width(730)
@@ -230,7 +229,6 @@ function grid (selector,data) {
     .on("preRender",(function(chart,filter){
     }))
 		.margins({top: 10, right: 10, bottom: 20, left: 40})
-	//	.x(d3.scale.sqrt().domain([0, maxBudget]))
     .x(d3.scale.ordinal())
     .xUnits(dc.units.ordinal)
 		.elasticX(true)
@@ -249,7 +247,7 @@ function grid (selector,data) {
         if (d<0) return "N/A";
         return formatInteger(d / 1e3) + "k€";});
 
-		graph.yAxis().ticks(3).tickFormat(d3.format(",.0f"));
+		graph.yAxis().ticks(6).tickFormat(d3.format(",.0f"));
 	}
 
 	
@@ -462,6 +460,7 @@ function grid (selector,data) {
               },{
               "searchable": false,
               "orderable": true,
+              "width":"30%",
               "targets": 1,
               data: function (row, type, val, meta) { 
                 if (row.acronyme) 
@@ -504,6 +503,7 @@ function grid (selector,data) {
               "orderable": true,
               "type":"num-fmt",
               "targets": 6,
+              "width":"125px",
               "className": "number",
               "render": function ( data, type, row ) { 
                 if (isNaN(row.min)) return "";
@@ -692,7 +692,7 @@ function eventpopup (epid) {
 				<ul class="nav navbar-nav">
 					<li class="active" id="bl_tool_btn"><a href="/">Lobbyistes en France</a></li>
           <li class="dropdown">
-            <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Autres sites<span class="caret"></span></a>
+            <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Integrity Watch Europe<span class="caret"></span></a>
              <ul class="dropdown-menu">
                <li><a href="http://www.integritywatch.eu">Union Européenne</a></li>
             </ul>
@@ -722,7 +722,7 @@ function eventpopup (epid) {
 			</div>
 			<div class="col-md-3" id="about_social">
 				<br/>
-				<a href="https://twitter.com/share" class="twitter-share-button" data-via="TI_France" data-text="Who’s #lobbying the @AssembleeNat and what do they spend? Check #integritywatch #transparency @TI_EU">Tweet</a>
+				<a href="https://twitter.com/share" class="twitter-share-button" data-via="TI_France" data-text="#Transparence du #lobbying à l'@AssembleeNat: qui a joué le jeu? Qui manque à l'appel? cc @TI_EU Vérifiez ici ">Tweet</a>
 				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 				<br/>
 				<br/>
@@ -846,9 +846,10 @@ Nombre de personnes participant aux activités relevant du champ d'application d
 				<div class="col-md-12 chart_box" id="lobbying_expense">
 					<h3>DÉPENSES DE LOBBYING</h3>
 					<div class="info_chart">
-						<span class="info">info</span>
+						<span class="info important">info</span>
 						<p class="desc">
-					Coûts liés aux activités directes de représentation d'intérêts auprès du Parlement déclarés par les organisations inscrites sur le registre, hors conseils privés. En cas d’estimation par tranche, nous avons utilisé la valeur basse. Valeurs en euros, base annuelle. Selon le vadémécum de l’Assemblée, cela concerne les dépenses suivantes liées au lobbying : salaires, locaux, événements, honoraires versés à des sociétés de conseil.
+            Coûts liés aux activités directes de représentation d'intérêts auprès du Parlement déclarés par les organisations inscrites sur le registre. En cas d’estimation par tranche, nous avons utilisé la valeur basse. Valeurs en euros, base annuelle. Selon le vadémécum de l’Assemblée, cela concerne les dépenses suivantes liées au lobbying : salaires, locaux, événements, honoraires versés à des sociétés de conseil.<br>
+Attention : les conseils privés doivent, pour leur part, déclarer le chiffre d'affaires lié aux activités de représentation d'intérêts effectués pour le compte de client auprès du Parlement. Veuillez ne pas comparer avec les coûts déclarés par les autres organisations.
             </p>
 					</div>
 					<div class="expense">
@@ -871,23 +872,30 @@ Nombre de personnes participant aux activités relevant du champ d'application d
 				<div id="info_table_container">
 					<div class="info_chart info_table" id="meetings_info">
 						<span class="info">info</span>
-						<p class="desc">Number of high-level meetings the organisation has had with the European Commission since December 2014.
+						<p class="desc">
+            La répartition par secteur est basée sur les informations déclarées sur le registre au titre des domaines d'activité et centres d'intérêt. Afin de permettre leur visualisation, certains secteurs ont été regroupés et simplifiés. Un seul domaine d’activité, correspondant au secteur d’activité principal de l’organisation, a été retenu.
 						</p>
-					</div>
-					
-					<div class="info_chart info_table" id="budget_info">
-						<span class="info">info</span>
-						<p class="desc">Lobby budget as declared by the organisation in the FR Transparency Register under “estimate of the annual costs related to activities covered by the register”. According to the official guidelines estimates should include staff costs, office, administrative and operational expenses, outsourced activities, memberships and other relevant costs.</p>
 					</div>
 					
 					<div class="info_chart info_table" id="lobbyist_info">
 						<span class="info">info</span>
-						<p class="desc">Number of lobbyists (in full-time equivalent) as declared by the organisation on the FR Transparency Register.</p>
+						<p class="desc">
+            Nombre de personnes participant aux activités relevant du champ d'application du registre des représentants tel que déclaré par les organisations inscrites.
+            </p>
+					</div>
+					
+					<div class="info_chart info_table" id="budget_info">
+						<span class="info">info</span>
+						<p class="desc">
+            Coûts liés aux activités directes de représentation d'intérêts auprès du Parlement déclarés par les organisations inscrites sur le registre. En cas d’estimation par tranche, nous avons utilisé la valeur basse. Valeurs en euros, base annuelle. Selon le vadémécum de l’Assemblée, cela concerne les dépenses suivantes liées au lobbying : salaires, locaux, événements, honoraires versés à des sociétés de conseil.
+            Attention : les conseils privés doivent, pour leur part, déclarer le chiffre d'affaires lié aux activités de représentation d'intérêts effectués pour le compte de client auprès du Parlement. Veuillez ne pas comparer avec les coûts déclarés par les autres organisations.
+            </p>
 					</div>
 					
 					<div class="info_chart info_table" id="badges_info">
 						<span class="info">info</span>
-						<p class="desc">Number of access badges to the European Parliament that the organisation holds for the lobbyists. Information published on the FR Transparency Register.
+						<p class="desc">
+            Nombre de personnes participant aux activités relevant du champ d'application du registre des représentants tel que déclaré par les organisations inscrites.
 						</p>
 					</div>
 				</div>
