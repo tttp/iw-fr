@@ -41,6 +41,8 @@ Who's lobbying the Assemblée Nationale and what do they spend? Check integrity 
 <script>
 function getCost (d) { 
   //return +d.cout_de_lobbying;
+  if (!$.isNumeric(d.min) ) 
+    return 0;
   return +d.min;
 } 
 
@@ -155,14 +157,14 @@ function grid (selector,data) {
         p.nb +=1;
         p.nb_personne += +d.nb_personne;
         p.nb_card += +d.nb_card;
-        p.cost += getCost(d);
+        p.cost += +getCost(d);
         return p;
       },
       function(p,d) {  
         p.nb -= 1;
         p.nb_personne -= +d.nb_personne;
         p.nb_card -= +d.nb_card;
-        p.cost -= getCost(d);
+        p.cost -= +getCost(d);
         return p;
       },
       function(p,d) {  
@@ -194,7 +196,7 @@ function grid (selector,data) {
 	  .on("renderlet.all", function(c) {
         $(".nbfte").html(fte);
         $(".nbaccredited").html(accredited);
-        $(".nbcost").html(cost);
+        $(".nbcost").html(d3.format(",g")(cost));
         cost=0;
         fte=0;
         accredited=0;
@@ -552,7 +554,7 @@ function grid (selector,data) {
     	if (d.acronyme != "") {
     		acr = "("+d.acronyme+")"
     	}
-    	s += "<div class='l_name'><label>Raison sociale</label> "+d.raison_sociale+" "+acr+"</div>";
+      s += "<div class='l_name'><label>Raison sociale</label><b>"+d.raison_sociale+" "+acr+"</b></div>";
     	s += "<div class='l_category'><label>Catégorie</label> "+d.categorie+"</div>";
     	s += "<div class='l_cost'><label>Budget Lobbying(&euro;)</label>"+d.cout_lobbying+ "</div>";
     	s += "<div class='l_cost'><label>Chiffre d'affaire(&euro;)</label>"+d.budget_global+ "</div>";
