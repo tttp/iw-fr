@@ -941,7 +941,8 @@ Attention : les conseils privés doivent, pour leur part, déclarer le chiffre d
 						//representatives[d.identification_code]=d;
            if (d.categorie == "Conseil privé"){
              d.min = +d.min_consultancies.replace(',','');
-             //d.max = +d.max_consultancies.replace(',','');
+             if (d.max_consultancies)
+               d.max = d.max_consultancies.replace(',','');
            }
 
             ridx[d.id]=i;
