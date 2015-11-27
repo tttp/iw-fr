@@ -1,0 +1,87 @@
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Integrity Watch FRANCE</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="css/bower.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/dc.css"/>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<script type="text/javascript" src="js/bower.js"></script>
+</head>
+
+<body>
+
+<div id="row1"></div>
+<div id="pie1"></div>
+<div id="pie2"></div>
+<div id="pie3"></div>
+
+<script>
+
+var pie2 = dc.pieChart("#pie2");
+var pie3 = dc.pieChart("#pie3");
+var pie1 = dc.pieChart("#pie1");
+var row1 = dc.rowChart("#row1");
+
+
+
+d3.csv("test.csv", function(error, data) {
+
+  var ndx           = crossfilter(data),  
+	  circ = ndx.dimension(function (d) {return d.num_circo;}),
+	  type = ndx.dimension(function (d) {return d.type;}),
+	  parti = ndx.dimension(function (d) {return d.parti;}),
+	  typeGroup = type.group().reduceSum(function(d) {return 1;}),
+	  circGroup = circ.group().reduceSum(function(d) {return 1;}),
+	  partiGroup = parti.group().reduceSum(function(d) {return 1;});
+
+  pie1
+    .width(400)
+    .height(400)
+    .slicesCap(4)
+    .innerRadius(100)
+    .dimension(type)
+    .group(typeGroup)
+    .legend(dc.legend());
+ 
+  pie2
+    .width(400)
+    .height(400)
+    .slicesCap(4)
+    .innerRadius(100)
+    .dimension(circ)
+    .group(circGroup)
+    .legend(dc.legend());
+  
+  pie3
+    .width(400)
+    .height(400)
+    .slicesCap(4)
+    .innerRadius(100)
+    .dimension(parti)
+    .group(partiGroup)
+    .legend(dc.legend());
+	
+  row1
+    .width(300)
+    .height(400)
+    .x(d3.scale.linear().domain([6,20]))
+    .elasticX(true)
+    .dimension(circ)
+    .group(circGroup)
+    .render();
+
+  pie2.render();
+  pie1.render();
+  pie3.render();
+  
+})
+
+</script>
+
+</body>
+
+
+</html>
