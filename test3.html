@@ -42,10 +42,10 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12 table-responsive">
-				<h2 class="table_title">Parlamentaires</h2>
+				<h2 class="table_title">Parlementaires</h2>
 				<table class="table table-hover dc-data-grid tablesorter-bootstrap">
 					<thead>
-						<tr class=header>
+						<tr class="header">
 							<th class="header">N</th>
 							<th class="header col-md-4">Nom</th>
 							<th class="header">Parti</th>
@@ -54,13 +54,34 @@
 						</tr>
 					</thead>
 				</table>
-			<div id="last_update">Mise à jour: 22 Oct 2015</div>
+				<div id="last_update">Mise à jour: 29 Nov 2015</div>
 			</div>
 		</div>
 	</div>
 </div>
 
 <div id="row1"></div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 
@@ -186,43 +207,13 @@ d3.csv("parlementaires.csv", function(error, data) {
               "type":"num",
               "targets": 4,
               data: "mandat",  
-              },{
-              "searchable": false,
-              "orderable": true,
-              "type":"num-fmt",
-              "targets": 5,
-              "width":"125px",
-              "className": "number",
-              "render": function ( data, type, row ) { 
-                if (isNaN(row.min)) return "";
-                //return data;
-                return d3.format(",g")(data);
-              },
-              data: function (row, type, val, meta) { if (!row) {return "";} ;
-                if (isNaN(row.min)) return "";
-                return row.min;
-                }
-              },{
-              "searchable": false,
-              "orderable": true,
-              "type":"num-fmt",
-              "targets": 6,
-              "className": "number",
-              "render": function ( data, type, row ) {
-                if (isNaN(row.min)) return "";
-                return d3.format(",g")(data);
-              },
-              data: function (row, type, val, meta) { if (!row) {return "";} ;
-                  if (isNaN(row.min)) return "";
-                  return row.max;
-                }
               }
             ],
             "iDisplayLength" : 500,
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": false,
-            "order": [[ 6, "desc" ]],
+            "order": [[ 1, "desc" ]],
             "bSort": true,
             "bInfo": false,
             "bAutoWidth": false,
@@ -299,6 +290,7 @@ d3.csv("parlementaires.csv", function(error, data) {
     } );
     
     datatable.on('click', 'tr[role="row"]', function () {
+		$('#myModal').modal('show');
         var tr = $(this);
         var row = datatable.DataTable().row( tr );
         if (!row.data()) return; 
