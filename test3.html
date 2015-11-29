@@ -1,0 +1,358 @@
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Integrity Watch FRANCE</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="css/bower.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/dc.css"/>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<script type="text/javascript" src="js/bower.js"></script>
+
+<style>
+
+</style>
+
+
+</head>
+
+<body>
+
+<div class="row" id="maincontainer">
+	<div class="col-md-4">Assemblée nationale
+	</div>
+	<div class="col-md-8">
+		<div class="row">
+			<div class="col-md-4">
+				<div id="pie1"></div>
+			</div>
+			<div class="col-md-4">
+				<div id="pie2"></div>
+			</div>
+			<div class="col-md-4">
+				<div id="pie3"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">4
+			</div>
+			<div class="col-md-4">5
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 table-responsive">
+				<h2 class="table_title">Parlamentaires</h2>
+				<table class="table table-hover dc-data-grid tablesorter-bootstrap">
+					<thead>
+						<tr class=header>
+							<th class="header">N</th>
+							<th class="header col-md-4">Nom</th>
+							<th class="header">Parti</th>
+							<th class="header">Group</th>
+							<th class="header">Mandat</th>							
+						</tr>
+					</thead>
+				</table>
+			<div id="last_update">Mise à jour: 22 Oct 2015</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="row1"></div>
+
+
+
+<script>
+
+var pie2 = dc.pieChart("#pie2");
+var pie3 = dc.pieChart("#pie3");
+var pie1 = dc.pieChart("#pie1");
+var row1 = dc.rowChart("#row1");
+
+var datatable = null;
+var rep = null;
+var representatives={};
+
+d3.csv("parlementaires.csv", function(error, data) {
+	representatives = data;
+	
+  var ndx           = crossfilter(data),  
+	  circ = ndx.dimension(function (d) {return d.departement;}),
+	  type = ndx.dimension(function (d) {return d.mandat;}),
+	  parti = ndx.dimension(function (d) {return d.parti;}),
+	  civilite = ndx.dimension(function (d) {return d.civilite;}),
+	  name = ndx.dimension(function (d) {return d.name;}),
+	  typeGroup = type.group().reduceSum(function(d) {return 1;}),
+	  circGroup = circ.group().reduceSum(function(d) {return 1;}),
+	  civiliteGroup = civilite.group().reduceSum(function(d) {return 1;}),
+	  partiGroup = parti.group().reduceSum(function(d) {return 1;}),
+	  nameGroup = name.group().reduceSum(function(d) {return 1;});
+	  
+	rep = ndx.dimension(function(d) {
+      return d.name;
+	});
+	
+
+  pie1
+    .width(200)
+    .height(300)
+    .slicesCap(4)
+    .innerRadius(50)
+    .dimension(type)
+    .group(typeGroup)
+	//.on("filtered", RefreshTable())
+    .legend(dc.legend());
+	
+	pie1.on('filtered.monitor', function(chart, filter) {
+		RefreshTable();
+	});
+	pie2.on('filtered.monitor', function(chart, filter) {
+		RefreshTable();
+	});
+	pie3.on('filtered.monitor', function(chart, filter) {
+		RefreshTable();
+	});
+ 
+  pie2
+    .width(200)
+    .height(300)
+    .slicesCap(4)
+    .innerRadius(50)
+    .dimension(civilite)
+    .group(civiliteGroup)
+    .legend(dc.legend());
+  
+  pie3
+    .width(200)
+    .height(300)
+    .slicesCap(4)
+    .innerRadius(50)
+    .dimension(parti)
+    .group(partiGroup)
+    .legend(dc.legend());
+	
+  row1
+    .width(300)
+    .height(400)
+    .x(d3.scale.linear().domain([6,20]))
+    .elasticX(true)
+    .dimension(circ)
+    .group(circGroup)
+    .render();
+	
+	
+	/*TABLE*/
+	function drawTable () {
+		var count=0;
+    //id,contact_country,sub_category,acronym,name,categorie,cost_min,cost_max,cost_absolute
+
+    datatable = $(".table").dataTable({
+            "columnDefs": [ {
+              "defaultContent":"",
+              "orderable": false,
+              "targets": 0,   
+              data: function ( row, type, val, meta ) {
+                count++;
+                return count;
+              }
+              },{
+              "searchable": true,
+              "orderable": true,
+              "width":"30%",
+              "targets": 1,
+              data: function (row, type, val, meta) { 
+                if (row.name) 
+                return row.name;
+                }
+              //data: "name",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "targets": 2,
+              data: "parti"
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "targets": 3,
+              data: "parti_group",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "type":"num",
+              "targets": 4,
+              data: "mandat",  
+              },{
+              "searchable": false,
+              "orderable": true,
+              "type":"num-fmt",
+              "targets": 5,
+              "width":"125px",
+              "className": "number",
+              "render": function ( data, type, row ) { 
+                if (isNaN(row.min)) return "";
+                //return data;
+                return d3.format(",g")(data);
+              },
+              data: function (row, type, val, meta) { if (!row) {return "";} ;
+                if (isNaN(row.min)) return "";
+                return row.min;
+                }
+              },{
+              "searchable": false,
+              "orderable": true,
+              "type":"num-fmt",
+              "targets": 6,
+              "className": "number",
+              "render": function ( data, type, row ) {
+                if (isNaN(row.min)) return "";
+                return d3.format(",g")(data);
+              },
+              data: function (row, type, val, meta) { if (!row) {return "";} ;
+                  if (isNaN(row.min)) return "";
+                  return row.max;
+                }
+              }
+            ],
+            "iDisplayLength" : 500,
+            "bPaginate": true,
+            "bLengthChange": false,
+            "bFilter": false,
+            "order": [[ 6, "desc" ]],
+            "bSort": true,
+            "bInfo": false,
+            "bAutoWidth": false,
+            "bDeferRender": true,
+            "aaData": rep.top(Infinity),
+            "bDestroy": true,
+        });
+	
+    function format (d) {
+    	var initiatives;
+    	
+    	s  = "<div class='l_data_container'>";
+    	acr = "";
+      if (!d) return;
+    	if (d.acronyme != "") {
+    		acr = "("+d.acronyme+")"
+    	}
+      s += "<div class='l_name'><label>Raison sociale</label><b>"+d.raison_sociale+" "+acr+"</b></div>";
+    	s += "<div class='l_category'><label>Catégorie</label> "+d.categorie+"</div>";
+    	s += "<div class='l_cost'><label>Budget Lobbying(&euro;)</label>"+d.cout_lobbying+ "</div>";
+    	s += "<div class='l_cost'><label>Chiffre d'affaire(&euro;)</label>"+d.budget_global+ "</div>";
+    	s += "<div class='l_year'><label>Pour l'année comptable</label> "+d.annee+"</div>";
+    	s += "<div class='l_year'><label>Nombre de badges</label> "+d.nb_card+"</div>";
+    	s += "<div class='l_fte'><label>Nombre lobbyistes</label> "+d.nb_personne+"</div>";
+    	s += "<div class='l_initiatives'><label>Activités de lobbying</label>"+d.initiative_assemblee+"</div>";
+    	s += "<div class='l_code'><label>Code de conduite</label> "+d.code+"</div>";
+    	s += "<div class='l_code_autre'><label>Charte de lobbying</label> "+d.code_de_conduite+"</div>";
+    	s += "<div class='l_declaration'><label>Déclaration originale</label> "+"<a href='http://www2.assemblee-nationale.fr/representant/representant_interet_detail/"+d.id_representant+"' target='_blank'>Fiche à l'Assemblée nationale</a></div>";
+    	s += "</div>";
+    	return s;
+    }
+
+    datatable.on('click', 'button', function () {
+        var tr = $(this).closest('tr');
+        var type=$(this).data("type");
+        var pre=$(this).parent().parent().next("pre");
+        var row = datatable.DataTable().row( tr.prev()[0] );
+        var d=row.data();
+     	
+        if (type == "event") {
+            var sevents =[];
+            _.each(events,function (e){
+            if (e.guestid == d.id)
+              sevents.push(e);
+            });
+            pre.html(JSON.stringify(sevents,null,2));
+            return;
+        }
+
+        var r = (tr.data("representative"));
+        if (!r) {
+          url="http://api.lobbyfacts.eu/api/1/representative/"+d.id+"?callback=?";
+          $.getJSON( url, function( data ) {
+            tr.data("representative",data);            
+            display (data);
+          });          
+          return;
+        }
+        display(r,type);
+
+        function display (data) {
+          switch (type) {
+            case "financial_data":
+             pre.html(JSON.stringify(data["financial_data"],null,2));
+              break;
+            case "accreditation":
+             pre.html(JSON.stringify(data["accreditations"],null,2));
+              break;
+            default:
+              pre.html(JSON.stringify(data,null,2));
+          }
+        }
+        
+    } );
+    
+    datatable.on('click', 'tr[role="row"]', function () {
+        var tr = $(this);
+        var row = datatable.DataTable().row( tr );
+        if (!row.data()) return; 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+        datatable.on( 'order.dt search.dt', function () {
+          datatable.DataTable().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+          } );
+
+        });
+
+	}
+	
+	drawTable();
+	pie2.render();
+	pie1.render();
+	pie3.render();
+	
+
+       function RefreshTable() {
+            dc.events.trigger(function () {
+				console.log(datatable);
+				if(datatable != null){
+                alldata = rep.top(Infinity);
+                datatable.fnClearTable();
+                if (!alldata.length)
+                  return;
+                datatable.fnAddData(alldata);
+                datatable.fnDraw();
+				}
+            });
+        }
+	
+	/*END TABLE*/
+	
+
+
+ 
+  
+})
+
+</script>
+
+</body>
+
+
+</html>
