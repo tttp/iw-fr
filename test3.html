@@ -303,8 +303,19 @@ d3.csv("parlementaires.csv", function(error, data) {
 		repdata = row.data();
 		$('#repModal .modal-title').html(repdata.name);
 		var photo = getPhoto(repdata.name,repdata.mandat);
-		$('#repModal .modal-body').html(photo);
+		var profile = getProfile(repdata.name,repdata.mandat);
+		var hatvp = getHatvp(repdata.name);
 		
+		//Build modal body
+		var modalbody = photo + '<div><label>Departément n°</label> '+repdata.departement_n+'</div>';
+		modalbody += '<div><label>Total revenue</label> '+repdata.revenue+'</div>';
+		modalbody += '<div><label>Activities</label> '+repdata.activities+'</div>';
+		modalbody += '<div><label>Profil link</label> <a href="'+profile+'" target="_blank">'+profile+'</a></div>';
+		modalbody += '<div><label>HATVP link</label> <a href="'+hatvp+'" target="_blank">'+hatvp+'</a></div>';
+		
+		$('#repModal .modal-body').html(modalbody);
+		
+		/*
         if ( row.child.isShown() ) {
             // This row is already open - close it
             row.child.hide();
@@ -315,6 +326,7 @@ d3.csv("parlementaires.csv", function(error, data) {
             row.child( format(row.data()) ).show();
             tr.addClass('shown');
         }
+		*/
     } );
         datatable.on( 'order.dt search.dt', function () {
           datatable.DataTable().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
@@ -325,8 +337,21 @@ d3.csv("parlementaires.csv", function(error, data) {
 
 	}
 	
+	var getProfile = function(name,type){
+	 return 'test';
+	}
+	
+	var getHatvp = function(name){
+		var plainname = removeDiacritics(name);
+		var plainname1 = plainname.split(" ");
+		var slug = plainname1[1]+'-'+plainname1[0];
+		slug = slug.toLowerCase();
+		var url = "http://www.hatvp.fr/page-nominative/?urldeclaration="+slug+'.html';
+		return url;
+	}
+	
 	var getPhoto = function(name,type){
-		var plainname = removeDiacritics (name);
+		var plainname = removeDiacritics(name);
 		//alert(plainname);
 		
 		if(type[0] == 'S'){
