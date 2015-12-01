@@ -14,6 +14,9 @@
 	.modal-body {
 		padding: 0px 20px;
 	}
+	.p20 {
+		padding: 0 20px;
+	}
 </style>
 
 
@@ -22,43 +25,62 @@
 <body>
 
 <div class="row" id="maincontainer">
-	<div class="col-md-4">Assemblée nationale
+	<div class="col-md-4">Map
 	</div>
 	<div class="col-md-8">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-4 chart_box">
+				<h3>Mandat</h3>
+				<div class="info_chart">
+					<span class="info">info</span>
+					<p class="desc" style="display: none;"> Info </p>
+				</div>
 				<div id="pie1"></div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-4 chart_box">
+				<h3>Civilité</h3>
+				<div class="info_chart">
+					<span class="info">info</span>
+					<p class="desc" style="display: none;"> Info </p>
+				</div>
 				<div id="pie2"></div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-4 chart_box">
+				<h3>Parti Politique</h3>
+				<div class="info_chart">
+					<span class="info">info</span>
+					<p class="desc" style="display: none;"> Info </p>
+				</div>
 				<div id="pie3"></div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-8">4
+			<div class="col-md-8">
 			</div>
-			<div class="col-md-4">5
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12 table-responsive">
-				<h2 class="table_title">Parlementaires</h2>
-				<table class="table table-hover dc-data-grid tablesorter-bootstrap">
-					<thead>
-						<tr class="header">
-							<th class="header">N</th>
-							<th class="header col-md-4">Nom</th>
-							<th class="header">Parti</th>
-							<th class="header">Group</th>
-							<th class="header">Mandat</th>							
-						</tr>
-					</thead>
-				</table>
-				<div id="last_update">Mise à jour: 29 Nov 2015</div>
+			<div class="col-md-4">
 			</div>
 		</div>
+	</div>
+</div>
+<div id="list_container">
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 table-responsive">
+			<h2 class="table_title">Parlementaires</h2>
+			<table class="table table-hover dc-data-grid tablesorter-bootstrap">
+				<thead>
+					<tr class="header">
+						<th class="header">N</th>
+						<th class="header col-md-4">Nom</th>
+						<th class="header">Parti</th>
+						<th class="header">Group</th>
+						<th class="header">Mandat</th>							
+					</tr>
+				</thead>
+			</table>
+			<div id="last_update">Mise à jour: 29 Nov 2015</div>
+		</div>
+	</div>
 	</div>
 </div>
 
