@@ -552,22 +552,29 @@ d3.csv("parlementaires.csv", function(error, data) {
 	
 	var getHatvp = function(name){
 		var plainname = removeDiacritics(name);
-		var plainname1 = plainname.split(" ");
-		var slug = plainname1[1]+'-'+plainname1[0];
+		
+		var name1 = plainname.substr(0,plainname.indexOf(' '));
+		var name2 = plainname.substr(plainname.indexOf(' ')+1); // "tocirah sneab"
+		var name2 = name2.replace(/ /g, '-');
+		var slug = name2+'-'+name1;		
+
 		slug = slug.toLowerCase();
+		if(slug == 'yonnet-salvator-evelyne'){
+		 slug = 'yonnet-evelyne';
+		}
 		var url = "http://www.hatvp.fr/page-nominative/?urldeclaration="+slug+'.html';
 		return url;
 	}
 	
 	var getPhoto = function(name,type){
 		var plainname = removeDiacritics(name);
-		//alert(plainname);
-		
+		var slug = plainname.replace(" ","-");
+		if(slug == 'Evelyne-Yonnet-Salvator'){
+		 slug = 'Evelyne-Yonnet';
+		}
 		if(type[0] == 'S'){
-			var slug = plainname.replace(" ","-");
 			var photourl = "http://www.nossenateurs.fr/senateur/photo/"+slug+"/80";
 		} else if(type[0] == 'A'){
-			var slug = plainname.replace(" ","-");
 			var photourl = "http://www.nosdeputes.fr/depute/photo/"+slug+"/80";
 		}
 		return "<img src=\""+photourl+"\" />";
