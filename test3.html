@@ -182,6 +182,12 @@ var repdata = null;
 d3.csv("parlementaires.csv", function(error, data) {
 	representatives = data;
 	
+	/*
+	data.forEach(function (d) {
+		d.departement_n = parseInt(d.departement_n);
+	});
+	*/
+	
   var ndx           = crossfilter(data),  
 	  circ = ndx.dimension(function (d) {return d.departement_n;}),
 	  type = ndx.dimension(function (d) {return d.mandat;}),
@@ -198,11 +204,40 @@ d3.csv("parlementaires.csv", function(error, data) {
       return d.name;
 	});
 	
+	
+	//Add matricules
+	
+	/*
+	data.forEach(function (d) {
+		var thisname = d.name;
+		var thismatricule = '';
+		d3.csv("matricules.csv", function(matricule) {
+			var filteredData = matricule.filter(function(d) 
+			{ 		
+				
+				if(removeDiacritics(d["name"]) == removeDiacritics(thisname)){
+					thismatricule = d["matricule"];
+					alert(thisname + ' ' + thismatricule);
+				}
+			});
+		});
+		d.matricule = thismatricule;	
+	});
+	*/
+	
+	
 	d3.json("departements.geojson", function (statesJson) {
 			var width=500;
 			var projection = d3.geo.equirectangular()
 			   .center([15,42]) //theorically, 50°7′2.23″N 9°14′51.97″E but this works
 			   .scale(width*2.7);
+			   
+			//Fix id
+			statesJson.features.forEach(function (d) {
+				if(d.properties.code[0] == '0'){
+					d.properties.code = d.properties.code.substr(1);
+				}
+			});
 	
             franceMap.width(500)
                     .height(300)
@@ -213,12 +248,12 @@ d3.csv("parlementaires.csv", function(error, data) {
                     .colorDomain([0, 30])
                     //.colorCalculator(function (d) { return d ? usChart.colors()(d) : '#ccc'; })
                     .overlayGeoJson(statesJson.features, "departement", function (d) {
-						//alert(d);
+						//alert(d.properties.code);
                         return d.properties.code;
                     })
                     .title(function (d) {
                         //return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
-						return "" + d.key + ': ' + d.value;
+						return "Departement " + d.key + ': ' + d.value;
                     });
 			franceMap.render();
 			franceMap.on('filtered.monitor', function(chart, filter) {
@@ -415,9 +450,10 @@ d3.csv("parlementaires.csv", function(error, data) {
 		
 		//Build modal body
 		var modalbody = '<div class="row"><div class="col-md-10">';
-		modalbody += '<div><label>Departément n°</label> '+repdata.departement_n+'</div>';
-		modalbody += '<div><label>Total revenue</label> '+repdata.revenue+'</div>';
-		modalbody += '<div><label>Activities</label> '+repdata.activities+'</div>';
+		modalbody += '<div><label>Matricule:</label> '+repdata.matricule+'</div>';
+		modalbody += '<div><label>Departément:</label> '+repdata.departement+'</div>';
+		modalbody += '<div><label>Total revenue:</label> '+repdata.revenue+'</div>';
+		modalbody += '<div><label>Activities:</label> '+repdata.activities+'</div>';
 		modalbody += '</div><div class="col-md-2">'+ photo + '</div></div>';
 		modalbody += '<br />';
 		modalbody += '<div><label>Profil link</label> <a href="'+profile+'" target="_blank">'+profile+'</a></div>';
@@ -528,7 +564,8 @@ d3.csv("parlementaires.csv", function(error, data) {
 		//alert(plainname);
 		
 		if(type[0] == 'S'){
-			var photourl = "";
+			var slug = plainname.replace(" ","-");
+			var photourl = "http://www.nossenateurs.fr/senateur/photo/"+slug+"/80";
 		} else if(type[0] == 'A'){
 			var slug = plainname.replace(" ","-");
 			var photourl = "http://www.nosdeputes.fr/depute/photo/"+slug+"/80";
