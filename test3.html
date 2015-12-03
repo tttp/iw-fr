@@ -17,6 +17,25 @@
 	.p20 {
 		padding: 0 20px;
 	}
+	.map_container {
+		min-height:300px;
+	}
+	.details_table {
+		font-size: 10px;
+		width: 100%;
+	}
+	.details_table thead {
+		font-weight: bold;
+		border-bottom: 2px solid #fff;
+	}
+	.details_table tr {
+		//border-bottom: 1px solid #ccc;
+	}
+	.details_table tr:nth-child(even) {background: #e9f2fa}
+	.details_table tr:nth-child(odd) {background: #fafafa}
+	.details_table td {
+		padding: 5px 10px;
+	}
 </style>
 
 
@@ -25,7 +44,9 @@
 <body>
 
 <div class="row" id="maincontainer">
-	<div class="col-md-4">Map
+	<div class="col-md-4 chart_box map_container">
+		<h3>Departements</h3>
+		<div id="france"></div>
 	</div>
 	<div class="col-md-8">
 		<div class="row">
@@ -115,6 +136,7 @@ var pie2 = dc.pieChart("#pie2");
 var pie3 = dc.pieChart("#pie3");
 var pie1 = dc.pieChart("#pie1");
 var row1 = dc.rowChart("#row1");
+var franceMap = dc.geoChoroplethChart("#france");
 
 var datatable = null;
 var rep = null;
@@ -126,7 +148,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 	representatives = data;
 	
   var ndx           = crossfilter(data),  
-	  circ = ndx.dimension(function (d) {return d.departement;}),
+	  circ = ndx.dimension(function (d) {return d.departement_n;}),
 	  type = ndx.dimension(function (d) {return d.mandat;}),
 	  parti = ndx.dimension(function (d) {return d.parti;}),
 	  civilite = ndx.dimension(function (d) {return d.civilite;}),
@@ -139,6 +161,34 @@ d3.csv("parlementaires.csv", function(error, data) {
 	  
 	rep = ndx.dimension(function(d) {
       return d.name;
+	});
+	
+	d3.json("departements.geojson", function (statesJson) {
+			var width=500;
+			var projection = d3.geo.equirectangular()
+			   .center([15,42]) //theorically, 50°7′2.23″N 9°14′51.97″E but this works
+			   .scale(width*2.7);
+	
+            franceMap.width(500)
+                    .height(300)
+                    .dimension(circ)
+                    .group(circGroup)
+					.projection(projection)
+                    .colors(d3.scale.quantize().range(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"]))
+                    .colorDomain([0, 30])
+                    //.colorCalculator(function (d) { return d ? usChart.colors()(d) : '#ccc'; })
+                    .overlayGeoJson(statesJson.features, "departement", function (d) {
+						//alert(d);
+                        return d.properties.code;
+                    })
+                    .title(function (d) {
+                        //return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
+						return "" + d.key + ': ' + d.value;
+                    });
+			franceMap.render();
+			franceMap.on('filtered.monitor', function(chart, filter) {
+				RefreshTable();
+			});
 	});
 	
 
@@ -335,20 +385,27 @@ d3.csv("parlementaires.csv", function(error, data) {
 		modalbody += '<div><label>Profil link</label> <a href="'+profile+'" target="_blank">'+profile+'</a></div>';
 		modalbody += '<div><label>HATVP link</label> <a href="'+hatvp+'" target="_blank">'+hatvp+'</a></div>';
 		
-		$('#repModal .modal-body').html(modalbody);
+		modalbody += '<table class="details_table"><thead><td>Type</td><td>Description</td><td>Revenue</td></thead><tbody>';
+		//Get details data
+		d3.csv("p_details3.csv", function(details) {
+			var filteredData = details.filter(function(d) 
+			{ 
+				//if( d["name"] == repdata.name) || (d["Criticality"]=="High" || d["Criticality"]=="Low")
+				if(d["name"] == repdata.name)
+				{ 
+					if(d["description"] != '' || d["amount"] != '' || d["company"] != '' || d["notes"] != ''){
+						modalbody += '<tr><td>' + d.type + '</td><td>' + d.description + '</td><td>' + d.amount + '</td></tr>' ;
+						return d;
+					}
+				} 
+
+			});
+			modalbody += '</tbody></table>';
+			$('#repModal .modal-body').html(modalbody);
+			
+		});
 		
-		/*
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            row.child( format(row.data()) ).show();
-            tr.addClass('shown');
-        }
-		*/
+		
     } );
         datatable.on( 'order.dt search.dt', function () {
           datatable.DataTable().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
@@ -485,6 +542,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 	pie2.render();
 	pie1.render();
 	pie3.render();
+	
 	
 
        function RefreshTable() {
