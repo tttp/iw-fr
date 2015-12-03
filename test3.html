@@ -28,13 +28,31 @@
 		font-weight: bold;
 		border-bottom: 2px solid #fff;
 	}
-	.details_table tr {
-		//border-bottom: 1px solid #ccc;
-	}
 	.details_table tr:nth-child(even) {background: #e9f2fa}
 	.details_table tr:nth-child(odd) {background: #fafafa}
 	.details_table td {
 		padding: 5px 10px;
+	}
+	.details_table thead tr {
+		background: #eee !important;
+	}
+	.details_modal {
+		padding-bottom: 0;
+	}
+	.pdesc {
+		position: absolute;
+		right: 30px;
+		//border: 1px solid #000;
+		background: #e6e6e6;
+		width: 200px;
+		padding: 10px;
+		font-size: 13px;
+	}
+	td.infod {
+		text-align: right;
+	}
+	.details_modal_body {
+		margin-bottom: 40px;
 	}
 </style>
 
@@ -113,11 +131,11 @@
 
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header details_modal">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Modal Header</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body details_modal_body">
         <p>Some text in the modal.</p>
       </div>
       <div class="modal-footer">
@@ -129,8 +147,25 @@
 </div>
 
 
-
 <script>
+
+$('.info').click(function(ev) {
+	ev.preventDefault();
+	if($(this).hasClass('opened')){
+		$(this).removeClass('opened');
+		$(this).parents('.info_chart').find('p.desc').slideUp('fast')
+	}else{
+		closeAllInfos();
+		$(this).addClass('opened');
+		$(this).parents('.info_chart').find('p.desc').slideDown('fast')
+	}
+});
+
+function closeAllInfos() {
+	$('.info').removeClass('opened');
+	$('p.desc').slideUp('fast');
+}
+
 
 var pie2 = dc.pieChart("#pie2");
 var pie3 = dc.pieChart("#pie3");
@@ -379,22 +414,47 @@ d3.csv("parlementaires.csv", function(error, data) {
 		var hatvp = getHatvp(repdata.name);
 		
 		//Build modal body
-		var modalbody = photo + '<div><label>Departément n°</label> '+repdata.departement_n+'</div>';
+		var modalbody = '<div class="row"><div class="col-md-10">';
+		modalbody += '<div><label>Departément n°</label> '+repdata.departement_n+'</div>';
 		modalbody += '<div><label>Total revenue</label> '+repdata.revenue+'</div>';
 		modalbody += '<div><label>Activities</label> '+repdata.activities+'</div>';
+		modalbody += '</div><div class="col-md-2">'+ photo + '</div></div>';
+		modalbody += '<br />';
 		modalbody += '<div><label>Profil link</label> <a href="'+profile+'" target="_blank">'+profile+'</a></div>';
 		modalbody += '<div><label>HATVP link</label> <a href="'+hatvp+'" target="_blank">'+hatvp+'</a></div>';
 		
-		modalbody += '<table class="details_table"><thead><td>Type</td><td>Description</td><td>Revenue</td></thead><tbody>';
+		//modalbody += '<table class="details_table"><thead><td>Type</td><td>Description</td><td>Revenue</td><td></td></thead><tbody>';
+		var tableh = '<table class="details_table"><thead><td>Description</td><td>Organization</td><td>Revenue</td><td></td></thead><tbody>';
+		var tablee = '</tbody></table>';
 		//Get details data
+		var detailtype = '';
 		d3.csv("p_details3.csv", function(details) {
 			var filteredData = details.filter(function(d) 
-			{ 
-				//if( d["name"] == repdata.name) || (d["Criticality"]=="High" || d["Criticality"]=="Low")
+			{ 				
 				if(d["name"] == repdata.name)
 				{ 
 					if(d["description"] != '' || d["amount"] != '' || d["company"] != '' || d["notes"] != ''){
-						modalbody += '<tr><td>' + d.type + '</td><td>' + d.description + '</td><td>' + d.amount + '</td></tr>' ;
+												
+						if(d.type != detailtype){
+							//Do table close if new type and previous not ''
+							if(detailtype != ''){
+								modalbody += tablee;
+							}
+							//Do title
+							modalbody += '<h4>'+ fullType(d.type)+'</h4>';
+							//Do table header if new type
+							modalbody += tableh;
+							//Set type
+							detailtype = d.type;
+						}
+						
+						modalbody += '<tr><td>' + d.description + '</td><td>' + d.company + '</td><td>' + d.amount + '</td>' ;
+						if( d["notes"] != ''){
+							//modalbody += '<img src="./img/info.svg" data-toggle="tooltip" title="'+d.notes+'" /></td></tr>';
+							modalbody += '<td class="infod"><img src="./img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes+'</p></div>';
+						} else {
+							modalbody += '<td></td></tr>';
+						}
 						return d;
 					}
 				} 
@@ -414,6 +474,40 @@ d3.csv("parlementaires.csv", function(error, data) {
 
         });
 
+	}
+	
+	var fullType = function(type){
+		switch(type) {
+			case 'pro':
+				return 'Professional activities';
+				break;
+			case 'pro5':
+				return 'Professional activities (5 years)';
+				break;
+			case 'consulting':
+				return 'Consulting activities';
+				break;
+			case 'executive':
+				return 'Executive bodies';
+				break;
+			case 'financial':
+				return 'Financial participations';
+				break;
+			case 'spouse':
+				return 'Spouse activities';
+				break;
+			case 'unpaid':
+				return 'Unpaid functions';
+				break;
+			case 'functions':
+				return 'Functions and mandates';
+				break;
+			case 'kept':
+				return 'Kept activities';
+				break;
+			default:
+				return '';
+		} 
 	}
 	
 	var getProfile = function(name,type){
