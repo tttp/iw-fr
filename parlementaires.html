@@ -72,6 +72,10 @@
 	#filter_wrap.filter_bl, #about_wrap.bl_header,.nav li#bl_tool_btn.active a {
 		background: #009AAB;
 	}
+	.departement path {
+		stroke: #000000;
+		stroke-width: 0.2;
+	}
 	
 </style>
 
@@ -169,21 +173,21 @@
 			<div class="col-xs-9 col-sm-9 col-md-4" id="filter_field_container">
 				<p>Recherche:</p>
 				<div class="input-group">
-					<input type="text" id="search-input" class="form-control input-lg" placeholder="Nom d'organisation ou lobbyiste">
+					<input type="text" id="search-input" class="form-control input-lg" placeholder="Nom du parlémentaire">
 				</div>
 			</div>
 			<div class="col-sm-7 col-md-7" id="filter_numbers">
 				<div class="row">
-					<div class="col-md-2" id="currently_selected_text"><p>Filtres actuels:</p></div>
-					<div class="col-md-2 filter_number">
+					<div class="col-md-3" id="currently_selected_text"><p>Filtres actuels:</p></div>
+					<div class="col-md-3 filter_number">
 						<div id="mep_number" class="dc-data-count org-count">
-							<span id="abig_number" class="big_number filter-count"></span>parmi <strong class="total-count"></strong> parlementaires
+							<span id="abig_number" class="big_number filter-count"></span>parmi <strong class="total-count"></strong><br />parlementaires
 						</div>
 					</div>
-            		<div class="col-md-4 filter_number">
+            		<div class="col-md-3 filter_number">
             			<div><span class="big_number afilter_long nbaccredited"></span>Activities</div>
             		</div>
-            		<div class="col-md-4 filter_number">
+            		<div class="col-md-3 filter_number">
             			<div class="dc-data-count org-count"><span class="big_number afilter_long nbcost">?</span>Revenue</div>
             		</div>
 				</div>
@@ -199,79 +203,83 @@
 <div class="container" id="maincontainer">
 <div class="row">
 	<div class="col-md-6 chart_box map_container">
-		<h3>Departements <button id="franceterritories">DOM-TOM</button><!--<button id="resetzoom">Reset zoom</button>--></h3>
+		<h3>Departements <button id="iledefrance">Ile de France</button><button id="franceterritories">DOM-TOM</button><!--<button id="resetzoom">Reset zoom</button>--></h3>
 		<div id="france"></div>
 	</div>
+	
 	<div class="col-md-3 chart_box">
-		<h3>Mandat</h3>
+		<h3>Parti Politique</h3>
 		<div class="info_chart">
 			<span class="info">info</span>
 			<p class="desc" style="display: none;"> Info </p>
 		</div>
-		<div id="pie1"></div>
+		<div id="pie3"></div>
 		<div class="legend">
-			<div class="blu1">Sénat</div>
-			<div class="blu2">Assemblée nationale</div>
+			<div class="gue">FG/PCF/PRG</div>
+			<div class="gue">Groupe GDR</div>
+			<div class="alde">UDI</div>
+			<div class="sd">PS/SRC</div>
+			<div class="greens">EELV/UDE</div>
+			<div class="lr">LR</div>
+			<div class="fn">FN</div>
+			<div class="ni">Autres</div>
 		</div>
+		<br class="clear" />
 	</div>
 	<div class="col-md-3 chart_box">
-		<h3>Civilité</h3>
+		<h3>Activités externes</h3>
 		<div class="info_chart">
 			<span class="info">info</span>
 			<p class="desc" style="display: none;"> Info </p>
 		</div>
-		<div id="pie2"></div>
+		<div id="pie4"></div>
 		<div class="legend">
-			<div class="blu1">m</div>
-			<div class="blu2">f</div>
+			<div class="_nd">0</div>
+			<div class="_1">1</div>
+			<div class="_2">2 - 5</div>
+			<div class="_3">6 - 10</div>
+			<div class="_4">> 10</div>
+			<br class="clear" />
 		</div>
-		
 	</div>
+	
 </div>
 <div class="row">
 			<div class="col-md-6">
-				<h3>Revenue</h3>
+				<h3>Revenue externe (p.a.)</h3>
 				<div class="info_chart">
 					<span class="info">info</span>
 					<p class="desc" style="display: none;"> Info </p>
 				</div>
 				<div id="bar1"></div>
 			</div>
+			
 			<div class="col-md-3 chart_box">
-				<h3>Parti Politique</h3>
+				<h3>Mandat</h3>
 				<div class="info_chart">
 					<span class="info">info</span>
 					<p class="desc" style="display: none;"> Info </p>
 				</div>
-				<div id="pie3"></div>
+				<div id="pie1"></div>
 				<div class="legend">
-					<div class="epp">EPP</div>
-					<div class="gue">FG/PCF/PRG</div>
-					<div class="alde">UDI</div>
-					<div class="sd">PS</div>
-					<div class="greens">EELV/UDE</div>
-					<div class="lr">LR</div>
-					<div class="fn">FN</div>
-					<div class="ni">Other</div>
+					<div class="blu1">Sénat</div>
+					<div class="blu2">Assemblée nationale</div>
 				</div>
-				<br class="clear" />
 			</div>
 			<div class="col-md-3 chart_box">
-				<h3>Activities</h3>
+				<h3>Civilité</h3>
 				<div class="info_chart">
 					<span class="info">info</span>
 					<p class="desc" style="display: none;"> Info </p>
 				</div>
-				<div id="pie4"></div>
+				<div id="pie2"></div>
 				<div class="legend">
-					<div class="_nd">0 / Unknown</div>
-					<div class="_1">1 - 5</div>
-					<div class="_2">6 - 10</div>
-					<div class="_3">11 - 20</div>
-					<div class="_4">> 20</div>
-					<br class="clear" />
+					<div class="blu1">Homme</div>
+					<div class="blu2">Femme</div>
 				</div>
+				
 			</div>
+			
 		</div>
 
 </div>
@@ -280,14 +288,14 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12 table-responsive">
-			<h2 class="table_title">Parlementaires</h2>
+			<h2 class="table_title">Activities et revenues externes des Parlementaires</h2>
 			<table class="table table-hover dc-data-grid tablesorter-bootstrap">
 				<thead>
 					<tr class="header">
 						<th class="header">N</th>
 						<th class="header col-md-4">Nom</th>
-						<th class="header">Parti</th>
-						<th class="header">Group</th>
+						<th class="header">Parti politique</th>
+						<th class="header">Groupe</th>
 						<th class="header">Mandat</th>	
 						<th class="header">Activities</th>
 						<th class="header">Revenue</th>						
@@ -401,11 +409,11 @@ var parti_groups = {
 };
 
 var activities_colors = {
-"0/nd":"#eee",
-"1 - 5":"#8ed3fb",
-"6 - 10":"#68add4",
-"11 - 20":"#4388ad",
-"> 20":"#1a6287"
+"0":"#eee",
+"1":"#8ed3fb",
+"2 - 5":"#68add4",
+"6 - 10":"#4388ad",
+"> 10":"#1a6287"
 }
 
 var totpeople = 0;
@@ -422,39 +430,39 @@ d3.csv("parlementaires.csv", function(error, data) {
 		
 		if(d.revenue == '#N/D' || d.revenue == ''){
 			d.revenue_n = 0;
+			d.revenue_n2 = 0;
 		} else {
 			d.revenue_n = d.revenue.replace(',','.');
 			d.revenue_n = parseFloat(d.revenue_n);
+			d.revenue_n2 = d.revenue_n.toFixed(0);
 		}
 		if(d.revenue == '#N/D' || d.revenue == ''){
-			d.revenue_range = "None or N/a";
+			d.revenue_range = "Aucun";
 		} else if(d.revenue_n <= 500){
 			d.revenue_range = "0 - 500";
-		} else if(d.revenue_n <= 1000){
-			d.revenue_range = "501 - 1000";
-		} else if(d.revenue_n <= 5000){
-			d.revenue_range = "1001 - 5000";
 		} else if(d.revenue_n <= 10000){
-			d.revenue_range = "5001 - 10000";
+			d.revenue_range = "501 - 10,000";
+		} else if(d.revenue_n <= 25000){
+			d.revenue_range = "10,001 - 25,000";
 		} else if(d.revenue_n <= 50000){
-			d.revenue_range = "10001 - 50000";
+			d.revenue_range = "25,001 - 50,000";
 		} else if(d.revenue_n > 50000){
-			d.revenue_range = "50001 +";
+			d.revenue_range = "50,001 +";
 		}
 
 		d.revenue_n = d.revenue_n.toFixed(2);
 		d.activities_word = d.activities;
 		if(d.activities == "#N/D" || d.activities == 0 ){
 			d.activities = 0;
-			d.activities_range = "0/nd";
+			d.activities_range = "0";
+		} else if(d.activities <= 1){
+			d.activities_range = "1";
 		} else if(d.activities <= 5){
-			d.activities_range = "1 - 5";
+			d.activities_range = "2 - 5";
 		} else if(d.activities <= 10){
 			d.activities_range = "6 - 10";
-		} else if(d.activities <= 20){
-			d.activities_range = "11 - 20";
-		} else if(d.activities > 20){
-			d.activities_range = "> 20";
+		} else if(d.activities > 10){
+			d.activities_range = "> 10";
 		}
 		
 		//Totals
@@ -464,12 +472,17 @@ d3.csv("parlementaires.csv", function(error, data) {
 		
 	});
 	
+	function addcommas(x){
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+	
 	//$(".nbfte").html(totpeople);
 	//alert(totact + ' ' +totpeople + ' ' +totrev);
 	$("#mep_number .filter-count").html(totpeople);
 	$("#mep_number .total-count").html(totpeople);
 	$(".nbaccredited").html(totact);
-	$(".nbcost").html(d3.format(",.5s")(totrev)+"€");
+	//$(".nbcost").html(d3.format(",.5s")(totrev)+"€");
+	$(".nbcost").html(addcommas(totrev.toFixed(0))+"€");
 	
 	
   var ndx = crossfilter(data),  
@@ -554,6 +567,19 @@ d3.csv("parlementaires.csv", function(error, data) {
 		RefreshTable();
 	});
 	
+	//Button to filter departments 75, 77, 78, 91, 92, 93, 94, 95
+	$("#iledefrance").click(function () {
+		circ.filter(function (d) { 
+			if(d == 75 || d == 77 || d == 78 || (d >= 91 && d <= 95)){
+			return true;
+			} else {
+				return false;
+			}
+		});
+		$(".resetall").attr("disabled",false);
+		dc.redrawAll();
+		RefreshTable();
+	});
 	
 	function drawMap() {
 	
@@ -564,7 +590,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 			   .center([10,43]) //theorically, 50°7′2.23″N 9°14′51.97″E but this works
 			   .scale(width*3.2);
 			
-			
+			/*
 			$("#resetzoom").click(function () {
 				projection
 				   .scale(width*3.2)
@@ -591,7 +617,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 				.attr("height", height)
 				.call(zoom);
 				
-			
+			*/
 			
 
 			   
@@ -646,9 +672,10 @@ d3.csv("parlementaires.csv", function(error, data) {
 			.brushOn(false)
 			.colors("#009AAB")
 			.yAxisLabel("Parlementaires")
+			.elasticY(true)
 			.dimension(revenueRange)
 			.group(revenueRangeGroup)
-			.x(d3.scale.ordinal().domain(["None or N/a", "0 - 500", "501 - 1000", "1001 - 5000", "5001 - 10000", "10001 - 50000", "50001 +"]))
+			.x(d3.scale.ordinal().domain(["Aucun", "0 - 500", "501 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 +"]))
 			.xUnits(dc.units.ordinal);
 			
 
@@ -669,6 +696,13 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.slicesCap(4)
 		.innerRadius(50)
 		.dimension(type)
+		.label(function(d) {
+			if(d.key[0] == 'A'){
+				return "AN";
+			} else if(d.key[0] == 'S'){
+				return "Sénat";
+			}
+		})
 		.group(typeGroup);
 		
 		pie1.on('filtered.monitor', function(chart, filter) {
@@ -686,6 +720,13 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.slicesCap(4)
 		.innerRadius(50)
 		.dimension(civilite)
+		.label(function(d) {
+			if(d.key == 'f'){
+				return "Femme";
+			} else if(d.key == 'm'){
+				return "Homme";
+			}
+		})
 		.group(civiliteGroup);
 		
 	  pie2.on('filtered.monitor', function(chart, filter) {
@@ -749,7 +790,7 @@ d3.csv("parlementaires.csv", function(error, data) {
               "targets": 0,   
               data: function ( row, type, val, meta ) {
                 count++;
-                return count;
+                return count - totpeople;
               }
               },{
               "searchable": true,
@@ -757,8 +798,12 @@ d3.csv("parlementaires.csv", function(error, data) {
               "width":"30%",
               "targets": 1,
               data: function (row, type, val, meta) { 
-                if (row.name) 
-                return row.name;
+                if (row.name) {
+				var name1 = row.name.substr(0,row.name.indexOf(' '));
+				var name2 = row.name.substr(row.name.indexOf(' ')+1);
+                //return row.name;
+				return name1 + ' <b>'+name2+'</b>';
+				}
                 }
               //data: "name",  
               },{
@@ -792,14 +837,14 @@ d3.csv("parlementaires.csv", function(error, data) {
               "orderable": true,
               "type":"num",
               "targets": 6,
-              data: "revenue_n",  
+              data: "revenue_n2",  
               }
             ],
             "iDisplayLength" : 500,
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": false,
-            "order": [[ 1, "desc" ]],
+            "order": [[ 6, "desc" ]],
             "bSort": true,
             "bInfo": false,
             "bAutoWidth": false,
@@ -808,29 +853,7 @@ d3.csv("parlementaires.csv", function(error, data) {
             "bDestroy": true,
         });
 	
-    function format (d) {
-    	var initiatives;
-    	
-    	s  = "<div class='l_data_container'>";
-    	acr = "";
-      if (!d) return;
-    	if (d.acronyme != "") {
-    		acr = "("+d.acronyme+")"
-    	}
-      s += "<div class='l_name'><label>Raison sociale</label><b>"+d.raison_sociale+" "+acr+"</b></div>";
-    	s += "<div class='l_category'><label>Catégorie</label> "+d.categorie+"</div>";
-    	s += "<div class='l_cost'><label>Budget Lobbying(&euro;)</label>"+d.cout_lobbying+ "</div>";
-    	s += "<div class='l_cost'><label>Chiffre d'affaire(&euro;)</label>"+d.budget_global+ "</div>";
-    	s += "<div class='l_year'><label>Pour l'année comptable</label> "+d.annee+"</div>";
-    	s += "<div class='l_year'><label>Nombre de badges</label> "+d.nb_card+"</div>";
-    	s += "<div class='l_fte'><label>Nombre lobbyistes</label> "+d.nb_personne+"</div>";
-    	s += "<div class='l_initiatives'><label>Activités de lobbying</label>"+d.initiative_assemblee+"</div>";
-    	s += "<div class='l_code'><label>Code de conduite</label> "+d.code+"</div>";
-    	s += "<div class='l_code_autre'><label>Charte de lobbying</label> "+d.code_de_conduite+"</div>";
-    	s += "<div class='l_declaration'><label>Déclaration originale</label> "+"<a href='http://www2.assemblee-nationale.fr/representant/representant_interet_detail/"+d.id_representant+"' target='_blank'>Fiche à l'Assemblée nationale</a></div>";
-    	s += "</div>";
-    	return s;
-    }
+    
 
     datatable.on('click', 'button', function () {
         var tr = $(this).closest('tr');
@@ -889,18 +912,18 @@ d3.csv("parlementaires.csv", function(error, data) {
 		var hatvp = getHatvp(repdata.name);
 		
 		//Build modal body
-		var modalbody = '<div class="row"><div class="col-md-10">';
-		modalbody += '<div><label>Matricule:</label> '+repdata.matricule+'</div>';
-		modalbody += '<div><label>Departément:</label> '+repdata.departement+'</div>';
-		modalbody += '<div><label>Total revenue:</label> '+repdata.revenue+' EUR</div>';
-		modalbody += '<div><label>Activities:</label> '+repdata.activities+'</div>';
-		modalbody += '</div><div class="col-md-2">'+ photo + '</div></div>';
+		var modalbody = '<div class="row"><div class="col-md-9">';
+		modalbody += '<div><label>Mandat:</label> '+repdata.mandat+'</div>';
+		modalbody += '<div><label>Departément:</label> '+repdata.departement+' ('+repdata.departement_n+')</div>';
+		modalbody += '<div><label>Total revenues externe:</label> '+addcommas(repdata.revenue_n2)+' EUR</div>';
+		modalbody += '<div><label>Activités externes:</label> '+repdata.activities+'</div>';
+		modalbody += '</div><div class="col-md-3">'+ photo + '</div></div>';
 		modalbody += '<br />';
-		modalbody += '<div><label>Profil link</label> <a href="'+profile+'" target="_blank">'+profile+'</a></div>';
-		modalbody += '<div><label>HATVP link</label> <a href="'+hatvp+'" target="_blank">'+hatvp+'</a></div>';
+		modalbody += '<div><label>Activités législatives:</label> <a href="'+profile+'" target="_blank">Profil sur www.nosdeputes.fr</a></div>';
+		modalbody += '<div><label>Declaration originale:</label> <a href="'+hatvp+'" target="_blank">Profil sur le site de la Haute Autprité pour la Transparence de la Vie Publique (HATVP)</a></div>';
 		
 		//modalbody += '<table class="details_table"><thead><td>Type</td><td>Description</td><td>Revenue</td><td></td></thead><tbody>';
-		var tableh = '<table class="details_table"><thead><td>Description</td><td>Organization</td><td>Revenue</td><td></td></thead><tbody>';
+		var tableh = '<table class="details_table"><thead><td>Description</td><td>Organisation</td><td>Revenue</td><td></td></thead><tbody>';
 		var tablee = '</tbody></table>';
 		//Get details data
 		var detailtype = '';
@@ -955,31 +978,31 @@ d3.csv("parlementaires.csv", function(error, data) {
 	var fullType = function(type){
 		switch(type) {
 			case 'pro':
-				return 'Professional activities';
+				return 'Activités rénumérés à l’élection';
 				break;
 			case 'pro5':
-				return 'Professional activities (5 years)';
+				return 'Activités rémunérés antérieures (5 ans)';
 				break;
 			case 'consulting':
-				return 'Consulting activities';
+				return 'Activités de consultant';
 				break;
 			case 'executive':
-				return 'Executive bodies';
+				return 'Organes dirigeants (public ou privé)';
 				break;
 			case 'financial':
-				return 'Financial participations';
+				return 'Participations financières';
 				break;
 			case 'spouse':
-				return 'Spouse activities';
+				return 'Activités du conjoint';
 				break;
 			case 'unpaid':
-				return 'Unpaid functions';
+				return 'Activités bénévoles';
 				break;
 			case 'functions':
-				return 'Functions and mandates';
+				return 'Autres mandats';
 				break;
 			case 'kept':
-				return 'Kept activities';
+				return 'Activités externes actuels';
 				break;
 			default:
 				return '';
@@ -1004,7 +1027,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 		var plainname = removeDiacritics(name);
 		
 		var name1 = plainname.substr(0,plainname.indexOf(' '));
-		var name2 = plainname.substr(plainname.indexOf(' ')+1); // "tocirah sneab"
+		var name2 = plainname.substr(plainname.indexOf(' ')+1);
 		var name2 = name2.replace(/ /g, '-');
 		var slug = name2+'-'+name1;		
 
@@ -1023,9 +1046,9 @@ d3.csv("parlementaires.csv", function(error, data) {
 		 slug = 'Evelyne-Yonnet';
 		}
 		if(type[0] == 'S'){
-			var photourl = "http://www.nossenateurs.fr/senateur/photo/"+slug+"/80";
+			var photourl = "http://www.nossenateurs.fr/senateur/photo/"+slug+"/120";
 		} else if(type[0] == 'A'){
-			var photourl = "http://www.nosdeputes.fr/depute/photo/"+slug+"/80";
+			var photourl = "http://www.nosdeputes.fr/depute/photo/"+slug+"/120";
 		}
 		return "<img src=\""+photourl+"\" />";
 		
@@ -1196,7 +1219,8 @@ d3.csv("parlementaires.csv", function(error, data) {
 		  .on("renderlet.all", function(c) {
 			$(".nbfte").html(fte);
 			$(".nbaccredited").html(activities);
-			$(".nbcost").html(d3.format(",.5s")(revenue)+"€");
+			//$(".nbcost").html(d3.format(",.5s")(revenue)+"€");
+			$(".nbcost").html(addcommas(revenue.toFixed(0))+"€");
 			revenue=0;
 			fte=0;
 			activities=0;
