@@ -583,12 +583,20 @@ d3.csv("parlementaires.csv", function(error, data) {
 	
 	function drawMap() {
 	
-		d3.json("departements.geojson", function (statesJson) {
+		d3.json("departements.topo.js", function (json) {
 			var width=550;
 			var height=500;
 			var projection = d3.geo.equirectangular()
 			   .center([10,43]) //theorically, 50°7′2.23″N 9°14′51.97″E but this works
 			   .scale(width*3.2);
+     var dpt = topojson.feature(json, json.objects.departements).features;
+
+			//Fix id
+			dpt.forEach(function (d) {
+				if(d.properties.code[0] == '0'){
+					d.properties.code = d.properties.code.substr(1);
+				}
+			});
 			
 			/*
 			$("#resetzoom").click(function () {
@@ -621,12 +629,6 @@ d3.csv("parlementaires.csv", function(error, data) {
 			
 
 			   
-			//Fix id
-			statesJson.features.forEach(function (d) {
-				if(d.properties.code[0] == '0'){
-					d.properties.code = d.properties.code.substr(1);
-				}
-			});
 			
 			var centered;
 			
@@ -642,13 +644,12 @@ d3.csv("parlementaires.csv", function(error, data) {
                     .colors(d3.scale.quantize().range(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"]))
                     .colorDomain([1, 20])
                     .colorCalculator(function (d) { return d == 0 ? '#eee' : franceMap.colors()(d);})
-                    .overlayGeoJson(statesJson.features, "departement", function (d) {
+                    .overlayGeoJson(dpt, "departement", function (d) {
 						//alert(d.properties.code);
                         return d.properties.code;
                     })
                     .title(function (d) {
-                        //return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
-						return "Departement " + d.key + ': ' + d.value;
+                        return  _.find(dpt, function (m) {return m.properties.code==d.key}).properties.nom + ': ' + d.value;
                     })
 					.on('renderlet', function(chart) {
 						/*
