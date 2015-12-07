@@ -54,6 +54,16 @@
 	.details_modal_body {
 		margin-bottom: 40px;
 	}
+	.legend div._nd::before {
+		background: #eee none repeat scroll 0 0;
+	}
+	.legend div.lr::before {
+		background: #0a3e63 none repeat scroll 0 0;
+	}
+	.legend div.fn::before {
+		background: #A1480D none repeat scroll 0 0;
+	}
+	
 </style>
 
 
@@ -91,12 +101,37 @@
 					<p class="desc" style="display: none;"> Info </p>
 				</div>
 				<div id="pie3"></div>
+				<div class="legend">
+					<div class="epp">EPP</div>
+					<div class="gue">FG/PCF/PRG</div>
+					<div class="alde">UDI</div>
+					<div class="sd">PS</div>
+					<div class="greens">EELV/UDE</div>
+					<div class="lr">LR</div>
+					<div class="fn">FN</div>
+					<div class="ni">Other</div>
+				</div>
+				<br class="clear" />
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-8">
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-4 chart_box">
+				<h3>Activities</h3>
+				<div class="info_chart">
+					<span class="info">info</span>
+					<p class="desc" style="display: none;"> Info </p>
+				</div>
+				<div id="pie4"></div>
+				<div class="legend">
+					<div class="_nd">0 / Unknown</div>
+					<div class="_1">1 - 5</div>
+					<div class="_2">6 - 10</div>
+					<div class="_3">11 - 20</div>
+					<div class="_4">> 20</div>
+					<br class="clear" />
+				</div>
 			</div>
 		</div>
 	</div>
@@ -113,7 +148,9 @@
 						<th class="header col-md-4">Nom</th>
 						<th class="header">Parti</th>
 						<th class="header">Group</th>
-						<th class="header">Mandat</th>							
+						<th class="header">Mandat</th>	
+						<th class="header">Activities</th>
+						<th class="header">Revenue</th>						
 					</tr>
 				</thead>
 			</table>
@@ -170,6 +207,7 @@ function closeAllInfos() {
 var pie2 = dc.pieChart("#pie2");
 var pie3 = dc.pieChart("#pie3");
 var pie1 = dc.pieChart("#pie1");
+var pie4 = dc.pieChart("#pie4");
 var row1 = dc.rowChart("#row1");
 var franceMap = dc.geoChoroplethChart("#france");
 
@@ -177,60 +215,142 @@ var datatable = null;
 var rep = null;
 var representatives={};
 
+var parti_groups = {
+"PRG":"#800c00",
+"FG":"#800c00",
+"PCF":"#800c00",
+"PS":"#c21200",
+"EELV":"#05a61e",
+"UDE":"#05a61e",
+"UDI":"#ffc200",
+"EFDD":"#5eced6",
+"PPE":"#0a3e63",
+"LR":"#0a3e63",
+"ECR":"#3086c2",
+"NA/NI":"#cccccc",
+"FN":"#A1480D",
+"Others":"#BBBBBB",
+"Array":"pink"
+};
+
+var activities_colors = {
+"0/nd":"#eee",
+"1 - 5":"#8ed3fb",
+"6 - 10":"#68add4",
+"11 - 20":"#4388ad",
+"> 20":"#1a6287"
+}
+
 var repdata = null;
 
 d3.csv("parlementaires.csv", function(error, data) {
 	representatives = data;
 	
-	/*
-	data.forEach(function (d) {
-		d.departement_n = parseInt(d.departement_n);
-	});
-	*/
 	
-  var ndx           = crossfilter(data),  
+	data.forEach(function (d) {
+		if(d.revenue == '#N/D' || d.revenue == ''){
+			d.revenue_n = 0;
+		} else {
+			d.revenue_n = d.revenue.replace(',','.');
+			d.revenue_n = parseFloat(d.revenue_n);
+		}
+		d.revenue_n = d.revenue_n.toFixed(2);
+		d.activities_word = d.activities;
+		if(d.activities == "#N/D" || d.activities == 0 ){
+			d.activities = 0;
+			d.activities_range = "0/nd";
+		} else if(d.activities <= 5){
+			d.activities_range = "1 - 5";
+		} else if(d.activities <= 10){
+			d.activities_range = "6 - 10";
+		} else if(d.activities <= 20){
+			d.activities_range = "11 - 20";
+		} else if(d.activities > 20){
+			d.activities_range = "> 20";
+		}
+		
+	});
+	
+	
+  var ndx = crossfilter(data),  
 	  circ = ndx.dimension(function (d) {return d.departement_n;}),
 	  type = ndx.dimension(function (d) {return d.mandat;}),
 	  parti = ndx.dimension(function (d) {return d.parti;}),
+	  partig = ndx.dimension(function (d) {return d.parti_group;}),
 	  civilite = ndx.dimension(function (d) {return d.civilite;}),
 	  name = ndx.dimension(function (d) {return d.name;}),
+	  activities = ndx.dimension(function (d) {return d.activities;}),
+	  activitiesRange = ndx.dimension(function (d) {return d.activities_range;}),
 	  typeGroup = type.group().reduceSum(function(d) {return 1;}),
 	  circGroup = circ.group().reduceSum(function(d) {return 1;}),
 	  civiliteGroup = civilite.group().reduceSum(function(d) {return 1;}),
 	  partiGroup = parti.group().reduceSum(function(d) {return 1;}),
+	  partigGroup = partig.group().reduceSum(function(d) {return 1;}),
+	  activitiesGroup = activities.group().reduceSum(function(d) {return d.activities;}),
+	  activitiesRangeGroup = activitiesRange.group().reduceSum(function(d) {return 1;}),
 	  nameGroup = name.group().reduceSum(function(d) {return 1;});
+	  
+	  var avgActivitiesGroup = circ.group().reduce(
+        function (p, v) {
+            ++p.count;
+			p.total += parseInt(v.activities);
+			return p;
+        },
+        function (p, v) {
+            --p.count;
+			p.total -= parseInt(v.activities);
+			return p;
+        },
+        function () {
+            return {count: 0, total: 0};
+        }
+    );
 	  
 	rep = ndx.dimension(function(d) {
       return d.name;
 	});
 	
 	
-	//Add matricules
-	
-	/*
-	data.forEach(function (d) {
-		var thisname = d.name;
-		var thismatricule = '';
-		d3.csv("matricules.csv", function(matricule) {
-			var filteredData = matricule.filter(function(d) 
-			{ 		
-				
-				if(removeDiacritics(d["name"]) == removeDiacritics(thisname)){
-					thismatricule = d["matricule"];
-					alert(thisname + ' ' + thismatricule);
-				}
-			});
-		});
-		d.matricule = thismatricule;	
-	});
-	*/
-	
+	function drawMap() {
 	
 	d3.json("departements.geojson", function (statesJson) {
 			var width=500;
+			var height=500;
 			var projection = d3.geo.equirectangular()
 			   .center([15,42]) //theorically, 50°7′2.23″N 9°14′51.97″E but this works
 			   .scale(width*2.7);
+			   
+			function zoomed() {
+				projection
+				.translate(d3.event.translate)
+				.scale(d3.event.scale);
+				franceMap.render();
+			}
+
+			var zoom = d3.behavior.zoom()
+				.translate(projection.translate())
+				.scale(projection.scale())
+				.scaleExtent([height/2, 16 * height])
+				.on("zoom", zoomed);
+
+			var svg = d3.select("#france")
+				.attr("width", width)
+				.attr("height", height)
+				.call(zoom);
+				
+			d3.selectAll(".departement").on("click", function () {
+				alert('t');
+				var t = d3.transform(d3.select(this).attr("transform")),
+					x = t.translate[0],
+					y = t.translate[1];
+
+				var scale = 10;
+
+				svg.transition().duration(3000)
+					.call(zoom.translate([((x * -scale) + (width / 2)), ((y * -scale) + height / 2)])
+					.scale(scale).event);
+
+			});
 			   
 			//Fix id
 			statesJson.features.forEach(function (d) {
@@ -242,11 +362,12 @@ d3.csv("parlementaires.csv", function(error, data) {
             franceMap.width(500)
                     .height(300)
                     .dimension(circ)
-                    .group(circGroup)
+                    .group(avgActivitiesGroup)
+					.valueAccessor(function(p) {return p.value.count > 0 ? Math.round(p.value.total / p.value.count) : 0; })
 					.projection(projection)
                     .colors(d3.scale.quantize().range(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"]))
-                    .colorDomain([0, 30])
-                    //.colorCalculator(function (d) { return d ? usChart.colors()(d) : '#ccc'; })
+                    .colorDomain([1, 20])
+                    .colorCalculator(function (d) { return d == 0 ? '#eee' : franceMap.colors()(d);})
                     .overlayGeoJson(statesJson.features, "departement", function (d) {
 						//alert(d.properties.code);
                         return d.properties.code;
@@ -261,16 +382,17 @@ d3.csv("parlementaires.csv", function(error, data) {
 			});
 	});
 	
+	}
+	
 
   pie1
     .width(200)
-    .height(300)
+    .height(240)
     .slicesCap(4)
     .innerRadius(50)
     .dimension(type)
-    .group(typeGroup)
-	//.on("filtered", RefreshTable())
-    .legend(dc.legend());
+    .group(typeGroup);
+    //.legend(dc.legend());
 	
 	pie1.on('filtered.monitor', function(chart, filter) {
 		RefreshTable();
@@ -281,24 +403,39 @@ d3.csv("parlementaires.csv", function(error, data) {
 	pie3.on('filtered.monitor', function(chart, filter) {
 		RefreshTable();
 	});
+	pie4.on('filtered.monitor', function(chart, filter) {
+		RefreshTable();
+	});
  
   pie2
     .width(200)
-    .height(300)
+    .height(240)
     .slicesCap(4)
     .innerRadius(50)
     .dimension(civilite)
-    .group(civiliteGroup)
-    .legend(dc.legend());
+    .group(civiliteGroup);
   
   pie3
     .width(200)
-    .height(300)
-    .slicesCap(4)
+    .height(240)
+    .slicesCap(6)
     .innerRadius(50)
-    .dimension(parti)
-    .group(partiGroup)
-    .legend(dc.legend());
+    .dimension(partig)
+    .group(partigGroup)
+	.colorCalculator(function(d, i) {
+		return parti_groups[d.key];
+	});
+	
+  pie4
+    .width(200)
+    .height(240)
+    .slicesCap(5)
+    .innerRadius(50)
+    .dimension(activitiesRange)
+    .group(activitiesRangeGroup)
+	.colorCalculator(function(d, i) {
+		return activities_colors[d.key];
+	});
 	
   row1
     .width(300)
@@ -350,9 +487,22 @@ d3.csv("parlementaires.csv", function(error, data) {
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
-              "type":"num",
               "targets": 4,
               data: "mandat",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "type":"num",
+              "targets": 5,
+              data: "activities",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "type":"num",
+              "targets": 6,
+              data: "revenue_n",  
               }
             ],
             "iDisplayLength" : 500,
@@ -452,7 +602,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 		var modalbody = '<div class="row"><div class="col-md-10">';
 		modalbody += '<div><label>Matricule:</label> '+repdata.matricule+'</div>';
 		modalbody += '<div><label>Departément:</label> '+repdata.departement+'</div>';
-		modalbody += '<div><label>Total revenue:</label> '+repdata.revenue+'</div>';
+		modalbody += '<div><label>Total revenue:</label> '+repdata.revenue+' EUR</div>';
 		modalbody += '<div><label>Activities:</label> '+repdata.activities+'</div>';
 		modalbody += '</div><div class="col-md-2">'+ photo + '</div></div>';
 		modalbody += '<br />';
@@ -675,29 +825,29 @@ d3.csv("parlementaires.csv", function(error, data) {
 		}
 		return str;
 	}
+
+   function RefreshTable() {
+		dc.events.trigger(function () {
+			console.log(datatable);
+			if(datatable != null){
+			alldata = rep.top(Infinity);
+			datatable.fnClearTable();
+			if (!alldata.length)
+			  return;
+			datatable.fnAddData(alldata);
+			datatable.fnDraw();
+			}
+		});
+	}
+	
+	
 	
 	drawTable();
+	drawMap();
 	pie2.render();
 	pie1.render();
 	pie3.render();
-	
-	
-
-       function RefreshTable() {
-            dc.events.trigger(function () {
-				console.log(datatable);
-				if(datatable != null){
-                alldata = rep.top(Infinity);
-                datatable.fnClearTable();
-                if (!alldata.length)
-                  return;
-                datatable.fnAddData(alldata);
-                datatable.fnDraw();
-				}
-            });
-        }
-	
-	/*END TABLE*/
+	pie4.render();
 	
 
 
