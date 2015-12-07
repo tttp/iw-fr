@@ -959,8 +959,39 @@ d3.csv("parlementaires.csv", function(error, data) {
 				} 
 
 			});
+			
 			modalbody += '</tbody></table>';
-			$('#repModal .modal-body').html(modalbody);
+			
+			d3.csv("collaborators.csv", function(coll) {
+			var colltb = 0;
+			var filteredData2 = coll.filter(function(d) 
+			{ 				
+				if(d["parlementaire"] == repdata.name)
+				{ 
+					if(colltb == 0){
+						colltb = 1;
+						modalbody += '<h4>Collaborateurs et leurs activités</h4>';
+						modalbody += '<table class="details_table"><thead><td>Nom</td><td>Employeur ou structure</td><td>Description</td><td>Employé par un autre parlementaire</td><td></td></thead><tbody>';
+					}
+					modalbody += '<tr><td>'+d.name + ' ' + d.lastname+'</td>';
+					modalbody += '<td>'+d.employer+'</td>';
+					modalbody += '<td>'+d.description+'</td>';
+					modalbody += '<td>'+d.employerother+'</td>';
+					if( d["notes"] != ''){
+						modalbody += '<td class="infod"><img src="./img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes+'</p></div>';
+					} else {
+						modalbody += '<td></td></tr>';
+					}
+					
+				}
+			});
+				if(colltb == 1){
+					modalbody += '</tbody></table>';
+				}
+				$('#repModal .modal-body').html(modalbody);
+			});
+			
+			
 			
 		});
 		
