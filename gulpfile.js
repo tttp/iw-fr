@@ -1,14 +1,29 @@
+// https://www.npmjs.com/package/gulp-run
+// topojson departements.geojson -o departements.topo.js -p code,nom -q 1e3
+
 var gulp = require('gulp');
 var flatten = require('gulp-flatten');
 var filter = require('gulp-filter');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
+var less = require('gulp-less');
 var cssmin = require('gulp-minify-css')
 var mainBowerFiles = require('main-bower-files');
 var debug = require('gulp-debug')
 
 var dest_path =  '.';
+
+gulp.task('bootstrap:prepareLess', function() {
+  return gulp.src('less/bootstrap/variables.less')
+    .pipe(gulp.dest('public/lib/bootstrap/less'));
+});
+
+gulp.task('bootstrap:compileLess', ['bootstrap:prepareLess'], function() {
+  return gulp.src('bower_components/bootstrap/less/bootstrap.less')
+    .pipe(less())
+    .pipe(gulp.dest('css'));
+})
 
 gulp.task('bower', function() {
 
@@ -16,7 +31,7 @@ gulp.task('bower', function() {
         var cssFilter = filter('*.css');
         var fontFilter = filter(['*.eot', '*.woff', '*.svg', '*.ttf']);
 
-        var files= mainBowerFiles().concat(["css/dc.css","css/material.css","style.css","js/dc.js"]);
+        var files= mainBowerFiles().concat(["css/dc.css","css/material.css","style.css","js/dc.js","css/bootstrap.css"]);
         return gulp.src(files)
         .pipe(debug({title:"all:"}))
 

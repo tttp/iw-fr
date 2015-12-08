@@ -313,47 +313,18 @@ d3.csv("parlementaires.csv", function(error, data) {
 	
 	function drawMap() {
 	
-	d3.json("departements.geojson", function (statesJson) {
+	d3.json("departements.topo.js", function (json) {
 			var width=500;
 			var height=500;
 			var projection = d3.geo.equirectangular()
 			   .center([15,42]) //theorically, 50°7′2.23″N 9°14′51.97″E but this works
 			   .scale(width*2.7);
 			   
-			function zoomed() {
-				projection
-				.translate(d3.event.translate)
-				.scale(d3.event.scale);
-				franceMap.render();
-			}
 
-			var zoom = d3.behavior.zoom()
-				.translate(projection.translate())
-				.scale(projection.scale())
-				.scaleExtent([height/2, 16 * height])
-				.on("zoom", zoomed);
+     var dpt = topojson.feature(json, json.objects.departements).features;
 
-			var svg = d3.select("#france")
-				.attr("width", width)
-				.attr("height", height)
-				.call(zoom);
-				
-			d3.selectAll(".departement").on("click", function () {
-				alert('t');
-				var t = d3.transform(d3.select(this).attr("transform")),
-					x = t.translate[0],
-					y = t.translate[1];
-
-				var scale = 10;
-
-				svg.transition().duration(3000)
-					.call(zoom.translate([((x * -scale) + (width / 2)), ((y * -scale) + height / 2)])
-					.scale(scale).event);
-
-			});
-			   
 			//Fix id
-			statesJson.features.forEach(function (d) {
+			dpt.forEach(function (d) {
 				if(d.properties.code[0] == '0'){
 					d.properties.code = d.properties.code.substr(1);
 				}
@@ -366,15 +337,14 @@ d3.csv("parlementaires.csv", function(error, data) {
 					.valueAccessor(function(p) {return p.value.count > 0 ? Math.round(p.value.total / p.value.count) : 0; })
 					.projection(projection)
                     .colors(d3.scale.quantize().range(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"]))
-                    .colorDomain([1, 20])
-                    .colorCalculator(function (d) { return d == 0 ? '#eee' : franceMap.colors()(d);})
-                    .overlayGeoJson(statesJson.features, "departement", function (d) {
-						//alert(d.properties.code);
+                    .colorDomain([0, 30])
+                    //.colorCalculator(function (d) { return d ? usChart.colors()(d) : '#ccc'; })
+                    .overlayGeoJson(dpt, "departement", function (d) {
                         return d.properties.code;
                     })
                     .title(function (d) {
-                        //return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
-						return "Departement " + d.key + ': ' + d.value;
+                        _.find(dpt, function (m) {return m.properties==d.key});
+                        return  _.find(dpt, function (m) {return m.properties.code==d.key}).properties.nom + ': ' + d.value;
                     });
 			franceMap.render();
 			franceMap.on('filtered.monitor', function(chart, filter) {
