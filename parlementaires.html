@@ -21,7 +21,7 @@
 		min-height:300px;
 	}
 	.details_table {
-		font-size: 10px;
+		font-size: 13px;
 		width: 100%;
 	}
 	.details_table thead {
@@ -69,6 +69,12 @@
 	.legend div.blu2::before {
 		background: #3182bd none repeat scroll 0 0;
 	}
+	.legend div.red::before {
+		background: #cf270e none repeat scroll 0 0;
+	}
+	.legend div.yellow::before {
+		background: #ecb005 none repeat scroll 0 0;
+	}
 	#filter_wrap.filter_bl, #about_wrap.bl_header,.nav li#bl_tool_btn.active a {
 		background: #009AAB;
 	}
@@ -76,7 +82,20 @@
 		stroke: #000000;
 		stroke-width: 0.2;
 	}
-	
+	.mapbuttons {
+		width: 100%;
+		text-align: right;
+	}
+	.alignright {
+		text-align:right;
+	}
+	#repModal .modal-dialog {
+		width: 800px;
+		max-width: 100%;
+	}
+	#repModal .modal-dialog .modal-body {
+		font-size: 15px;
+	}
 </style>
 
 
@@ -185,10 +204,10 @@
 						</div>
 					</div>
             		<div class="col-md-3 filter_number">
-            			<div><span class="big_number afilter_long nbaccredited"></span>Activities</div>
+            			<div><span class="big_number afilter_long nbaccredited"></span>Total: activités externes</div>
             		</div>
             		<div class="col-md-3 filter_number">
-            			<div class="dc-data-count org-count"><span class="big_number afilter_long nbcost">?</span>Revenue</div>
+            			<div class="dc-data-count org-count"><span class="big_number afilter_long nbcost">?</span>Total: revenue externe (p.a.)</div>
             		</div>
 				</div>
 			</div>
@@ -203,7 +222,8 @@
 <div class="container" id="maincontainer">
 <div class="row">
 	<div class="col-md-6 chart_box map_container">
-		<h3>Departements <button id="iledefrance">Ile de France</button><button id="franceterritories">DOM-TOM</button><!--<button id="resetzoom">Reset zoom</button>--></h3>
+		<h3>Departements</h3>
+		<div class="mapbuttons"><button id="iledefrance">Ile de France</button><button id="franceterritories">DOM-TOM</button></div>
 		<div id="france"></div>
 	</div>
 	
@@ -245,7 +265,7 @@
 	
 </div>
 <div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 chart_box">
 				<h3>Revenue externe (p.a.)</h3>
 				<div class="info_chart">
 					<span class="info">info</span>
@@ -262,8 +282,8 @@
 				</div>
 				<div id="pie1"></div>
 				<div class="legend">
-					<div class="blu1">Sénat</div>
-					<div class="blu2">Assemblée nationale</div>
+					<div class="red">Sénat</div>
+					<div class="yellow">Assemblée nationale</div>
 				</div>
 			</div>
 			<div class="col-md-3 chart_box">
@@ -274,8 +294,8 @@
 				</div>
 				<div id="pie2"></div>
 				<div class="legend">
-					<div class="blu1">Homme</div>
-					<div class="blu2">Femme</div>
+					<div class="red">Homme</div>
+					<div class="yellow">Femme</div>
 				</div>
 				
 			</div>
@@ -294,9 +314,10 @@
 					<tr class="header">
 						<th class="header">N</th>
 						<th class="header col-md-4">Nom</th>
+						<th class="header">Département</th>
+						<th class="header">Mandat</th>
 						<th class="header">Parti politique</th>
 						<th class="header">Groupe</th>
-						<th class="header">Mandat</th>	
 						<th class="header">Activities</th>
 						<th class="header">Revenue</th>						
 					</tr>
@@ -331,6 +352,43 @@
 
 
 <script>
+
+//Custom sorting for datatables numbers with commas
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "numeric-comma-pre": function ( a ) {
+        var x = (a == "-") ? 0 : a.replace( /,/, "" );
+        return parseFloat( x );
+    },
+ 
+    "numeric-comma-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+ 
+    "numeric-comma-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "name-lastname-pre": function ( a ) {
+		//alert(a);
+		var name = a.substr(0,a.indexOf(' '));
+		var lastname = a.substr(a.indexOf(' ')+1);
+		lastname = lastname.replace('<b>','');
+		lastname = lastname.replace('</b>','');
+        return lastname.toLowerCase();
+    },
+ 
+    "name-lastname-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+ 
+    "name-lastname-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
+
 
 $('#view_charts').click(function(ev) {
 	ev.preventDefault();
@@ -480,7 +538,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 	//alert(totact + ' ' +totpeople + ' ' +totrev);
 	$("#mep_number .filter-count").html(totpeople);
 	$("#mep_number .total-count").html(totpeople);
-	$(".nbaccredited").html(totact);
+	$(".nbaccredited").html(addcommas(totact));
 	//$(".nbcost").html(d3.format(",.5s")(totrev)+"€");
 	$(".nbcost").html(addcommas(totrev.toFixed(0))+"€");
 	
@@ -585,10 +643,11 @@ d3.csv("parlementaires.csv", function(error, data) {
 	
 		d3.json("departements.topo.js", function (json) {
 			var width=550;
-			var height=500;
-			var projection = d3.geo.equirectangular()
-			   .center([10,43]) //theorically, 50°7′2.23″N 9°14′51.97″E but this works
-			   .scale(width*3.2);
+			var height=600;
+			//var projection = d3.geo.equirectangular()
+			var projection = d3.geo.mercator()
+			   .center([11,45]) //theorically, 50°7′2.23″N 9°14′51.97″E but this works
+			   .scale(width*2.8);
      var dpt = topojson.feature(json, json.objects.departements).features;
 
 			//Fix id
@@ -636,10 +695,11 @@ d3.csv("parlementaires.csv", function(error, data) {
 			}
 	
             franceMap.width(550)
-                    .height(300)
+                    .height(400)
                     .dimension(circ)
-                    .group(avgActivitiesGroup)
-					.valueAccessor(function(p) {return p.value.count > 0 ? Math.round(p.value.total / p.value.count) : 0; })
+					.group(circGroup)
+                    //.group(avgActivitiesGroup)
+					//.valueAccessor(function(p) {return p.value.count > 0 ? Math.round(p.value.total / p.value.count) : 0; })
 					.projection(projection)
                     .colors(d3.scale.quantize().range(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"]))
                     .colorDomain([1, 20])
@@ -671,13 +731,26 @@ d3.csv("parlementaires.csv", function(error, data) {
 			.width(550)
 			.height(330)
 			.brushOn(false)
-			.colors("#009AAB")
+			//.colors("#009AAB")
+			.colors(d3.scale.ordinal().domain(["Aucun", "0 - 500", "501 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 +"])
+				.range(["#eeeeee", "#8ed3fb", "#68add4", "#4388ad", "#1a6287", "#0a5277"]))
+			.colorCalculator(function (d) {return bar1.colors()(d.key);})
 			.yAxisLabel("Parlementaires")
 			.elasticY(true)
 			.dimension(revenueRange)
 			.group(revenueRangeGroup)
 			.x(d3.scale.ordinal().domain(["Aucun", "0 - 500", "501 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 +"]))
 			.xUnits(dc.units.ordinal);
+		
+/*		
+		bar1.renderlet(function(chart){
+			var colors = d3.scale.ordinal().domain(["Aucun", "0 - 500", "501 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 +"])
+				.range(["steelblue", "brown", "red", "green", "yellow", "grey"]);
+			chart.selectAll('rect.bar').each(function(d){
+				 d3.select(this).attr("style", "fill: " + colors(d.key)); // use key accessor if you are using a custom accessor
+			});
+		});
+		*/
 			
 
 			
@@ -697,6 +770,13 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.slicesCap(4)
 		.innerRadius(50)
 		.dimension(type)
+		.colorCalculator(function(d, i) {
+			if(d.key[0] == 'S'){
+				return '#cf270e';
+			} else if(d.key[0] == 'A'){
+				return '#ecb005';
+			}
+		})
 		.label(function(d) {
 			if(d.key[0] == 'A'){
 				return "AN";
@@ -721,6 +801,13 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.slicesCap(4)
 		.innerRadius(50)
 		.dimension(civilite)
+		.colorCalculator(function(d, i) {
+			if(d.key[0] == 'm'){
+				return '#cf270e';
+			} else if(d.key[0] == 'f'){
+				return '#ecb005';
+			}
+		})
 		.label(function(d) {
 			if(d.key == 'f'){
 				return "Femme";
@@ -749,6 +836,41 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.colorCalculator(function(d, i) {
 			return parti_groups[d.key];
 		});
+		
+		//pie3.ordering(function(d) { return -d.value; })
+		function partiorder(d) {
+			//LR, Autres, FN, UDI, EELV, FG/PCF, PS
+			switch(d.key) {
+				case 'LR':
+					return 0;
+					break;
+				case 'Others':
+					return 1;
+					break;
+				case 'FN':
+					return 2;
+					break;
+				case 'UDI':
+					return 3;
+					break;
+				case 'EELV':
+					return 4;
+					break;
+				case 'PCF':
+					return 5;
+					break;
+				case 'FG':
+					return 5;
+					break;
+				case 'PS':
+					return 6;
+					break;
+				default:
+					return 7;
+			}
+		}
+		
+		pie3.ordering(function(d) { return partiorder(d); })
 		
 	  pie3.on('filtered.monitor', function(chart, filter) {
 		RefreshTable();
@@ -797,6 +919,7 @@ d3.csv("parlementaires.csv", function(error, data) {
               "searchable": true,
               "orderable": true,
               "width":"30%",
+			  "type":"name-lastname",
               "targets": 1,
               data: function (row, type, val, meta) { 
                 if (row.name) {
@@ -812,40 +935,52 @@ d3.csv("parlementaires.csv", function(error, data) {
               "searchable": false,
               "orderable": true,
               "targets": 2,
-              data: "parti"
-              },{
-              "defaultContent":"No data",
-              "searchable": false,
-              "orderable": true,
-              "targets": 3,
-              data: "parti_group",  
+			  "type":"num",
+			  "sClass": "alignright",
+              data: "departement_n"
               },{
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
               "targets": 4,
+              data: "parti"
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "targets": 5,
+              data: "parti_group",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "targets": 3,
               data: "mandat",  
               },{
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
               "type":"num",
-              "targets": 5,
+              "targets": 6,
+			  "sClass": "alignright",
               data: "activities",  
               },{
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
-              "type":"num",
-              "targets": 6,
-              data: "revenue_n2",  
+			  "sClass": "alignright",
+              "type":"numeric-comma",
+              "targets": 7,
+			  data: function (row, type, val, meta) { 
+				return addcommas(row.revenue_n2)
+			  }, 
               }
             ],
             "iDisplayLength" : 500,
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": false,
-            "order": [[ 6, "desc" ]],
+            "order": [[ 7, "desc" ]],
             "bSort": true,
             "bInfo": false,
             "bAutoWidth": false,
@@ -909,7 +1044,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 		repdata = row.data();
 		$('#repModal .modal-title').html(repdata.name);
 		var photo = getPhoto(repdata.name,repdata.mandat);
-		var profile = getProfile(repdata.name,repdata.mandat);
+		var profile = getProfile(repdata.name,repdata.mandat,repdata.uid);
 		var hatvp = getHatvp(repdata.name);
 		
 		//Build modal body
@@ -918,10 +1053,10 @@ d3.csv("parlementaires.csv", function(error, data) {
 		modalbody += '<div><label>Departément:</label> '+repdata.departement+' ('+repdata.departement_n+')</div>';
 		modalbody += '<div><label>Total revenues externe:</label> '+addcommas(repdata.revenue_n2)+' EUR</div>';
 		modalbody += '<div><label>Activités externes:</label> '+repdata.activities+'</div>';
-		modalbody += '</div><div class="col-md-3">'+ photo + '</div></div>';
-		modalbody += '<br />';
-		modalbody += '<div><label>Activités législatives:</label> <a href="'+profile+'" target="_blank">Profil sur www.nosdeputes.fr</a></div>';
+		modalbody += '<div><label>Activités législatives:</label> <a href="'+profile+'" target="_blank">Profil détaillé</a></div>';
 		modalbody += '<div><label>Declaration originale:</label> <a href="'+hatvp+'" target="_blank">Profil sur le site de la Haute Autprité pour la Transparence de la Vie Publique (HATVP)</a></div>';
+		modalbody += '</div><div class="col-md-3">'+ photo + '</div></div>';
+		
 		
 		//modalbody += '<table class="details_table"><thead><td>Type</td><td>Description</td><td>Revenue</td><td></td></thead><tbody>';
 		var tableh = '<table class="details_table"><thead><td>Description</td><td>Organisation</td><td>Revenue</td><td></td></thead><tbody>';
@@ -1041,16 +1176,29 @@ d3.csv("parlementaires.csv", function(error, data) {
 		} 
 	}
 	
-	var getProfile = function(name,type){
-		var plainname = removeDiacritics(name);
-		var slug = plainname.replace(" ","-");
-		if(slug == 'Evelyne-Yonnet-Salvator'){
-		 slug = 'Evelyne-Yonnet';
-		}
-		if(type[0] == 'S'){
-			var url = "http://www.nossenateurs.fr/"+slug;
-		} else if(type[0] == 'A'){
-			var url = "http://www.nosdeputes.fr/"+slug;
+	var getProfile = function(name,type,uid){
+		if(uid != ''){
+			if(type[0] == 'A'){
+				var url = 'http://www2.assemblee-nationale.fr/deputes/fiche/OMC_'+uid;
+			} else if(type[0] == 'S'){
+				var plainname = removeDiacritics(name);		
+				var name1 = plainname.substr(0,plainname.indexOf(' '));
+				var name2 = plainname.substr(plainname.indexOf(' ')+1);
+				var name2 = name2.replace(/ /g, '_');
+				var slug = name2+'_'+name1;
+				var url = 'http://www.senat.fr/senateur/'+ slug + uid + '.html';
+			}
+		} else {
+			var plainname = removeDiacritics(name);
+			var slug = plainname.replace(" ","-");
+			if(slug == 'Evelyne-Yonnet-Salvator'){
+			 slug = 'Evelyne-Yonnet';
+			}
+			if(type[0] == 'S'){
+				var url = "http://www.nossenateurs.fr/"+slug;
+			} else if(type[0] == 'A'){
+				var url = "http://www.nosdeputes.fr/"+slug;
+			}
 		}
 		return url;
 	}
@@ -1078,9 +1226,9 @@ d3.csv("parlementaires.csv", function(error, data) {
 		 slug = 'Evelyne-Yonnet';
 		}
 		if(type[0] == 'S'){
-			var photourl = "http://www.nossenateurs.fr/senateur/photo/"+slug+"/120";
+			var photourl = "http://www.nossenateurs.fr/senateur/photo/"+slug+"/180";
 		} else if(type[0] == 'A'){
-			var photourl = "http://www.nosdeputes.fr/depute/photo/"+slug+"/120";
+			var photourl = "http://www.nosdeputes.fr/depute/photo/"+slug+"/180";
 		}
 		return "<img src=\""+photourl+"\" />";
 		
@@ -1250,7 +1398,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 			})
 		  .on("renderlet.all", function(c) {
 			$(".nbfte").html(fte);
-			$(".nbaccredited").html(activities);
+			$(".nbaccredited").html(addcommas(activities));
 			//$(".nbcost").html(d3.format(",.5s")(revenue)+"€");
 			$(".nbcost").html(addcommas(revenue.toFixed(0))+"€");
 			revenue=0;
