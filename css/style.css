@@ -1368,4 +1368,14 @@ td.number{
 	position: absolute;
 }
 
+//Fixes
+.navbar-default {
+	border: 0px;
+	border-color: none !important;
+	border-radius: 0;
+}
+.navbar {
+	border: 0px solid transparent;
+	border-radius: 0;
+}
 noneedanymore.categorie svg {height:340px;}
