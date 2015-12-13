@@ -60,7 +60,19 @@
 	.legend div.lr::before {
 		background: #0a3e63 none repeat scroll 0 0;
 	}
+	.legend div.fg::before {
+		background: #db6a1f none repeat scroll 0 0;
+	}
+	.legend div.ps::before {
+		background: #c12e41 none repeat scroll 0 0;
+	}
+	.legend div.udi::before {
+		background: #8c1456 none repeat scroll 0 0;
+	}
 	.legend div.fn::before {
+		background: #000000 none repeat scroll 0 0;
+	}
+	.legend div.gdr::before {
 		background: #A1480D none repeat scroll 0 0;
 	}
 	.legend div.blu1::before {
@@ -75,6 +87,15 @@
 	.legend div.yellow::before {
 		background: #ecb005 none repeat scroll 0 0;
 	}
+	/*
+	#about_wrap_top.bl_header {
+		background: #009AAB;
+	}
+	#collapse_about.bl_collapse a.closed {
+		background: #009AAB url("../img/collapse_cm.svg") no-repeat scroll center top;
+		background-position: 110% !important;
+	}
+	*/
 	#filter_wrap.filter_bl, #about_wrap.bl_header,.nav li#bl_tool_btn.active a {
 		background: #009AAB;
 	}
@@ -96,6 +117,11 @@
 	#repModal .modal-dialog .modal-body {
 		font-size: 15px;
 	}
+	#bar1 .tick text {
+		font-size: 8px;
+	}
+
+	
 </style>
 
 
@@ -147,11 +173,12 @@
 			</div>
 			<div class="col-md-6 col-lg-6" id="about_content">
 				<p>
- Integrity Watch France est une base de données interactive sur le lobbying qui offre un aperçu unique des organisations inscrites sur le registre des représentants d’intérêts de l’Assemblée nationale. 
+ Integrity Watch France est une base de données interactive qui offre un aperçu unique des intérêts et activités déclarées par les parlementaires à la Haute Autorité pour la transparence de la vie publique. Cet outil doit permettre de mieux identifier les activités susceptibles de générer des conflits d’intérêts.
+ <br /> <br />
+Seules les activités exercées en parallèle du mandat de député ou de sénateur ont été prises en compte (mandats et fonctions publiques, activités privées, fonctions bénévoles). De même, les indemnités parlementaires n’ont pas été intégrées au calcul des revenus.  
+<br /> <br />
+Simple d’utilisation, il suffit de cliquer sur les éléments des infographies pour filtrer, trier et classer les informations. Veillez à bien enlever les filtres en cas de recherches successives. <br />
 				<br /><a href="about.html" class="more">En savoir plus</a></p>
-				<p>
-      Simple d’utilisation, il suffit de cliquer sur les éléments des infographies pour filtrer, trier et classer les organisations.
-        </p>
 			</div>
 			<div class="col-md-3" id="about_social">
 				<br/>
@@ -235,10 +262,11 @@
 		</div>
 		<div id="pie3"></div>
 		<div class="legend">
-			<div class="gue">FG/PCF/PRG</div>
-			<div class="gue">Groupe GDR</div>
-			<div class="alde">UDI</div>
-			<div class="sd">PS/SRC</div>
+			<div class="fg">FG/PCF</div>
+			<div class="fg">PRG</div>
+			<div class="gdr">Groupe GDR</div>
+			<div class="udi">UDI</div>
+			<div class="ps">PS/SRC</div>
 			<div class="greens">EELV/UDE</div>
 			<div class="lr">LR</div>
 			<div class="fn">FN</div>
@@ -247,7 +275,7 @@
 		<br class="clear" />
 	</div>
 	<div class="col-md-3 chart_box">
-		<h3>Activités externes</h3>
+		<h3>Activités annexes</h3>
 		<div class="info_chart">
 			<span class="info">info</span>
 			<p class="desc" style="display: none;"> Info </p>
@@ -266,7 +294,7 @@
 </div>
 <div class="row">
 			<div class="col-md-6 chart_box">
-				<h3>Revenue externe (p.a.)</h3>
+				<h3>Revenus annexes</h3>
 				<div class="info_chart">
 					<span class="info">info</span>
 					<p class="desc" style="display: none;"> Info </p>
@@ -275,27 +303,27 @@
 			</div>
 			
 			<div class="col-md-3 chart_box">
-				<h3>Mandat</h3>
+				<h3>Mandat parlementaire</h3>
 				<div class="info_chart">
 					<span class="info">info</span>
 					<p class="desc" style="display: none;"> Info </p>
 				</div>
 				<div id="pie1"></div>
 				<div class="legend">
-					<div class="red">Sénat</div>
-					<div class="yellow">Assemblée nationale</div>
+					<div class="blu1">Sénat</div>
+					<div class="blu2">Assemblée nationale</div>
 				</div>
 			</div>
 			<div class="col-md-3 chart_box">
-				<h3>Civilité</h3>
+				<h3>Hommes/Femmes</h3>
 				<div class="info_chart">
 					<span class="info">info</span>
 					<p class="desc" style="display: none;"> Info </p>
 				</div>
 				<div id="pie2"></div>
 				<div class="legend">
-					<div class="red">Homme</div>
-					<div class="yellow">Femme</div>
+					<div class="blu1">Hommes</div>
+					<div class="blu2">Femmes</div>
 				</div>
 				
 			</div>
@@ -319,7 +347,7 @@
 						<th class="header">Parti politique</th>
 						<th class="header">Groupe</th>
 						<th class="header">Activities</th>
-						<th class="header">Revenue</th>						
+						<th class="header">Revenus</th>						
 					</tr>
 				</thead>
 			</table>
@@ -446,23 +474,27 @@ var rep = null;
 var representatives={};
 
 var parti_groups = {
-"PRG":"#800c00",
-"FG":"#800c00",
-"PCF":"#800c00",
-"PS":"#c21200",
-"Groupe SRC":"#c21200",
+"PRG":"#DB6A1F",
+"FG":"#DB6A1F",
+"PCF":"#DB6A1F",
+"FG/PCF":"#DB6A1F",
+"PS":"#C12E41",
+"Groupe SRC":"#C12E41",
+"PS/SRC":"#C12E41",
 "EELV":"#05a61e",
 "UDE":"#05a61e",
-"UDI":"#ffc200",
+"EELV/UDE":"#05a61e",
+"UDI":"#8C1456",
 "EFDD":"#5eced6",
 "PPE":"#0a3e63",
 "LR":"#0a3e63",
 "ECR":"#3086c2",
 "NA/NI":"#cccccc",
-"FN":"#A1480D",
-"Groupe GDR":"#800c00",
+"FN":"#000000",
+"Groupe GDR":"#A1480D",
 "Group RRDP":"#800c00",
 "Others":"#BBBBBB",
+"Autres":"#BBBBBB",
 "Array":"pink"
 };
 
@@ -485,6 +517,26 @@ d3.csv("parlementaires.csv", function(error, data) {
 	
 	
 	data.forEach(function (d) {
+	
+		//Group parties
+		d.parti_group_m = d.parti_group;
+		if(d.parti_group == 'EELV' || d.parti_group == 'UDE'){
+			d.parti_group_m = 'EELV/UDE';
+		} else if(d.parti_group == 'FG' || d.parti_group == 'PCF') {
+			d.parti_group_m = 'FG/PCF';
+		} else if(d.parti_group == 'PS' || d.parti_group == 'Groupe SRC' || d.parti_group == 'PS '){
+			d.parti_group_m = 'PS/SRC';
+		} else if(d.parti_group == 'UDI'){
+			d.parti_group_m = 'UDI';
+		} else if(d.parti_group == 'PRG'){
+			d.parti_group_m = 'PRG';
+		} else if(d.parti_group == 'LR' || d.parti_group == 'LR '){
+			d.parti_group_m = 'LR';
+		} else if(d.parti_group == 'FN'){
+			d.parti_group_m = 'FN';
+		} else {
+			d.parti_group_m = 'Autres';
+		}
 		
 		if(d.revenue == '#N/D' || d.revenue == ''){
 			d.revenue_n = 0;
@@ -494,18 +546,21 @@ d3.csv("parlementaires.csv", function(error, data) {
 			d.revenue_n = parseFloat(d.revenue_n);
 			d.revenue_n2 = d.revenue_n.toFixed(0);
 		}
+		
 		if(d.revenue == '#N/D' || d.revenue == ''){
 			d.revenue_range = "Aucun";
-		} else if(d.revenue_n <= 500){
-			d.revenue_range = "0 - 500";
+		} else if(d.revenue_n <= 1000){
+			d.revenue_range = "0 - 1000";
 		} else if(d.revenue_n <= 10000){
-			d.revenue_range = "501 - 10,000";
+			d.revenue_range = "1001 - 10,000";
 		} else if(d.revenue_n <= 25000){
 			d.revenue_range = "10,001 - 25,000";
 		} else if(d.revenue_n <= 50000){
 			d.revenue_range = "25,001 - 50,000";
-		} else if(d.revenue_n > 50000){
-			d.revenue_range = "50,001 +";
+		} else if(d.revenue_n <= 100000){
+			d.revenue_range = "50,001 - 100,000";
+		} else if(d.revenue_n > 100000){
+			d.revenue_range = "100,001 +";
 		}
 
 		d.revenue_n = d.revenue_n.toFixed(2);
@@ -547,7 +602,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 	  circ = ndx.dimension(function (d) {return d.departement_n;}),
 	  type = ndx.dimension(function (d) {return d.mandat;}),
 	  parti = ndx.dimension(function (d) {return d.parti;}),
-	  partig = ndx.dimension(function (d) {return d.parti_group;}),
+	  partig = ndx.dimension(function (d) {return d.parti_group_m;}),
 	  civilite = ndx.dimension(function (d) {return d.civilite;}),
 	  name = ndx.dimension(function (d) {return d.name;}),
 	  activities = ndx.dimension(function (d) {return d.activities;}),
@@ -709,7 +764,7 @@ d3.csv("parlementaires.csv", function(error, data) {
                         return d.properties.code;
                     })
                     .title(function (d) {
-                        return  _.find(dpt, function (m) {return m.properties.code==d.key}).properties.nom + ': ' + d.value;
+                        return  _.find(dpt, function (m) {return m.properties.code==d.key}).properties.nom + ': ' + d.value + ' parlementaires';
                     })
 					.on('renderlet', function(chart) {
 						/*
@@ -732,14 +787,15 @@ d3.csv("parlementaires.csv", function(error, data) {
 			.height(330)
 			.brushOn(false)
 			//.colors("#009AAB")
-			.colors(d3.scale.ordinal().domain(["Aucun", "0 - 500", "501 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 +"])
-				.range(["#eeeeee", "#8ed3fb", "#68add4", "#4388ad", "#1a6287", "#0a5277"]))
+			.colors(d3.scale.ordinal().domain(["Aucun", "0 - 1000", "1001 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 - 100,000", "100,001 +"])
+				.range(["#eeeeee", "#8ed3fb", "#68add4", "#4388ad", "#1a6287", "#0a5277", "#054267"]))
 			.colorCalculator(function (d) {return bar1.colors()(d.key);})
 			.yAxisLabel("Parlementaires")
 			.elasticY(true)
 			.dimension(revenueRange)
+			.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
 			.group(revenueRangeGroup)
-			.x(d3.scale.ordinal().domain(["Aucun", "0 - 500", "501 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 +"]))
+			.x(d3.scale.ordinal().domain(["Aucun", "0 - 1000", "1001 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 - 100,000", "100,001 +"]))
 			.xUnits(dc.units.ordinal);
 		
 /*		
@@ -770,6 +826,8 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.slicesCap(4)
 		.innerRadius(50)
 		.dimension(type)
+		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
+		/*
 		.colorCalculator(function(d, i) {
 			if(d.key[0] == 'S'){
 				return '#cf270e';
@@ -777,6 +835,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 				return '#ecb005';
 			}
 		})
+		*/
 		.label(function(d) {
 			if(d.key[0] == 'A'){
 				return "AN";
@@ -801,6 +860,8 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.slicesCap(4)
 		.innerRadius(50)
 		.dimension(civilite)
+		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
+		/*
 		.colorCalculator(function(d, i) {
 			if(d.key[0] == 'm'){
 				return '#cf270e';
@@ -808,6 +869,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 				return '#ecb005';
 			}
 		})
+		*/
 		.label(function(d) {
 			if(d.key == 'f'){
 				return "Femme";
@@ -829,10 +891,11 @@ d3.csv("parlementaires.csv", function(error, data) {
 	  pie3
 		.width(200)
 		.height(240)
-		.slicesCap(6)
+		.slicesCap(8)
 		.innerRadius(50)
 		.dimension(partig)
 		.group(partigGroup)
+		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
 		.colorCalculator(function(d, i) {
 			return parti_groups[d.key];
 		});
@@ -844,7 +907,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 				case 'LR':
 					return 0;
 					break;
-				case 'Others':
+				case 'Autres':
 					return 1;
 					break;
 				case 'FN':
@@ -853,16 +916,16 @@ d3.csv("parlementaires.csv", function(error, data) {
 				case 'UDI':
 					return 3;
 					break;
-				case 'EELV':
+				case 'EELV/UDE':
 					return 4;
 					break;
-				case 'PCF':
+				case 'FG/PCF':
 					return 5;
 					break;
-				case 'FG':
+				case 'PRG':
 					return 5;
 					break;
-				case 'PS':
+				case 'PS/SRC':
 					return 6;
 					break;
 				default:
@@ -886,6 +949,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.height(240)
 		.slicesCap(5)
 		.innerRadius(50)
+		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
 		.dimension(activitiesRange)
 		.group(activitiesRangeGroup)
 		.colorCalculator(function(d, i) {
@@ -1050,16 +1114,16 @@ d3.csv("parlementaires.csv", function(error, data) {
 		//Build modal body
 		var modalbody = '<div class="row"><div class="col-md-9">';
 		modalbody += '<div><label>Mandat:</label> '+repdata.mandat+'</div>';
-		modalbody += '<div><label>Departément:</label> '+repdata.departement+' ('+repdata.departement_n+')</div>';
-		modalbody += '<div><label>Total revenues externe:</label> '+addcommas(repdata.revenue_n2)+' EUR</div>';
-		modalbody += '<div><label>Activités externes:</label> '+repdata.activities+'</div>';
+		modalbody += '<div><label>Département:</label> '+repdata.departement+' ('+repdata.departement_n+')</div>';
+		modalbody += '<div><label>Total revenus annexes:</label> '+addcommas(repdata.revenue_n2)+' EUR</div>';
+		modalbody += '<div><label>Activités annexes:</label> '+repdata.activities+'</div>';
 		modalbody += '<div><label>Activités législatives:</label> <a href="'+profile+'" target="_blank">Profil détaillé</a></div>';
 		modalbody += '<div><label>Declaration originale:</label> <a href="'+hatvp+'" target="_blank">Profil sur le site de la Haute Autprité pour la Transparence de la Vie Publique (HATVP)</a></div>';
 		modalbody += '</div><div class="col-md-3">'+ photo + '</div></div>';
 		
 		
 		//modalbody += '<table class="details_table"><thead><td>Type</td><td>Description</td><td>Revenue</td><td></td></thead><tbody>';
-		var tableh = '<table class="details_table"><thead><td>Description</td><td>Organisation</td><td>Revenue</td><td></td></thead><tbody>';
+		var tableh = '<table class="details_table"><thead><td>Description</td><td>Organisation</td><td>Revenus</td><td></td></thead><tbody>';
 		var tablee = '</tbody></table>';
 		//Get details data
 		var detailtype = '';
@@ -1145,10 +1209,10 @@ d3.csv("parlementaires.csv", function(error, data) {
 	var fullType = function(type){
 		switch(type) {
 			case 'pro':
-				return 'Activités rénumérés à l’élection';
+				return 'Activités rémunérées à la date de l’élection';
 				break;
 			case 'pro5':
-				return 'Activités rémunérés antérieures (5 ans)';
+				return 'Activités antérieures rémunérées (5 ans)';
 				break;
 			case 'consulting':
 				return 'Activités de consultant';
@@ -1169,7 +1233,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 				return 'Autres mandats';
 				break;
 			case 'kept':
-				return 'Activités externes actuels';
+				return 'Activités externes conservées';
 				break;
 			default:
 				return '';
