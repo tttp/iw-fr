@@ -1,0 +1,113 @@
+.modal-body {
+	padding: 0px 20px;
+}
+.p20 {
+	padding: 0 20px;
+}
+.map_container {
+	min-height:300px;
+}
+.details_table {
+	font-size: 13px;
+	width: 100%;
+}
+.details_table thead {
+	font-weight: bold;
+	border-bottom: 2px solid #fff;
+}
+.details_table tr:nth-child(even) {background: #e9f2fa}
+.details_table tr:nth-child(odd) {background: #fafafa}
+.details_table td {
+	padding: 5px 10px;
+}
+.details_table thead tr {
+	background: #eee !important;
+}
+.details_modal {
+	padding-bottom: 0;
+}
+.pdesc {
+	position: absolute;
+	right: 30px;
+	//border: 1px solid #000;
+	background: #e6e6e6;
+	width: 200px;
+	padding: 10px;
+	font-size: 13px;
+}
+td.infod {
+	text-align: right;
+}
+.details_modal_body {
+	margin-bottom: 40px;
+}
+.legend div._nd::before {
+	background: #eee none repeat scroll 0 0;
+}
+.legend div.lr::before {
+	background: #0a3e63 none repeat scroll 0 0;
+}
+.legend div.fg::before {
+	background: #db6a1f none repeat scroll 0 0;
+}
+.legend div.ps::before {
+	background: #c12e41 none repeat scroll 0 0;
+}
+.legend div.udi::before {
+	background: #8c1456 none repeat scroll 0 0;
+}
+.legend div.fn::before {
+	background: #000000 none repeat scroll 0 0;
+}
+.legend div.gdr::before {
+	background: #A1480D none repeat scroll 0 0;
+}
+.legend div.blu1::before {
+	background: #6baed6 none repeat scroll 0 0;
+}
+.legend div.blu2::before {
+	background: #3182bd none repeat scroll 0 0;
+}
+.legend div.red::before {
+	background: #cf270e none repeat scroll 0 0;
+}
+.legend div.yellow::before {
+	background: #ecb005 none repeat scroll 0 0;
+}
+/*
+#about_wrap_top.bl_header {
+	background: #009AAB;
+}
+#collapse_about.bl_collapse a.closed {
+	background: #009AAB url("../img/collapse_cm.svg") no-repeat scroll center top;
+	background-position: 110% !important;
+}
+*/
+#filter_wrap.filter_bl, #about_wrap.bl_header,.nav li#bl_tool_btn.active a {
+	background: #009AAB;
+}
+.departement path {
+	stroke: #000000;
+	stroke-width: 0.2;
+}
+.mapbuttons {
+	width: 100%;
+	text-align: right;
+}
+.alignright {
+	text-align:right;
+}
+#repModal .modal-dialog {
+	width: 800px;
+	max-width: 100%;
+}
+#repModal .modal-dialog .modal-body {
+	font-size: 15px;
+}
+#bar1 .tick text {
+	font-size: 8px;
+}
+.nobright {
+	border-right: none !important;
+	padding-right: 5px;
+}

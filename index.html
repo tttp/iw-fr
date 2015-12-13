@@ -971,7 +971,7 @@ Attention : les conseils privés doivent, pour leur part, déclarer le chiffre d
 	$(".resetall").click(function() {
 		$("#search-input").val("");
 		$(".resetall").attr("disabled",true);
-    rep.filter(null); //needs to be explicitely reset
+		rep.filter(null); //needs to be explicitely reset
 		dc.filterAll();
 		dc.renderAll();
 
