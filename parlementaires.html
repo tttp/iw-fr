@@ -773,7 +773,9 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.slicesCap(4)
 		.innerRadius(50)
 		.dimension(type)
-		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
+		.title(function (d) {
+			return d.key + ': '+d.value + ' parlementaires'
+		})
 		/*
 		.colorCalculator(function(d, i) {
 			if(d.key[0] == 'S'){
@@ -783,12 +785,19 @@ d3.csv("parlementaires.csv", function(error, data) {
 			}
 		})
 		*/
+		/*
 		.label(function(d) {
 			if(d.key[0] == 'A'){
 				return "AN";
 			} else if(d.key[0] == 'S'){
 				return "Sénat";
 			}
+		})
+		*/
+		.label(function (d){
+			var percent = d.value / typeGroup.all().reduce(function(a, v){ return a + v.value; }, 0);
+			percent = percent*100;
+			return percent.toFixed(1) + '%';
 		})
 		.group(typeGroup);
 		
@@ -807,16 +816,19 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.slicesCap(4)
 		.innerRadius(50)
 		.dimension(civilite)
-		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
-		/*
-		.colorCalculator(function(d, i) {
-			if(d.key[0] == 'm'){
-				return '#cf270e';
-			} else if(d.key[0] == 'f'){
-				return '#ecb005';
+		.title(function (d) {
+			if(d.key == 'f'){
+				return "Femmes" + ': '+d.value + ' parlementaires';;
+			} else if(d.key == 'm'){
+				return "Hommes" + ': '+d.value + ' parlementaires';;
 			}
 		})
-		*/
+		.label(function (d){
+			var percent = d.value / civiliteGroup.all().reduce(function(a, v){ return a + v.value; }, 0);
+			percent = percent*100;
+			return percent.toFixed(1) + '%';
+		})
+		/*
 		.label(function(d) {
 			if(d.key == 'f'){
 				return "Femme";
@@ -824,6 +836,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 				return "Homme";
 			}
 		})
+		*/
 		.group(civiliteGroup);
 		
 	  pie2.on('filtered.monitor', function(chart, filter) {
@@ -896,7 +909,14 @@ d3.csv("parlementaires.csv", function(error, data) {
 		.height(240)
 		.slicesCap(5)
 		.innerRadius(50)
-		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
+		.title(function (d) {
+			return d.key + ': '+d.value + ' parlementaires';
+		})
+		.label(function (d){
+			var percent = d.value / activitiesRangeGroup.all().reduce(function(a, v){ return a + v.value; }, 0);
+			percent = percent*100;
+			return percent.toFixed(1) + '%';
+		})
 		.dimension(activitiesRange)
 		.group(activitiesRangeGroup)
 		.colorCalculator(function(d, i) {
