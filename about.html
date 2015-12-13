@@ -52,7 +52,8 @@
 		
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li id="bl_tool_btn"><a href="/">Lobbyistes en France</a></li>
+					<li id="bl_tool_btn"><a href="index.html">Lobbyistes en France</a></li>
+					<li><a href="parlementaires.html">Parlementaires en France</a></li>
           <li class="dropdown">
             <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Integrity Watch Europe<span class="caret"></span></a>
              <ul class="dropdown-menu">
@@ -61,6 +62,7 @@
           </li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="http://">Suivez-nous</a></li>
 					<li><a href="http://www.transparency-france.org/ewb_pages/div/Faire_un_don_a_TI_France.php">Faites un don</a></li>
 					<li class="active"><a href="about.html">A propos</a></li>
 					<li><a href="contact.html">Contact</a></li>
@@ -71,7 +73,14 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-xs-12">
+	<div class="col-md-3">
+		<div id="about_menu_container">
+			<ul id="menu" style="width: 263px;">
+				<li><a href="#about">About</a></li>
+			</ul>
+		</div>
+	</div>
+    <div class="col-md-9">
       <p class="well">
       Integrity Watch a vocation à décliner différents outils développés par Transparency International pour renforcer la transparence et la redevabilité des acteurs publics et privés, et prévenir les conflits d’intérêts en facilitant l’exercice d’un contrôle citoyen. <br>Integrity Watch France est la version française d’<a href='http://www.integritywatch.eu'>EU Integrity Watch</a>, lancé en octobre 2014. 
     </p><p>
@@ -165,5 +174,14 @@
     </div>
   </div>
 </div>
+<script>
+$('#menu').width($('#about_menu_container').width())
+$('#menu li a').click(function(e) {
+	e.preventDefault();
+	$('html, body').animate({
+		   scrollTop: $($(this).attr('href')).offset().top - 20
+	   }, 1000);
+})
+</script>
 </body>
 </html>

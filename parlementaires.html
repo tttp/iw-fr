@@ -45,6 +45,7 @@
           </li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="http://">Suivez-nous</a></li>
 					<li><a href="http://www.transparency-france.org/ewb_pages/div/Faire_un_don_a_TI_France.php">Faites un don</a></li>
 					<li><a href="about.html">A propos</a></li>
 					<li><a href="contact.html">Contact</a></li>
@@ -60,10 +61,10 @@
 			</div>
 			<div class="col-md-6 col-lg-6" id="about_content">
 				<p>
- Integrity Watch France est une base de données interactive qui offre un aperçu unique des intérêts et activités déclarées par les parlementaires à la Haute Autorité pour la transparence de la vie publique. Cet outil doit permettre de mieux identifier les activités susceptibles de générer des conflits d’intérêts.
+ Integrity Watch France est une base de données interactive qui offre un aperçu unique des intérêts et activités déclarées par les parlementaires. Cet outil doit permettre de mieux identifier les activités susceptibles de générer des conflits d’intérêts.
  <br /> <br />
-Seules les activités exercées en parallèle du mandat de député ou de sénateur ont été prises en compte (mandats et fonctions publiques, activités privées, fonctions bénévoles). De même, les indemnités parlementaires n’ont pas été intégrées au calcul des revenus.  
-<br /> <br />
+Seules les activités exercées en parallèle du mandat de député ou de sénateur ont été prises en compte (mandats électifs, activités conservées, fonctions bénévoles). De même, les indemnités parlementaires n’ont pas été intégrées au calcul des revenus. 
+ <br /> <br />
 Simple d’utilisation, il suffit de cliquer sur les éléments des infographies pour filtrer, trier et classer les informations. Veillez à bien enlever les filtres en cas de recherches successives. <br />
 				<br /><a href="about.html" class="more">En savoir plus</a></p>
 			</div>
@@ -143,6 +144,10 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 <div class="row">
 	<div class="col-md-6 chart_box map_container">
 		<h3>Departements</h3>
+		<div class="info_chart">
+			<span class="info">info</span>
+			<p class="desc" style="display: none;">Nombre de parlementaires par département, à l’exception de l’Île-de-France et des DOM-TOM (nombres totaux). Passez la souris sur le département qui vous intéresse pour voir le nombre de parlementaires concernés.</p>
+		</div>
 		<div class="mapbuttons"><button id="iledefrance">Ile de France</button><button id="franceterritories">DOM-TOM</button></div>
 		<div id="france"></div>
 	</div>
@@ -151,7 +156,7 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 		<h3>Parti Politique</h3>
 		<div class="info_chart">
 			<span class="info">info</span>
-			<p class="desc" style="display: none;"> Info </p>
+			<p class="desc" style="display: none;">Répartition des parlementaires en fonction de leur appartenance politique.  Passez la souris sur les différents secteurs pour voir le nombre de parlementaires concernés.</p>
 		</div>
 		<div id="pie3"></div>
 		<div class="legend">
@@ -171,7 +176,7 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 		<h3>Activités annexes</h3>
 		<div class="info_chart">
 			<span class="info">info</span>
-			<p class="desc" style="display: none;"> Info </p>
+			<p class="desc" style="display: none;">Nombre de mandats électifs, activités professionnelles conservées et fonctions bénévoles toujours en cours déclarées par le parlementaire. Passez la souris sur les différents secteurs pour voir le nombre de parlementaires concernés.</p>
 		</div>
 		<div id="pie4"></div>
 		<div class="legend">
@@ -190,7 +195,7 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 				<h3>Revenus annexes</h3>
 				<div class="info_chart">
 					<span class="info">info</span>
-					<p class="desc" style="display: none;"> Info </p>
+					<p class="desc" style="display: none;">Total des rémunérations perçues par an pour les activités annexes prises en compte. Les indemnités parlementaires n’ont pas été intégrées. Attention, les montants peuvent être bruts ou nets. Passez la souris sur les différents secteurs pour voir le nombre de parlementaires concernés.</p>
 				</div>
 				<div id="bar1"></div>
 			</div>
@@ -199,7 +204,7 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 				<h3>Mandat parlementaire</h3>
 				<div class="info_chart">
 					<span class="info">info</span>
-					<p class="desc" style="display: none;"> Info </p>
+					<p class="desc" style="display: none;">Type de mandat occupé par le parlementaire.</p>
 				</div>
 				<div id="pie1"></div>
 				<div class="legend">
@@ -209,10 +214,6 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 			</div>
 			<div class="col-md-3 chart_box">
 				<h3>Hommes/Femmes</h3>
-				<div class="info_chart">
-					<span class="info">info</span>
-					<p class="desc" style="display: none;"> Info </p>
-				</div>
 				<div id="pie2"></div>
 				<div class="legend">
 					<div class="blu1">Hommes</div>
@@ -239,7 +240,7 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 						<th class="header">Département</th>
 						<th class="header">Mandat</th>
 						<th class="header">Parti politique</th>
-						<th class="header">Groupe</th>
+						<th class="header">Parti/groupe</th>
 						<th class="header">Activités</th>
 						<th class="header">Revenus</th>						
 					</tr>
