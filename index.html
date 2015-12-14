@@ -103,18 +103,20 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 <div class="container_wrap filter_bl" id="filter_wrap">
 	<div class="container">
 		<div class="row">
-			<div class="col-xs-9 col-sm-9 col-md-2 nobright" id="filter_field_container">
+			<div class="col-xs-9 col-sm-9 col-md-4" id="filter_field_container">
 				<p>Recherche:</p>
 				<div class="input-group">
-					<input type="text" id="search-input" class="form-control input-lg" placeholder="Nom du parlementaire">
+					<input type="text" id="search-input" class="form-control input-lg" placeholder="Nom du parlementaire and departement">
 				</div>
 			</div>
+			<!--
 			<div class="col-xs-9 col-sm-9 col-md-2" id="filter_field_container">
 				<p>&nbsp; </p>
 				<div class="input-group">
 					<input type="text" id="search-input-dep" class="form-control input-lg" placeholder="Departement">
 				</div>
 			</div>
+			-->
 			<div class="col-sm-7 col-md-7" id="filter_numbers">
 				<div class="row">
 					<div class="col-md-3" id="currently_selected_text"><p>Filtres actuels:</p></div>
@@ -437,6 +439,9 @@ d3.csv("parlementaires.csv", function(error, data) {
 			d.parti_group_m = 'Autres';
 		}
 		
+		//Search string
+		d.searchstring = d.name + " " + d.departement + " " + d.departement_n;
+		
 		if(d.revenue == '#N/D' || d.revenue == ''){
 			d.revenue_n = 0;
 			d.revenue_n2 = 0;
@@ -496,6 +501,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 	
 	
   var ndx = crossfilter(data),  
+	  searchDim = ndx.dimension(function (d) {return d.searchstring;}),
 	  circ = ndx.dimension(function (d) {return d.departement_n;}),
 	  type = ndx.dimension(function (d) {return d.mandat;}),
 	  parti = ndx.dimension(function (d) {return d.parti;}),
@@ -541,7 +547,8 @@ d3.csv("parlementaires.csv", function(error, data) {
 	
 	$("#search-input").keyup (function () {
 		var s = $(this ).val().toLowerCase();
-		rep.filter(function (d) { 
+		searchDim.filter(function (d) { 
+		//rep.filter(function (d) { 
 			return d.toLowerCase().indexOf (s) !== -1;} );
 		$(".resetall").attr("disabled",false);
 		throttle();
@@ -596,6 +603,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 		$(".resetall").attr("disabled",true);
 		rep.filter(null); //needs to be explicitely reset
 		dep.filter(null);
+		searchDim.filter(null);
 		circ.filter(null);
 		dc.filterAll(null);
 		dc.renderAll();
@@ -1087,6 +1095,8 @@ d3.csv("parlementaires.csv", function(error, data) {
 		modalbody += '<div><label>Mandat:</label> '+repdata.mandat+'</div>';
 		modalbody += '<div><label>Département:</label> '+repdata.departement+' ('+repdata.departement_n+')</div>';
 		modalbody += '<div><label>Total revenus annexes:</label> '+addcommas(repdata.revenue_n2)+' EUR</div>';
+		modalbody += '<div><label>Indemnité parlementaire nette:</label> 63.600 € (environ 5300€ par mois)';
+		modalbody += '<span class="infod"> <img src="./img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc up10" style="display: none;">Au <a href="http://www.senat.fr/role/senateurs_info/statut.html" target="_blank">Sénat</a>, l’indemnité nette mensuelle s’élève à 5 366,32 €. A l’<a href="http://www2.assemblee-nationale.fr/decouvrir-l-assemblee/role-et-pouvoirs-de-l-assemblee-nationale/le-depute/la-situation-materielle-du-depute" target="_blank">Assemblée nationale</a>, les députés élus pour la première fois avant juin 2012 perçoivent 5 046,77 € ; les députés élus pour la première fois en juin 2012 ou après perçoivent 5 351,65 €.</p></div>';
 		modalbody += '<div><label>Activités annexes:</label> '+repdata.activities+'</div>';
 		modalbody += '<div><label>Activités législatives:</label> <a href="'+profile+'" target="_blank">Profil détaillé</a></div>';
 		modalbody += '<div><label>Déclaration originale:</label> <a href="'+hatvp+'" target="_blank">Profil sur le site de la Haute Autorité pour la Transparence de la Vie Publique (HATVP)</a></div>';
