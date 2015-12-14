@@ -59,6 +59,9 @@ td.infod {
 .legend div.fn::before {
 	background: #000000 none repeat scroll 0 0;
 }
+.legend div.prg::before {
+	background: #ECB050 none repeat scroll 0 0;
+}
 .legend div.gdr::before {
 	background: #A1480D none repeat scroll 0 0;
 }
@@ -110,4 +113,13 @@ td.infod {
 .nobright {
 	border-right: none !important;
 	padding-right: 5px;
+}
+.table-title-box {
+	margin-bottom: 10px;
+}
+.table-title-box .col-md-3 {
+	text-align: right;
+}
+.table-title-box .update {
+	padding-top: 25px;
 }

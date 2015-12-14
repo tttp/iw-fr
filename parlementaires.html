@@ -35,8 +35,8 @@
 		
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">Lobbyistes en France</a></li>
 					<li class="active" id="bl_tool_btn"><a href="/">Parlementaires en France</a></li>
+					<li><a href="index.html">Lobbyistes en France</a></li>
           <li class="dropdown">
             <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Integrity Watch Europe<span class="caret"></span></a>
              <ul class="dropdown-menu">
@@ -45,10 +45,9 @@
           </li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="http://">Suivez-nous</a></li>
-					<li><a href="http://www.transparency-france.org/ewb_pages/div/Faire_un_don_a_TI_France.php">Faites un don</a></li>
 					<li><a href="about.html">A propos</a></li>
-					<li><a href="contact.html">Contact</a></li>
+					<li><a href="http://www.transparency-france.org/observatoire-ethique/contact/">Suivez-nous</a></li>
+					<li><a href="http://www.transparency-france.org/ewb_pages/div/Faire_un_don_a_TI_France.php">Faites un don</a></li>
 				</ul>
 			</div>
 	 </div><!-- container -->
@@ -111,7 +110,7 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 				</div>
 			</div>
 			<div class="col-xs-9 col-sm-9 col-md-2" id="filter_field_container">
-				<p>f </p>
+				<p>&nbsp; </p>
 				<div class="input-group">
 					<input type="text" id="search-input-dep" class="form-control input-lg" placeholder="Departement">
 				</div>
@@ -125,10 +124,10 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 						</div>
 					</div>
             		<div class="col-md-3 filter_number">
-            			<div><span class="big_number afilter_long nbaccredited"></span>Total: activités externes</div>
+            			<div><span class="big_number afilter_long nbaccredited"></span>Total: activités annexes</div>
             		</div>
             		<div class="col-md-3 filter_number">
-            			<div class="dc-data-count org-count"><span class="big_number afilter_long nbcost">?</span>Total: revenus externe (p.a.)</div>
+            			<div class="dc-data-count org-count"><span class="big_number afilter_long nbcost">?</span>Total: revenus annexes</div>
             		</div>
 				</div>
 			</div>
@@ -161,10 +160,9 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 		<div id="pie3"></div>
 		<div class="legend">
 			<div class="fg">FG/PCF</div>
-			<div class="fg">PRG</div>
-			<div class="gdr">Groupe GDR</div>
+			<div class="prg">PRG</div>
 			<div class="udi">UDI</div>
-			<div class="ps">PS/SRC</div>
+			<div class="ps">PS</div>
 			<div class="greens">EELV/UDE</div>
 			<div class="lr">LR</div>
 			<div class="fn">FN</div>
@@ -230,8 +228,14 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 <div class="container">
 	<div class="row">
 		<div class="col-md-12 table-responsive">
-			<h2 class="table_title">ACTIVITES ET REVENUS ANNEXES DES PARLEMENTAIRES</h2>
-			<div id="last_update">Mise à jour: 13 Dec 2015</div>
+			<div class="row table-title-box">
+				<div class="col-md-9">
+					<h2 class="table_title">ACTIVITES ET REVENUS ANNEXES DES PARLEMENTAIRES</h2>
+				</div>
+				<div class="col-md-3">
+					<div class="update">Mise à jour: 13 Dec 2015</div>
+				</div>
+			</div>
 			<table class="table table-hover dc-data-grid tablesorter-bootstrap">
 				<thead>
 					<tr class="header">
@@ -369,7 +373,7 @@ var dep = null;
 var representatives={};
 
 var parti_groups = {
-"PRG":"#DB6A1F",
+"PRG":"#ECB050",
 "FG":"#DB6A1F",
 "PCF":"#DB6A1F",
 "FG/PCF":"#DB6A1F",
@@ -420,7 +424,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 		} else if(d.parti_group == 'FG' || d.parti_group == 'PCF') {
 			d.parti_group_m = 'FG/PCF';
 		} else if(d.parti_group == 'PS' || d.parti_group == 'Groupe SRC' || d.parti_group == 'PS '){
-			d.parti_group_m = 'PS/SRC';
+			d.parti_group_m = 'PS';
 		} else if(d.parti_group == 'UDI'){
 			d.parti_group_m = 'UDI';
 		} else if(d.parti_group == 'PRG'){
@@ -1085,7 +1089,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 		modalbody += '<div><label>Total revenus annexes:</label> '+addcommas(repdata.revenue_n2)+' EUR</div>';
 		modalbody += '<div><label>Activités annexes:</label> '+repdata.activities+'</div>';
 		modalbody += '<div><label>Activités législatives:</label> <a href="'+profile+'" target="_blank">Profil détaillé</a></div>';
-		modalbody += '<div><label>Declaration originale:</label> <a href="'+hatvp+'" target="_blank">Profil sur le site de la Haute Autprité pour la Transparence de la Vie Publique (HATVP)</a></div>';
+		modalbody += '<div><label>Déclaration originale:</label> <a href="'+hatvp+'" target="_blank">Profil sur le site de la Haute Autorité pour la Transparence de la Vie Publique (HATVP)</a></div>';
 		modalbody += '</div><div class="col-md-3">'+ photo + '</div></div>';
 		
 		
