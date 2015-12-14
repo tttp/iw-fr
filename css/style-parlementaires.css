@@ -42,7 +42,7 @@ td.infod {
 	margin-bottom: 40px;
 }
 .legend div._nd::before {
-	background: #eee none repeat scroll 0 0;
+	background: #ccc none repeat scroll 0 0;
 }
 .legend div.lr::before {
 	background: #0a3e63 none repeat scroll 0 0;
