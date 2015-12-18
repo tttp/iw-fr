@@ -1289,12 +1289,15 @@ d3.csv("parlementaires.csv", function(error, data) {
 		} else if(slug == 'Pierre-Yves-Le-Borgn-'){
 			slug = 'Pierre-Yves-Le-Borgn';
 		}
+		var copyr = "";
 		if(type[0] == 'S'){
 			var photourl = "http://www.nossenateurs.fr/senateur/photo/"+slug+"/180";
+			copyr = "©Assemblée-nationale – 2015";
 		} else if(type[0] == 'A'){
 			var photourl = "http://www.nosdeputes.fr/depute/photo/"+slug+"/180";
+			copyr = "©Sénat – 2015";
 		}
-		return "<img src=\""+photourl+"\" />";
+		return "<img src=\""+photourl+"\" /><br />"+copyr;
 		
 	}
 	
