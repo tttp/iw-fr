@@ -1144,9 +1144,16 @@ d3.csv("parlementaires.csv", function(error, data) {
 						}
 						
 						modalbody += '<tr><td>' + d.description + '</td><td>' + d.company + '</td><td>' + d.amount + '</td>' ;
-						if( d["notes"] != ''){
+						if( d["notes"] != '' || d["notes3"] != '' || d["notes4"] != ''){
 							//modalbody += '<img src="./img/info.svg" data-toggle="tooltip" title="'+d.notes+'" /></td></tr>';
-							modalbody += '<td class="infod"><img src="./img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes+'</p></div>';
+							modalbody += '<td class="infod"><img src="./img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes;
+							if(d["notes3"] != ''){
+								modalbody += '<br />Début: '+d.notes3;
+							}
+							if(d["notes4"] != ''){
+								modalbody += '<br />Fin: '+d.notes4;
+							}
+							modalbody += '</p></div>';
 						} else {
 							modalbody += '<td></td></tr>';
 						}
@@ -1174,7 +1181,8 @@ d3.csv("parlementaires.csv", function(error, data) {
 					modalbody += '<td>'+d.description+'</td>';
 					modalbody += '<td>'+d.employerother+'</td>';
 					if( d["notes"] != ''){
-						modalbody += '<td class="infod"><img src="./img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes+'</p></div>';
+						modalbody += '<td class="infod"><img src="./img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes;
+						modalbody += '</p></div>';
 					} else {
 						modalbody += '<td></td></tr>';
 					}
@@ -1226,7 +1234,7 @@ d3.csv("parlementaires.csv", function(error, data) {
 				return 'Activités bénévoles';
 				break;
 			case 'functions':
-				return 'Autres mandats';
+				return 'Autres mandats à la date d\'election';
 				break;
 			case 'kept':
 				return 'Activités externes conservées';
