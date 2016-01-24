@@ -215,10 +215,16 @@ function grid (selector,data) {
 
 
 	function drawExpense () {
+	/*
 		var dim = ndx.dimension (function(d) {
         if (!$.isNumeric(d.min) ) 
           return -1;
         return getCost(d);
+	});
+	*/
+	
+	var dim = ndx.dimension (function(d) {
+		return d.minrange
 	});
   
     var group   = dim.group().reduceSum( function(d) {return 1;});
@@ -231,27 +237,37 @@ function grid (selector,data) {
     .on("preRender",(function(chart,filter){
     }))
 		.margins({top: 10, right: 10, bottom: 20, left: 40})
-    .x(d3.scale.ordinal())
-    .xUnits(dc.units.ordinal)
-		.elasticX(true)
+    //.x(d3.scale.ordinal())
+    //.xUnits(dc.units.ordinal)
+	.x(d3.scale.ordinal().domain(["N/A", "0", "1 - 1000", "1K - 10K", "10K - 30K", "30K - 50K", "50K - 100K", "100K - 200K", "200K - 1M", "> 1M"]))
+	.xUnits(dc.units.ordinal)
+		//.elasticX(true)
 		.elasticY(true)
-				.brushOn(true)
+				//.brushOn(true)
 		//.yAxisLabel("Lobbying expense")
 		.colorCalculator(function(d, i) {
-      if (d.key < 0)
+      //if (d.key < 0)
+	    if(d.key == 'N/A')
         return "#666";
 			return "#f1ca58";
 		})
 		.dimension(dim)
 		.group(group);
 		//graph.xAxis().ticks(5).tickFormat(d3.format(",.0f"));
+		/*
     graph.xAxis().ticks(5).tickFormat(function(d) {
         if (d<0) return "N/A";
         return d3.format(",s")(d);
         return formatInteger(d / 1e3) + "k€";});
+		*/
 
 		graph.yAxis().ticks(6).tickFormat(d3.format(",.0f"));
 	}
+	
+	/*
+	.x(d3.scale.ordinal().domain(["N/A", "0", "1 - 1000", "1K - 10K", "10K - 30K", "30K - 50K", "50K - 100K", "100K - 200K", "200K - 1M", "> 1M"]))
+	.xUnits(dc.units.ordinal);
+	*/
 
 	
 	function drawNbMeetings () {
@@ -947,6 +963,34 @@ Attention : les conseils privés doivent, pour leur part, déclarer le chiffre d
              if (d.max_consultancies)
                d.max = d.max_consultancies.replace(',','');
            }
+		   
+		   //Create min ranges
+		   d.minrange = '';
+		   if (!$.isNumeric(d.min) ) {
+			d.minrange = 'N/A';
+		   } else if(d.min == 0){
+			d.minrange = '0';
+		   } else if(d.min <= 1000){
+			d.minrange = '1 - 1000';
+		   } else if(d.min <= 10000){
+			d.minrange = '1K - 10K';
+		   } else if(d.min <= 30000){
+			d.minrange = '10K - 30K';
+		   } else if(d.min <= 50000){
+			d.minrange = '30K - 50K';
+		   } else if(d.min <= 100000){
+			d.minrange = '50K - 100K';
+		   } else if(d.min <= 200000){
+			d.minrange = '100K - 200K';
+		   } else if(d.min <= 1000000){
+			d.minrange = '200K - 1M';
+		   } else if(d.min > 1000000){
+			d.minrange = '> 1M';
+		   } else {
+		    d.minrange = 'N/A';
+		   }
+		   
+		   
 
             ridx[d.id]=i;
 			});
