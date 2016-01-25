@@ -1379,3 +1379,14 @@ td.number{
 	border-radius: 0;
 }
 noneedanymore.categorie svg {height:340px;}
+
+
+.table-title-box {
+	margin-bottom: 10px;
+}
+.table-title-box .col-md-3 {
+	text-align: right;
+}
+.table-title-box .update {
+	padding-top: 25px;
+}
