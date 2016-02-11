@@ -1283,7 +1283,8 @@ d3.csv("parlementaires.csv", function(error, data) {
 		if(slug == 'yonnet-salvator-evelyne'){
 		 slug = 'yonnet-evelyne';
 		}
-		var url = "http://www.hatvp.fr/page-nominative/?urldeclaration="+slug+'.html';
+		//var url = "http://www.hatvp.fr/page-nominative/?urldeclaration="+slug+'.html';
+		var url = "http://www.hatvp.fr/fiche-nominative/?declarant="+slug;
 		return url;
 	}
 	
