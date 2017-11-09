@@ -198,14 +198,18 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 		</div>
 		<div id="pie3"></div>
 		<div class="legend">
-			<div class="fg">FG/PCF</div>
-			<div class="prg">PRG</div>
-			<div class="udi">UDI</div>
-			<div class="ps">PS</div>
-			<div class="greens">EELV/UDE</div>
-			<div class="lr">LR</div>
-			<div class="fn">FN</div>
-			<div class="ni">Autres</div>
+			
+			<div class="parti-rem">REM</div>
+			<div class="parti-lr">LR</div>
+			<div class="parti-modem">MoDem</div>
+			<div class="parti-lc">LC</div>
+			<div class="parti-ng">NG</div>
+			<div class="parti-fi">FI</div>
+			<div class="parti-gdr">GDR</div>
+			<div class="parti-ni">NI</div>
+			<div class="ni">Autres/Unknown</div>
+			
+			
 		</div>
 		<br class="clear" />
 	</div>
@@ -283,7 +287,7 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 						<th class="header">Département</th>
 						<th class="header">Mandat</th>
 						<th class="header">Parti politique</th>
-						<th class="header">Parti/groupe</th>
+						<th class="header">Groupe</th>
 						<th class="header">Activités</th>
 						<th class="header">Revenus</th>						
 					</tr>
@@ -429,7 +433,6 @@ var parti_groups = {
 "UDI":"#8C1456",
 "EFDD":"#5eced6",
 "PPE":"#0a3e63",
-"LR":"#0a3e63",
 "ECR":"#3086c2",
 "NA/NI":"#cccccc",
 "FN":"#000000",
@@ -437,7 +440,17 @@ var parti_groups = {
 "Group RRDP":"#800c00",
 "Others":"#BBBBBB",
 "Autres":"#BBBBBB",
-"Array":"pink"
+"Array":"pink",
+//New ones
+"REM":"#f6cb00",
+"LR":"#0a3e63",
+"MoDem":"#ff9205",
+"LC":"#48d4f7",
+"NG":"#fcafc5",
+"FI":"#ff4541",
+"GDR":"#c21410",
+"NI":"#656565",
+"":"#BBBBBB"
 };
 
 var activities_colors = {
@@ -466,9 +479,14 @@ function cleanstringSpecial(str) {
 
 d3.csv("parlementaires.csv", function(error, data) {
 d3.json("declarations.json", function(error, data2) {
-d3.csv("parties-departments.csv", function(error, data3) {
+//d3.csv("parties-departments.csv", function(error, data3) {
+d3.csv("parties.csv", function(error, data3) {
 	
 	declarations = data2.declarations.declaration;
+	var declaration_filtered = _.filter(declarations, function(dec, index) {
+	  return dec.general.qualiteMandat.codTypeMandatFichier == 'depute';
+	});
+	declarations = declaration_filtered;
 	pardep = data3;
 	representatives = data;
 	
@@ -508,15 +526,19 @@ d3.csv("parties-departments.csv", function(error, data3) {
 		if(d.thispardep){
 			//d.departement = d.thispardep.dep.trim();
 			//d.departement_n = d.thispardep.dep_n.trim();
+			/*
 			if(d.department == ""){
 				d.departement = d.thispardep.dep.trim();
 			}
 			if(d.department_n == ""){
 				d.departement_n = d.thispardep.dep_n.trim();
 			}
+			*/
 			d.parti_group = d.thispardep.groupe.trim();
 			d.parti = d.thispardep.parti.trim();
 		}
+		
+		d.parti_group_m = d.parti_group;
 		
 		
 		//Calculate activities number and revenue
@@ -754,7 +776,7 @@ d3.csv("parties-departments.csv", function(error, data3) {
 	data.forEach(function (d) {
 	
 		//Group parties
-		d.parti_group_m = d.parti_group;
+		/*
 		if(d.parti_group == 'EELV' || d.parti_group == 'UDE'){
 			d.parti_group_m = 'EELV/UDE';
 		} else if(d.parti_group == 'FG' || d.parti_group == 'PCF') {
@@ -772,6 +794,7 @@ d3.csv("parties-departments.csv", function(error, data3) {
 		} else {
 			//d.parti_group_m = 'Autres';
 		}
+		*/
 		
 		//Search string
 		d.searchstring = d.name + " " + d.departement + " " + d.departement_n;
@@ -1434,7 +1457,7 @@ d3.csv("parties-departments.csv", function(error, data3) {
 		
 		
 		/* NEW DATA - ACT PROF 5 YEARS */
-		modalbody += '<span class="activitiestabletitle">ACTIVITÉS PROFESSIONNELLES RÉMUNÉRÉES EXERCEES À LA DATE DEL’ÉLECTION OUANTERIEURES (5 ANS)</span>';
+		modalbody += '<span class="activitiestabletitle">ACTIVITÉS PROFESSIONNELLES RÉMUNÉRÉES EXERCEES À LA DATE DE L’ÉLECTION OU ANTERIEURES (5 ANS)</span>';
 		if(repdata.activProfCinqDerniere.length > 0){
 			modalbody += '<table class="activitiestable">';
 			modalbody += '<thead><tr><th>Description</th><th>Employeur</th><th>Durée</th><th>Activité Conservée</th><th>Revenus</th></tr></thead>';
@@ -1446,7 +1469,7 @@ d3.csv("parties-departments.csv", function(error, data3) {
 			modalbody += '/';
 		}
 		/* NEW DATA - ACT CONSULTANT */
-		modalbody += '<span class="activitiestabletitle">ACTIVITÉS DE CONSULTANT EXERCEE À LA DATE DEL’ÉLECTION OUANTERIEURES (5 ANS)</span>';
+		modalbody += '<span class="activitiestabletitle">ACTIVITÉS DE CONSULTANT EXERCEE À LA DATE DE L’ÉLECTION OU ANTERIEURES (5 ANS)</span>';
 		if(repdata.activConsultant.length > 0){
 			modalbody += '<table class="activitiestable">';
 			modalbody += '<thead><tr><th>Description</th><th>Employeur</th><th>Durée</th><th>Activité Conservée</th><th>Revenus</th></tr></thead>';

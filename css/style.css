@@ -898,6 +898,38 @@ ul.nav.navbar-right li.active a{
 	background: #cccccc;
 }
 
+/* groups - new*/
+
+.legend div.parti-rem:before{
+	background: #f6cb00;
+}
+.legend div.parti-lr:before{
+	background: #0a3e63;
+}
+.legend div.parti-modem:before{
+	background: #ff9205;
+}
+.legend div.parti-lc:before{
+	background: #48d4f7;
+}
+.legend div.parti-ng:before{
+	background: #fcafc5;
+}
+.legend div.parti-fi:before{
+	background: #ff4541;
+}
+.legend div.parti-gdr:before{
+	background: #c21410;
+}
+.legend div.parti-ni:before{
+	background: #656565;
+}
+.legend div.parti-other:before{
+	background: #bbb;
+}
+
+
+
 .group svg{
 }
 
