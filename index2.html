@@ -480,7 +480,8 @@ function cleanstringSpecial(str) {
 d3.csv("parlementaires.csv", function(error, data) {
 d3.json("declarations.json", function(error, data2) {
 //d3.csv("parties-departments.csv", function(error, data3) {
-d3.csv("parties.csv", function(error, data3) {
+d3.csv("parties-new.csv", function(error, data3) {
+d3.csv("department-missing.csv", function(error, missingdep) {
 	
 	declarations = data2.declarations.declaration;
 	var declaration_filtered = _.filter(declarations, function(dec, index) {
@@ -496,6 +497,7 @@ d3.csv("parties.csv", function(error, data3) {
 	declarations.forEach(function (d) {
 		//Prepare main variables
 		d.name = d.general.declarant.prenom + " " + d.general.declarant.nom;
+		d.name_show = d.name;
 		d.civilite = cleanstring(d.general.declarant.civilite);
 		d.birth_year = d.general.declarant.dateNaissance.split("/")[2];
 		d.birth_date = d.general.declarant.dateNaissance;
@@ -514,8 +516,19 @@ d3.csv("parties.csv", function(error, data3) {
 		d.parti_group = "";
 		d.parti = "";
 		
+		
+		
 		if(d.mandat == "Député ou sénateur"){
 			d.mandat = d.mandat2;
+		}
+		
+		//If department is missing
+		if(d.departement_n == ""){
+			var thisdep = _.find(missingdep, function (m) {return cleanstring(m.name + " " + m.lastname)==cleanstring(d.name)});
+			if(thisdep){
+				d.departement_n = thisdep.codeOrgane;
+				d.departement = thisdep.labelOrgane;
+			}
 		}
 		
 		//Get additional data about party and departments
@@ -536,6 +549,8 @@ d3.csv("parties.csv", function(error, data3) {
 			*/
 			d.parti_group = d.thispardep.groupe.trim();
 			d.parti = d.thispardep.parti.trim();
+			d.name_show = d.thispardep.nameShow;
+			d.name = d.thispardep.nameShow;
 		}
 		
 		d.parti_group_m = d.parti_group;
@@ -1941,6 +1956,9 @@ d3.csv("parties.csv", function(error, data3) {
 	drawCounter();
 	
 	//setTimeout(drawCounter(), 5000)
+	
+	//Close missing departments .csv
+	});
 
 	})
   }) 
