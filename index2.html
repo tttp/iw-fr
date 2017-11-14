@@ -474,6 +474,8 @@ function cleanstringSpecial(str) {
 	var newStr = str.trim().toLowerCase();
 	newStr = newStr.replace("é","e");
 	newStr = newStr.replace("è","e");
+	newStr = newStr.replace("ç","c");
+	newStr = newStr.replace("-"," ");
 	return newStr;
 }
 
@@ -523,11 +525,15 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 		}
 		
 		//If department is missing
-		if(d.departement_n == ""){
-			var thisdep = _.find(missingdep, function (m) {return cleanstring(m.name + " " + m.lastname)==cleanstring(d.name)});
+		
+		
+		if(d.departement_n == "" || d.departement_n == "No data" || !d.departement_n){
+			var thisdep = _.find(missingdep, function (m) {return cleanstringSpecial(m.name + " " + m.lastname)==cleanstringSpecial(d.name)});
 			if(thisdep){
 				d.departement_n = thisdep.codeOrgane;
 				d.departement = thisdep.labelOrgane;
+			} else {
+				//alert(d.name);
 			}
 		}
 		
