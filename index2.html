@@ -477,6 +477,7 @@ function cleanstringSpecial(str) {
 	newStr = newStr.replace("ç","c");
 	newStr = newStr.replace("-"," ");
 	newStr = newStr.replace("ë","e");
+	newStr = newStr.replace(".","");
 	return newStr;
 }
 
@@ -502,6 +503,12 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 		d.name = d.general.declarant.prenom + " " + d.general.declarant.nom;
 		d.name_show = d.name;
 		d.civilite = cleanstring(d.general.declarant.civilite);
+		if(cleanstringSpecial(d.civilite) == "m"){
+			d.civilite = "m";
+		}
+		if(cleanstringSpecial(d.civilite) == "mme"){
+			d.civilite = "f";
+		}
 		d.birth_year = d.general.declarant.dateNaissance.split("/")[2];
 		d.birth_date = d.general.declarant.dateNaissance;
 		d.revenue = 0;
@@ -1028,7 +1035,7 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 					d.properties.code = d.properties.code.substr(1);
 				}
 			});
-			*/
+			
 			
 			/*
 			$("#resetzoom").click(function () {
