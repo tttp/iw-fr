@@ -1021,11 +1021,14 @@ d3.csv("department-missing.csv", function(error, missingdep) {
      var dpt = topojson.feature(json, json.objects.departements).features;
 
 			//Fix id
+			//Not needed anymore for nowrap
+			/*
 			dpt.forEach(function (d) {
 				if(d.properties.code[0] == '0'){
 					d.properties.code = d.properties.code.substr(1);
 				}
 			});
+			*/
 			
 			/*
 			$("#resetzoom").click(function () {
