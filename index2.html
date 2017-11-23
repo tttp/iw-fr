@@ -44,6 +44,9 @@
 	margin: 10px 0;
 	display: block;
 }
+tr.header th.header {
+	font-size: 12px;
+}
 </style>
 
 </head>
@@ -283,13 +286,17 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 				<thead>
 					<tr class="header">
 						<th class="header">N</th>
-						<th class="header col-md-4">Nom</th>
+						<th class="header">Nom</th>
 						<th class="header">Département</th>
 						<th class="header">Mandat</th>
 						<th class="header">Parti politique</th>
 						<th class="header">Groupe</th>
 						<th class="header">Activités</th>
-						<th class="header">Revenus</th>						
+						<th class="header">Activités conservées?</th>
+						<th class="header">Détiens des parts de société?</th>
+						<th class="header">Nombre de collaborateurs exerçant une activité annexe</th>
+						<th class="header">Revenus</th>		
+						<th class="header">Revenus (Avg)</th>							
 					</tr>
 				</thead>
 			</table>
@@ -526,6 +533,11 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 		d.parti_group = "";
 		d.parti = "";
 		
+		d.activcons = "NON";
+		d.partsoc = "NON";
+		
+		d.collabNum = 0;
+		
 		
 		
 		if(d.mandat == "Député ou sénateur"){
@@ -574,6 +586,8 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 		
 		d.activitiestot = 0;
 		d.revenuetot = 0;
+		
+		d.revenuetotAvg = 0;
 		
 		d.activConsultant = [];
 		d.activProfCinqDerniere = [];
@@ -642,104 +656,69 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 				d.activCollaborateurs = d.activCollaborateursDto.items.items;
 			}
 		}
+		
+		if(d.participationFinanciere.length > 0){
+			d.partsoc = "OUI";
+		}
 
 		//Calculate activities and revenues
 		
-		if(d.activConsultant.length > 0){
-			d.activConsultant.forEach(function (x) {
-				d.activitiestot ++;
-				//Revenue sum
-				if(x.remuneration && x.remuneration.montant.montant){
-					//If the revenue only has 1 entry the data structure is a bit different
-					if(x.remuneration.montant.montant.annee && x.remuneration.montant.montant.annee == currentYear){
-						d.revenuetot += Number(x.remuneration.montant.montant.montant);
-					} else if(x.remuneration.montant.montant.length > 0){
-						//If there are more entries, loop through revenue entries, 1 entry per year; pick the current year entry
-						x.remuneration.montant.montant.forEach(function (y) {
-							if(y.annee == currentYear){
-								d.revenuetot += Number(y.montant);
+		function calcActRev(actArray){
+			if(actArray.length > 0){
+				actArray.forEach(function (x) {
+					d.activitiestot ++;
+					//Revenue sum for conservee activities
+					if(x.conservee == "true"){
+						if(x.remuneration && x.remuneration.montant.montant){
+							//If the revenue only has 1 entry the data structure is a bit different
+							if(x.remuneration.montant.montant.annee && x.remuneration.montant.montant.annee == currentYear){
+								d.revenuetot += Number(x.remuneration.montant.montant.montant);
+							} else if(x.remuneration.montant.montant.length > 0){
+								//If there are more entries, loop through revenue entries, 1 entry per year; pick the current year entry
+								x.remuneration.montant.montant.forEach(function (y) {
+									if(y.annee == currentYear){
+										d.revenuetot += Number(y.montant);
+									}
+								});
 							}
-						});
-					}
-				}
-			});
-		}
-		if(d.activProfCinqDerniere.length > 0){
-			d.activProfCinqDerniere.forEach(function (x) {
-				d.activitiestot ++;
-				//Revenue sum
-				if(x.remuneration && x.remuneration.montant.montant){
-					//If the revenue only has 1 entry the data structure is a bit different
-					if(x.remuneration.montant.montant.annee && x.remuneration.montant.montant.annee == currentYear){
-						d.revenuetot += Number(x.remuneration.montant.montant.montant);
-					} else if(x.remuneration.montant.montant.length > 0){
-						//If there are more entries, loop through revenue entries, 1 entry per year; pick the current year entry
-						x.remuneration.montant.montant.forEach(function (y) {
-							if(y.annee == currentYear){
-								d.revenuetot += Number(y.montant);
+						}
+						//Revenue sum average
+						var thisacttot = 0;
+						var thisactyears = 0;
+						if(x.remuneration && x.remuneration.montant.montant){
+							//If the revenue only has 1 entry the data structure is a bit different
+							if(x.remuneration.montant.montant.annee){
+								d.revenuetotAvg += Number(x.remuneration.montant.montant.montant);
+							} else if(x.remuneration.montant.montant.length > 0){
+								//If there are more entries, loop through revenue entries, 1 entry per year; sum the revenues and divide by years amount
+								x.remuneration.montant.montant.forEach(function (y) {
+									thisacttot += Number(y.montant);
+									thisactyears ++;
+								});
 							}
-						});
+						}
+						if(thisactyears > 0){
+							d.revenuetotAvg += Number(thisacttot)/Number(thisactyears);
+							//.toFixed(2)
+						}
 					}
-				}
-			});
-		}
-		if(d.fonctionBenevole.length > 0){
-			d.fonctionBenevole.forEach(function (x) {
-				d.activitiestot ++;
-				//Revenue sum
-				if(x.remuneration && x.remuneration.montant.montant){
-					//If the revenue only has 1 entry the data structure is a bit different
-					if(x.remuneration.montant.montant.annee && x.remuneration.montant.montant.annee == currentYear){
-						d.revenuetot += Number(x.remuneration.montant.montant.montant);
-					} else if(x.remuneration.montant.montant.length > 0){
-						//If there are more entries, loop through revenue entries, 1 entry per year; pick the current year entry
-						x.remuneration.montant.montant.forEach(function (y) {
-							if(y.annee == currentYear){
-								d.revenuetot += Number(y.montant);
-							}
-						});
+					//If any is kept, set activcons to OUI
+					if(x.conservee && x.conservee == "true"){
+						d.activcons = "OUI";
 					}
-				}
-			});
+				});
+			}
 		}
-		if(d.mandatElectif.length > 0){
-			d.mandatElectif.forEach(function (x) {
-				d.activitiestot ++;
-				//Revenue sum
-				if(x.remuneration && x.remuneration.montant.montant){
-					//If the revenue only has 1 entry the data structure is a bit different
-					if(x.remuneration.montant.montant.annee && x.remuneration.montant.montant.annee == currentYear){
-						d.revenuetot += Number(x.remuneration.montant.montant.montant);
-					} else if(x.remuneration.montant.montant.length > 0){
-						//If there are more entries, loop through revenue entries, 1 entry per year; pick the current year entry
-						x.remuneration.montant.montant.forEach(function (y) {
-							if(y.annee == currentYear){
-								d.revenuetot += Number(y.montant);
-							}
-						});
-					}
-				}
-			});
-		}
-		if(d.participationDirigeant.length > 0){
-			d.participationDirigeant.forEach(function (x) {
-				d.activitiestot ++;
-				//Revenue sum
-				if(x.remuneration && x.remuneration.montant.montant){
-					//If the revenue only has 1 entry the data structure is a bit different
-					if(x.remuneration.montant.montant.annee && x.remuneration.montant.montant.annee == currentYear){
-						d.revenuetot += Number(x.remuneration.montant.montant.montant);
-					} else if(x.remuneration.montant.montant.length > 0){
-						//If there are more entries, loop through revenue entries, 1 entry per year; pick the current year entry
-						x.remuneration.montant.montant.forEach(function (y) {
-							if(y.annee == currentYear){
-								d.revenuetot += Number(y.montant);
-							}
-						});
-					}
-				}
-			});
-		}
+		
+		
+		
+		calcActRev(d.activConsultant);
+		calcActRev(d.activProfCinqDerniere);
+		calcActRev(d.fonctionBenevole);
+		calcActRev(d.mandatElectif);
+		calcActRev(d.participationDirigeant);
+
+		
 		/* ENTRIES THAT SHOULD NOT BE COUNTED FOR ACTIVITIES COUNT - DO NOT DELETE */
 		/*
 		if(d.activProfConjoint.length > 0){
@@ -753,6 +732,10 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 			});
 		
 		*/
+		
+		d.collabNum = d.activCollaborateurs.length;
+		
+		d.activities = d.activitiestot;
 
 		d.activities_range = "";
 		if(d.activitiestot == 0){
@@ -1376,11 +1359,42 @@ d3.csv("department-missing.csv", function(error, missingdep) {
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
+              "type":"num",
+              "targets": 7,
+              data: "activcons",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "type":"num",
+              "targets": 8,
+              data: "partsoc",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "type":"num",
+              "targets": 9,
+              data: "collabNum",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
 			  "sClass": "alignright",
               "type":"numeric-comma",
-              "targets": 7,
+              "targets": 10,
 			  data: function (row, type, val, meta) { 
 				return addcommas(row.revenue_n2)
+			  }, 
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+			  "sClass": "alignright",
+              "type":"numeric-comma",
+              "targets": 11,
+			  data: function (row, type, val, meta) { 
+				return addcommas(row.revenuetotAvg.toFixed(2))
 			  }, 
               }
             ],
@@ -1388,7 +1402,7 @@ d3.csv("department-missing.csv", function(error, missingdep) {
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": false,
-            "order": [[ 7, "desc" ]],
+            "order": [[ 9, "desc" ]],
             "bSort": true,
             "bInfo": false,
             "bAutoWidth": false,
