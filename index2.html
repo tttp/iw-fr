@@ -733,7 +733,11 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 		
 		*/
 		
-		d.collabNum = d.activCollaborateurs.length;
+		d.activCollaborateurs.forEach(function (x) {
+			if(((cleanstringSpecial(x.employeur) != "neant" && cleanstringSpecial(x.employeur) != "") || (cleanstringSpecial(x.descriptionActivite) != "" && cleanstringSpecial(x.descriptionActivite) != "neant")) && (x.descriptionActivite != "AUCUNE AUTRE ACTIVITE")){
+				d.collabNum ++;
+			}
+		});
 		
 		d.activities = d.activitiestot;
 
@@ -1598,7 +1602,10 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 		} else {
 			modalbody += '/';
 		}
+		$('#repModal .modal-body').html(modalbody);
 		
+		
+		/*
 		//modalbody += '<table class="details_table"><thead><td>Type</td><td>Description</td><td>Revenue</td><td></td></thead><tbody>';
 		var tableh = '<table class="details_table"><thead><td>Description</td><td>Organisation</td><td>Revenus</td><td></td></thead><tbody>';
 		var tablee = '</tbody></table>';
@@ -1646,6 +1653,8 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 			
 			modalbody += '</tbody></table>';
 			
+			
+			/*
 			d3.csv("collaborators.csv", function(coll) {
 			var colltb = 0;
 			var filteredData2 = coll.filter(function(d) 
@@ -1678,7 +1687,11 @@ d3.csv("department-missing.csv", function(error, missingdep) {
 			
 			
 			
+			
+			
 		});
+		*/
+		$('#repModal .modal-body').html(modalbody);
 		
 		
     } );
