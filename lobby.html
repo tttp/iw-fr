@@ -704,14 +704,13 @@ function eventpopup (epid) {
 				<div class="navbar-brand" id="ti_logo_container">
 						<a id="ti_logo" href="http://www.transparency-france.org">Transparency International</a>
 						<a id="page_title" href="/" target="_blank">Integrity Watch<br />France</a>
-
 				</div>
 			</div>
-		
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li><a href="index.html">Parlementaires en France</a></li>
 					<li class="active" id="bl_tool_btn"><a href="/">Lobbyistes en France</a></li>
+					<li><a href="./old_version/index.html">XIVe législature</a></li>
           <li class="dropdown">
             <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Integrity Watch Europe<span class="caret"></span></a>
              <ul class="dropdown-menu">
@@ -810,10 +809,6 @@ function eventpopup (epid) {
 
 <div id="ec">
 	<div class="container_wrap" id="main_charts_wrap">
-		<!-- update notice -->
-		<div style="margin:15px auto 25px auto;width:80%;max-width:1000px;border:1px solid #eee;background: #eee;padding: 20px;text-align:center;">Integrity Watch sera actualisé prochainement.<br />Suivez l'actualité de Transparency International France via notre site Internet <a href="http://www.transparency-france.org">www.transparency-france.org</a>.<br />Vous pouvez accéder aux données sur les parlementaires de la quatorzième législature.
-		</div>
-	<!-- end update notice -->
 		<div class="container">
 			<div class="row">
           		<div class="col-md-4">
@@ -966,7 +961,7 @@ Attention : les conseils privés doivent, pour leur part, déclarer le chiffre d
 			//var dateFormat = d3.time.format("%Y-%m-%d");
 
 		});
-    d3.csv("representants.csv", function(d) {return d;}
+    d3.csv("data/representants.csv", function(d) {return d;}
       ,function (rows) {
         representatives = rows;
 				 _.each (representatives, function (d,i) {

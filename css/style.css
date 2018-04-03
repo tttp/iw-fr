@@ -1422,3 +1422,8 @@ noneedanymore.categorie svg {height:340px;}
 .table-title-box .update {
 	padding-top: 25px;
 }
+
+
+.navbar .navbar-nav > li > a {
+	width: 130px;
+}
