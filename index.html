@@ -51,6 +51,9 @@ tr.header th.header {
 </head>
 
 <body>
+<div id="loader-container">
+	<div id="loader"></div>
+</div>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -482,6 +485,7 @@ d3.csv("data/parlementaires.csv", function(error, data) {
 d3.json("data/declarations-2018.json", function(error2, data2) {
 d3.csv("data/parties-new.csv", function(error, data3) {
 d3.csv("data/department-missing.csv", function(error, missingdep) {
+	$('#loader-container').hide();
 	declarations = data2.declarations.declaration;
 	
 	var declaration_filtered = _.filter(declarations, function(dec, index) {

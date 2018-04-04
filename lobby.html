@@ -37,6 +37,9 @@ Who's lobbying the Assemblée Nationale and what do they spend? Check integrity 
 </head>
 <body>
 
+<div id="loader-container">
+	<div id="loader"></div>
+</div>
 
 <script>
 function getCost (d) { 
@@ -963,6 +966,7 @@ Attention : les conseils privés doivent, pour leur part, déclarer le chiffre d
 		});
     d3.csv("data/representants.csv", function(d) {return d;}
       ,function (rows) {
+				$('#loader-container').hide();
         representatives = rows;
 				 _.each (representatives, function (d,i) {
 						//representatives[d.identification_code]=d;
