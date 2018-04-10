@@ -477,13 +477,23 @@ function cleanstringSpecial(str) {
 	newStr = newStr.replace("-"," ");
 	newStr = newStr.replace("ë","e");
 	newStr = newStr.replace(".","");
+
+	newStr = newStr.replace(/é/g , "e");
+	newStr = newStr.replace(/è/g , "e");
+	newStr = newStr.replace(/ç/g , "c");
+	newStr = newStr.replace(/_/g , " ");
+	newStr = newStr.replace(/ë/g , "e");
+	newStr = newStr.replace(/\./g , "");
+
+	newStr = newStr.replace("  "," ");
 	return newStr;
 	}
 }
 
 d3.csv("data/parlementaires.csv", function(error, data) {
-d3.json("data/declarations-2018.json", function(error2, data2) {
+d3.json("data/declarations-2018-c.json", function(error2, data2) {
 d3.csv("data/parties-new.csv", function(error, data3) {
+d3.csv("data/parties-new-senate.csv", function(error, data4) {
 d3.csv("data/department-missing.csv", function(error, missingdep) {
 	$('#loader-container').hide();
 	declarations = data2.declarations.declaration;
@@ -495,9 +505,34 @@ d3.csv("data/department-missing.csv", function(error, missingdep) {
 	declarations = declaration_filtered;
 	
 	pardep = data3;
+	parsen = data4;
 	representatives = data;
 	
 	var currentYear = "2017";
+	
+	/* REMOVE DUPLICATE DECLARATIONS */
+	/*
+	var donepeople = {};
+	declarations.forEach(function (d, index) {
+		var thisname = d.general.declarant.prenom + " " + d.general.declarant.nom;
+		if(donepeople[thisname]){
+			var thiscompare = donepeople[thisname];
+			var thisdatef = d3.time.format("%d/%m/%Y %H:%M:%S");
+			var date1 = thisdatef.parse(d.dateDepot);
+			var date2 = thisdatef.parse(thiscompare[0]);
+			if(date1 >= date2){
+				declarations.splice(thiscompare[1], 1);
+				donepeople[thisname] = [d.dateDepot, index];
+			} else {
+				declarations.splice(index, 1);
+			}
+		} else {
+			donepeople[thisname] = [d.dateDepot, index];
+		}
+	});
+	console.log(declarations);
+	*/
+
 	
 	//Prepare new data
 	declarations.forEach(function (d) {
@@ -555,28 +590,39 @@ d3.csv("data/department-missing.csv", function(error, missingdep) {
 			}
 		}
 		
-		//Get additional data about party and departments
-		d.thispardep = _.find(pardep, function (m) {return cleanstring(m.name)==cleanstring(d.name)});
-		if(!d.thispardep){
-			d.thispardep = _.find(pardep, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(d.name)});
-		}
-		if(d.thispardep){
-			//d.departement = d.thispardep.dep.trim();
-			//d.departement_n = d.thispardep.dep_n.trim();
-			/*
-			if(d.department == ""){
-				d.departement = d.thispardep.dep.trim();
+		//Get additional data about party for senators
+		if(cleanstring(d.mandat) == 'sénateur'){
+			d.thispardep = _.find(parsen, function (m) {return cleanstring(m.name + ' ' + m.lastname)==cleanstring(d.name)});
+			if(!d.thispardep){
+				d.thispardep = _.find(parsen, function (m) {
+					//Special cases
+					if(d.name == "JOURDA Muriel"){
+						return (cleanstringSpecial(m.name) + ' ' + cleanstringSpecial(m.lastname))=="muriel jourda";
+					}
+					if(d.name == "BOCKEL JEAN-MARIE"){
+						return (cleanstringSpecial(m.name) + ' ' + cleanstringSpecial(m.lastname))=="jean marie bockel";
+					}
+
+					return (cleanstringSpecial(m.name) + ' ' + cleanstringSpecial(m.lastname))==cleanstringSpecial(d.name)
+				});
 			}
-			if(d.department_n == ""){
-				d.departement_n = d.thispardep.dep_n.trim();
+			if(d.thispardep){
+				d.parti_group = d.thispardep.groupe.trim();
+				d.parti = d.thispardep.parti.trim();
+			}	
+		} else {
+		//Get additional data about party for deputies
+			d.thispardep = _.find(pardep, function (m) {return cleanstring(m.name)==cleanstring(d.name)});
+			if(!d.thispardep){
+				d.thispardep = _.find(pardep, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(d.name)});
 			}
-			*/
-			d.parti_group = d.thispardep.groupe.trim();
-			d.parti = d.thispardep.parti.trim();
-			d.name_show = d.thispardep.nameShow;
-			d.name = d.thispardep.nameShow;
+			if(d.thispardep){
+				d.parti_group = d.thispardep.groupe.trim();
+				d.parti = d.thispardep.parti.trim();
+				d.name_show = d.thispardep.nameShow;
+				d.name = d.thispardep.nameShow;
+			}
 		}
-		
 		d.parti_group_m = d.parti_group;
 		
 		
@@ -1914,7 +1960,7 @@ d3.csv("data/department-missing.csv", function(error, missingdep) {
 	drawCounter();
 
 	});
-
+	})
 	})
   }) 
 })
