@@ -495,9 +495,14 @@ d3.csv("data/parlementaires.csv", function(error, data) {
 d3.json("data/declarations-2018-c.json", function(error2, data2) {
 d3.csv("data/parties-new.csv", function(error, data3) {
 d3.csv("data/parties-new-senate.csv", function(error, data4) {
-d3.csv("data/department-missing.csv", function(error, missingdep) {
+d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
+
 	$('#loader-container').hide();
 	declarations = data2.declarations.declaration;
+	pardep = data3;
+	parsen = data4;
+	representatives = data;
+	var currentYear = "2017";
 	
 	/*
 	var declaration_filtered = _.filter(declarations, function(dec, index) {
@@ -505,13 +510,6 @@ d3.csv("data/department-missing.csv", function(error, missingdep) {
 	});
 	declarations = declaration_filtered;
 	*/
-	
-	
-	pardep = data3;
-	parsen = data4;
-	representatives = data;
-	
-	var currentYear = "2017";
 	
 	/* REMOVE DUPLICATE DECLARATIONS */
 	/*
@@ -581,24 +579,10 @@ d3.csv("data/department-missing.csv", function(error, missingdep) {
 		
 		d.collabNum = 0;
 		
-		
-		
 		if(d.mandat == "Député ou sénateur"){
 			d.mandat = d.mandat2;
 		}
 		
-		//If department is missing
-		
-		
-		if(d.departement_n == "" || d.departement_n == "No data" || !d.departement_n){
-			var thisdep = _.find(missingdep, function (m) {return cleanstringSpecial(m.name + " " + m.lastname)==cleanstringSpecial(d.name)});
-			if(thisdep){
-				d.departement_n = thisdep.codeOrgane;
-				d.departement = thisdep.labelOrgane;
-			} else {
-				//alert(d.name);
-			}
-		}
 		
 		//Get additional data about party for senators
 		if(cleanstring(d.mandat) == 'sénateur'){
@@ -633,6 +617,19 @@ d3.csv("data/department-missing.csv", function(error, missingdep) {
 				d.name = d.thispardep.nameShow;
 			}
 		}
+		
+		
+
+		//Get missing parties and departments (new data April 2018)
+		if(d.departement_n == "" || d.departement_n == "No data" || !d.departement_n || d.parti == "" || !d.parti){
+			var thisentry = _.find(partidepartments, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(d.name);});
+			if(thisentry){
+				d.departement_n = thisentry.departement.trim();
+				d.parti = thisentry.parti.trim();
+				d.parti_group = thisentry.groupe.trim();
+			}
+		}
+
 		d.parti_group_m = d.parti_group;
 		
 		
