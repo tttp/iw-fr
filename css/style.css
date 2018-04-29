@@ -1466,5 +1466,18 @@ noneedanymore.categorie svg {height:340px;}
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
   }
+
+
+  .table-uppercase {
+	  text-transform: uppercase;
+  }
+
+  .about-page h1, .about-page h2, .about-page h3 {
+	  display: block;
+	  margin: 30px 0 15px 0;
+  }
+  .about-page h1 {
+	  margin-top: 40px !important;
+  }
   
  

@@ -282,9 +282,9 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 						<th class="header">Mandat</th>
 						<th class="header">Parti politique</th>
 						<th class="header">Groupe parlementaire de rattachement</th>
-						<th class="header">Nombre d’activités annexes conserves</th>
+						<th class="header">Activités annexes conservées</th>
 						<th class="header">Détention de participations financières</th>
-						<th class="header">Nombre de collaborateurs exerçant une activité annexe</th>						
+						<th class="header">Activités annexes des collaborateurs</th>						
 					</tr>
 				</thead>
 			</table>
@@ -788,7 +788,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		*/
 		
 		d.activCollaborateurs.forEach(function (x) {
-			if(((cleanstringSpecial(x.employeur) != "neant" && cleanstringSpecial(x.employeur) != "") || (cleanstringSpecial(x.descriptionActivite) != "" && cleanstringSpecial(x.descriptionActivite) != "neant")) && (x.descriptionActivite != "AUCUNE AUTRE ACTIVITE")){
+			if((x.descriptionActivite || (x.employeur && x.employeur != "Néant")) && ((cleanstringSpecial(x.employeur) != "neant" && x.employeur != "Néant" && cleanstringSpecial(x.employeur) != "") || (cleanstringSpecial(x.descriptionActivite) != "" && cleanstringSpecial(x.descriptionActivite) != "neant")) && (x.descriptionActivite != "AUCUNE AUTRE ACTIVITE")){
 				d.collabNum ++;
 			}
 		});
@@ -1286,6 +1286,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
               "orderable": true,
               "width":"30%",
 			  "type":"name-lastname",
+			  "sClass": "table-uppercase",
               "targets": 1,
               data: function (row, type, val, meta) { 
                 if (row.name) {
