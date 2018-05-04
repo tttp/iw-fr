@@ -1184,8 +1184,8 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		.height(240)
 		.slicesCap(8)
 		.innerRadius(50)
-		.dimension(partig)
-		.group(partigGroup)
+		.dimension(parti)
+		.group(partiGroup)
 		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
 		.colorCalculator(function(d, i) {
 			return parti_groups[d.key];
