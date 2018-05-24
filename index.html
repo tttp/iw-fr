@@ -631,6 +631,16 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		}
 
 		d.parti_group_m = d.parti_group;
+
+		//Party for pie
+		var partiespielist = ['rem','lr','modem','lc','ng','fi','gdr','ni','ps'];
+		//'pcf'
+		if(partiespielist.indexOf(d.parti.toLowerCase()) < 0){
+			d.parti_pie = 'Others';
+		} else {
+			d.parti_pie = d.parti;
+		}
+		//d.parti_pie = d.parti;
 		
 		
 		//Calculate activities number and revenue
@@ -873,6 +883,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	  type = ndx.dimension(function (d) {return d.mandat;}),
 	  parti = ndx.dimension(function (d) {return d.parti;}),
 	  partig = ndx.dimension(function (d) {return d.parti_group_m;}),
+	  partipie = ndx.dimension(function (d) {return d.parti_pie;}),
 	  civilite = ndx.dimension(function (d) {return d.civilite;}),
 	  name = ndx.dimension(function (d) {return d.name;}),
 	  activities = ndx.dimension(function (d) {return d.activities;}),
@@ -883,6 +894,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	  civiliteGroup = civilite.group().reduceSum(function(d) {return 1;}),
 	  partiGroup = parti.group().reduceSum(function(d) {return 1;}),
 	  partigGroup = partig.group().reduceSum(function(d) {return 1;}),
+	  partiPieGroup = partipie.group().reduceSum(function(d) {return 1;}),
 	  activitiesGroup = activities.group().reduceSum(function(d) {return d.activities;}),
 	  activitiesRangeGroup = activitiesRange.group().reduceSum(function(d) {return 1;}),
 	  revenueRangeGroup = revenueRange.group().reduceSum(function(d) {return 1;}),
@@ -1184,8 +1196,8 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		.height(240)
 		.slicesCap(8)
 		.innerRadius(50)
-		.dimension(parti)
-		.group(partiGroup)
+		.dimension(partipie)
+		.group(partiPieGroup)
 		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
 		.colorCalculator(function(d, i) {
 			return parti_groups[d.key];
