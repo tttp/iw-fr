@@ -21,39 +21,10 @@
 <meta property="og:image" content="http://www.integritywatch.fr/img/thumbnail2.jpg" />
 <meta property="fb:app_id" content="1611680135716224" />
 
-<style>
-.activitiestable {
-	width: 100%;
-	font-size: 12px;
-	margin-bottom: 20px;
-}
-.activitiestable tr:nth-child(even) {
-	background: #f9f9f9;
-}
-.activitiestable td {
-	border: 1px solid #eee;
-	padding: 5px 10px;
-}
-.activitiestable th {
-	padding: 5px 10px;
-	font-size: 13px;
-}
-.activitiestabletitle {
-	font-weight: 600;
-	margin: 10px 0;
-	display: block;
-}
-tr.header th.header {
-	font-size: 12px;
-}
-</style>
 
 </head>
 
 <body>
-<div id="loader-container">
-	<div id="loader"></div>
-</div>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -73,12 +44,11 @@ tr.header th.header {
 				<ul class="nav navbar-nav">
 					<li class="active" id="bl_tool_btn"><a href="/">Parlementaires en France</a></li>
 					<li><a href="lobby.html">Lobbyistes en France</a></li>
-					<li><a href="./old_version/index.html">XIVe législature</a></li>
 					<li class="dropdown">
-						<a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Integrity Watch Europe<span class="caret"></span></a>
+					<a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Integrity Watch Europe<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="http://www.integritywatch.eu">Union Européenne</a></li>
-						</ul>
+						<li><a href="http://www.integritywatch.eu">Union Européenne</a></li>
+					</ul>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -102,7 +72,8 @@ tr.header th.header {
 Seules les activités exercées en parallèle du mandat de député ou de sénateur ont été prises en compte (mandats électifs, activités conservées, fonctions bénévoles). 
 <br /><br />
 Simple d’utilisation, il suffit de cliquer sur les éléments des infographies pour filtrer, trier et classer les informations. Veillez à bien enlever les filtres en cas de recherches successives.
- <br />
+ <br /><br />
+<a href="http://www.agircontrelacorruption.fr/portrait-robot-parlementaires/" target="_blank" class="more">Voir le portrait-robot du parlementaire français</a>
 <br /><a href="about.html" class="more">En savoir plus</a></p>
 			</div>
 			<div class="col-md-3" id="about_social">
@@ -166,7 +137,10 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 						</div>
 					</div>
             		<div class="col-md-3 filter_number">
-            			<div><span class="big_number afilter_long nbaccredited"></span>Total: activités annexes conservées</div>
+            			<div><span class="big_number afilter_long nbaccredited"></span>Total: activités annexes</div>
+            		</div>
+            		<div class="col-md-3 filter_number">
+            			<div class="dc-data-count org-count"><span class="big_number afilter_long nbcost">?</span>Total: revenus annexes</div>
             		</div>
 				</div>
 			</div>
@@ -198,18 +172,14 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 		</div>
 		<div id="pie3"></div>
 		<div class="legend">
-			
-			<div class="parti-rem">REM</div>
-			<div class="parti-lr">LR</div>
-			<div class="parti-modem">MoDem</div>
-			<div class="parti-lc">LC</div>
-			<div class="parti-ng">NG</div>
-			<div class="parti-fi">FI</div>
-			<div class="parti-gdr">GDR</div>
-			<div class="parti-ni">NI</div>
-			<div class="ni">Autres/Unknown</div>
-			
-			
+			<div class="fg">FG/PCF</div>
+			<div class="prg">PRG</div>
+			<div class="udi">UDI</div>
+			<div class="ps">PS</div>
+			<div class="greens">EELV/UDE</div>
+			<div class="lr">LR</div>
+			<div class="fn">FN</div>
+			<div class="ni">Autres</div>
 		</div>
 		<br class="clear" />
 	</div>
@@ -233,6 +203,12 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 </div>
 <div class="row">
 			<div class="col-md-6 chart_box">
+				<h3>Revenus annexes</h3>
+				<div class="info_chart">
+					<span class="info">info</span>
+					<p class="desc" style="display: none;">Total des rémunérations perçues par an pour les activités annexes prises en compte. Les indemnités parlementaires n’ont pas été intégrées. Attention, les montants peuvent être bruts ou nets. Passez la souris sur les différents secteurs pour voir le nombre de parlementaires concernés.</p>
+				</div>
+				<div id="bar1"></div>
 			</div>
 			
 			<div class="col-md-3 chart_box">
@@ -267,24 +243,23 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 		<div class="col-md-12 table-responsive">
 			<div class="row table-title-box">
 				<div class="col-md-9">
-					<h2 class="table_title">Activités annexes des parlementaires</h2>
+					<h2 class="table_title">ACTIVITES ET REVENUS ANNEXES DES PARLEMENTAIRES</h2>
 				</div>
 				<div class="col-md-3">
-					<div class="update">Mise à jour: avril 2018</div>
+					<div class="update">Mise à jour: 13 Dec 2015</div>
 				</div>
 			</div>
 			<table class="table table-hover dc-data-grid tablesorter-bootstrap">
 				<thead>
 					<tr class="header">
 						<th class="header">N</th>
-						<th class="header">Nom</th>
+						<th class="header col-md-4">Nom</th>
 						<th class="header">Département</th>
 						<th class="header">Mandat</th>
 						<th class="header">Parti politique</th>
-						<th class="header">Groupe parlementaire de rattachement</th>
-						<th class="header">Activités annexes conservées</th>
-						<th class="header">Détention de participations financières</th>
-						<th class="header">Activités annexes des collaborateurs</th>						
+						<th class="header">Parti/groupe</th>
+						<th class="header">Activités</th>
+						<th class="header">Revenus</th>						
 					</tr>
 				</thead>
 			</table>
@@ -404,15 +379,13 @@ var pie2 = dc.pieChart("#pie2");
 var pie3 = dc.pieChart("#pie3");
 var pie1 = dc.pieChart("#pie1");
 var pie4 = dc.pieChart("#pie4");
-//var bar1 = dc.barChart("#bar1");
+var bar1 = dc.barChart("#bar1");
 var franceMap = dc.geoChoroplethChart("#france");
 
 var datatable = null;
 var rep = null;
 var dep = null;
 var representatives={};
-var declarations;
-var pardep;
 
 var parti_groups = {
 "PRG":"#ECB050",
@@ -428,6 +401,7 @@ var parti_groups = {
 "UDI":"#8C1456",
 "EFDD":"#5eced6",
 "PPE":"#0a3e63",
+"LR":"#0a3e63",
 "ECR":"#3086c2",
 "NA/NI":"#cccccc",
 "FN":"#000000",
@@ -435,17 +409,7 @@ var parti_groups = {
 "Group RRDP":"#800c00",
 "Others":"#BBBBBB",
 "Autres":"#BBBBBB",
-"Array":"pink",
-//New ones
-"REM":"#f6cb00",
-"LR":"#0a3e63",
-"MoDem":"#ff9205",
-"LC":"#48d4f7",
-"NG":"#fcafc5",
-"FI":"#ff4541",
-"GDR":"#c21410",
-"NI":"#656565",
-"":"#BBBBBB"
+"Array":"pink"
 };
 
 var activities_colors = {
@@ -462,370 +426,40 @@ var totrev = 0;
 
 var repdata = null;
 
-function cleanstring(str) {
-	if(str) {
-		return str.trim().toLowerCase();
-	} else {
-		return '';
-	}
-}
-function cleanstringSpecial(str) {
-	if(str){
-	var newStr = str.trim().toLowerCase();
-	newStr = newStr.replace("é","e");
-	newStr = newStr.replace("è","e");
-	newStr = newStr.replace("ç","c");
-	newStr = newStr.replace("-"," ");
-	newStr = newStr.replace("ë","e");
-	newStr = newStr.replace(".","");
-
-	newStr = newStr.replace(/é/g , "e");
-	newStr = newStr.replace(/è/g , "e");
-	newStr = newStr.replace(/ç/g , "c");
-	newStr = newStr.replace(/_/g , " ");
-	newStr = newStr.replace(/ë/g , "e");
-	newStr = newStr.replace(/\./g , "");
-
-	newStr = newStr.replace("  "," ");
-	return newStr;
-	}
-}
-
-d3.csv("data/parlementaires.csv", function(error, data) {
-d3.json("data/declarations-2018-c.json", function(error2, data2) {
-d3.csv("data/parties-new.csv", function(error, data3) {
-d3.csv("data/parties-new-senate.csv", function(error, data4) {
-d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
-
-	$('#loader-container').hide();
-	declarations = data2.declarations.declaration;
-	pardep = data3;
-	parsen = data4;
+d3.csv("parlementaires.csv", function(error, data) {
 	representatives = data;
-	var currentYear = "2017";
 	
-	/*
-	var declaration_filtered = _.filter(declarations, function(dec, index) {
-	  return dec.general.qualiteMandat.codTypeMandatFichier == 'depute' || dec.general.qualiteMandat.codTypeMandatFichier == 'senateur' || dec.general.mandat.label.trim() == 'Député ou sénateur';
-	});
-	declarations = declaration_filtered;
-	*/
 	
-	/* REMOVE DUPLICATE DECLARATIONS */
-	/*
-	function removeDuplicates() {
-		var donepeople = {};
-		declarations.forEach(function (d, index) {
-			var thisname = d.general.declarant.prenom + " " + d.general.declarant.nom;
-			if(donepeople[thisname]){
-				var thiscompare = donepeople[thisname];
-				var thisdatef = d3.time.format("%d/%m/%Y %H:%M:%S");
-				var date1 = thisdatef.parse(d.dateDepot);
-				var date2 = thisdatef.parse(thiscompare[0]);
-				if(date1 >= date2){
-					declarations.splice(thiscompare[1], 1);
-					donepeople[thisname] = [d.dateDepot, index];
-				} else {
-					declarations.splice(index, 1);
-				}
-			} else {
-				donepeople[thisname] = [d.dateDepot, index];
-			}
-		});
-		console.log(declarations);
-	}
+	data.forEach(function (d) {
 	
-	removeDuplicates();
-	removeDuplicates();
-	removeDuplicates();
-	removeDuplicates();
-	*/
-
-	
-	//Prepare new data
-	declarations.forEach(function (d) {
-		//Prepare main variables
-		d.name = d.general.declarant.prenom + " " + d.general.declarant.nom;
-		d.name_show = d.name;
-		d.civilite = cleanstring(d.general.declarant.civilite);
-
-		if(cleanstringSpecial(d.civilite) == "m"){
-			d.civilite = "m";
-		}
-		if(cleanstringSpecial(d.civilite) == "mme"){
-			d.civilite = "f";
-		}
-		d.birth_year = d.general.declarant.dateNaissance.split("/")[2];
-		d.birth_date = d.general.declarant.dateNaissance;
-		d.revenue = 0;
-		d.activities = 0;
-		//d.departement = "";
-		//d.departement_n = "";
-		d.departement;
-		if(d.general.organe && d.general.organe.labelOrgane){
-			d.departement = d.general.organe.labelOrgane.split("(")[0];
-		}
-		if(d.general.organe){
-		d.departement_n = d.general.organe.codeOrgane;
-		}
-		d.region = "";
-		d.mandat2 = d.general.qualiteMandat.typeMandat;
-		d.mandat = d.general.mandat.label;
-		d.parti_group = "";
-		d.parti = "";
-		
-		d.activcons = "NON";
-		d.partsoc = "NON";
-		
-		d.collabNum = 0;
-		
-		if(d.mandat == "Député ou sénateur"){
-			d.mandat = d.mandat2;
-		}
-		
-		
-		//Get additional data about party for senators
-		if(cleanstring(d.mandat) == 'sénateur'){
-			d.thispardep = _.find(parsen, function (m) {return cleanstring(m.name + ' ' + m.lastname)==cleanstring(d.name)});
-			if(!d.thispardep){
-				d.thispardep = _.find(parsen, function (m) {
-					//Special cases
-					if(d.name == "JOURDA Muriel"){
-						return (cleanstringSpecial(m.name) + ' ' + cleanstringSpecial(m.lastname))=="muriel jourda";
-					}
-					if(d.name == "BOCKEL JEAN-MARIE"){
-						return (cleanstringSpecial(m.name) + ' ' + cleanstringSpecial(m.lastname))=="jean marie bockel";
-					}
-
-					return (cleanstringSpecial(m.name) + ' ' + cleanstringSpecial(m.lastname))==cleanstringSpecial(d.name)
-				});
-			}
-			if(d.thispardep){
-				d.parti_group = d.thispardep.groupe.trim();
-				d.parti = d.thispardep.parti.trim();
-			}	
-		} else {
-		//Get additional data about party for deputies
-			d.thispardep = _.find(pardep, function (m) {return cleanstring(m.name)==cleanstring(d.name)});
-			if(!d.thispardep){
-				d.thispardep = _.find(pardep, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(d.name)});
-			}
-			if(d.thispardep){
-				d.parti_group = d.thispardep.groupe.trim();
-				d.parti = d.thispardep.parti.trim();
-				d.name_show = d.thispardep.nameShow;
-				d.name = d.thispardep.nameShow;
-			}
-		}
-		
-		
-
-		//Get missing parties and departments (new data April 2018)
-		if(d.departement_n == "" || d.departement_n == "No data" || !d.departement_n || d.parti == "" || !d.parti){
-			var thisentry = _.find(partidepartments, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(d.name);});
-			if(thisentry){
-				d.departement_n = thisentry.departement.trim();
-				d.parti = thisentry.parti.trim();
-				d.parti_group = thisentry.groupe.trim();
-			}
-		}
-
+		//Group parties
 		d.parti_group_m = d.parti_group;
-
-		//Party for pie
-		var partiespielist = ['rem','lr','modem','lc','ng','fi','gdr','ni','ps'];
-		//'pcf'
-		if(partiespielist.indexOf(d.parti.toLowerCase()) < 0){
-			d.parti_pie = 'Others';
+		if(d.parti_group == 'EELV' || d.parti_group == 'UDE'){
+			d.parti_group_m = 'EELV/UDE';
+		} else if(d.parti_group == 'FG' || d.parti_group == 'PCF') {
+			d.parti_group_m = 'FG/PCF';
+		} else if(d.parti_group == 'PS' || d.parti_group == 'Groupe SRC' || d.parti_group == 'PS '){
+			d.parti_group_m = 'PS';
+		} else if(d.parti_group == 'UDI'){
+			d.parti_group_m = 'UDI';
+		} else if(d.parti_group == 'PRG'){
+			d.parti_group_m = 'PRG';
+		} else if(d.parti_group == 'LR' || d.parti_group == 'LR '){
+			d.parti_group_m = 'LR';
+		} else if(d.parti_group == 'FN'){
+			d.parti_group_m = 'FN';
 		} else {
-			d.parti_pie = d.parti;
-		}
-		//d.parti_pie = d.parti;
-		
-		
-		//Calculate activities number and revenue
-		
-		d.activitiestot = 0;
-		d.revenuetot = 0;
-		
-		d.revenuetotAvg = 0;
-		
-		d.activConsultant = [];
-		d.activProfCinqDerniere = [];
-		d.activProfConjoint = [];
-		d.fonctionBenevole = [];
-		d.mandatElectif = [];
-		d.participationDirigeant = [];
-		d.participationFinanciere = [];
-		
-		d.activCollaborateurs = [];
-		
-		if(d.activConsultantDto && d.activConsultantDto.items && d.activConsultantDto.items.items){
-			if(d.activConsultantDto.items.items.motif){
-				d.activConsultant.push(d.activConsultantDto.items.items);
-			} else {
-				d.activConsultant = d.activConsultantDto.items.items;
-			}
-		}
-		if(d.activProfCinqDerniereDto && d.activProfCinqDerniereDto.items && d.activProfCinqDerniereDto.items.items){
-			if(d.activProfCinqDerniereDto.items.items.motif){
-				d.activConsultant.push(d.activProfCinqDerniereDto.items.items);
-			} else {
-				d.activProfCinqDerniere = d.activProfCinqDerniereDto.items.items;
-			}
-		}
-		if(d.activProfConjointDto && d.activProfConjointDto.items && d.activProfConjointDto.items.items){
-			if(d.activProfConjointDto.items.items.motif){
-				d.activProfConjoint.push(d.activProfConjointDto.items.items);
-			} else {
-				d.activProfConjoint = d.activProfConjointDto.items.items;
-			}
-		}
-		if(d.fonctionBenevoleDto && d.fonctionBenevoleDto.items && d.fonctionBenevoleDto.items.items){
-			if(d.fonctionBenevoleDto.items.items.motif){
-				d.fonctionBenevole.push(d.fonctionBenevoleDto.items.items);
-			} else {
-				d.fonctionBenevole = d.fonctionBenevoleDto.items.items;
-			}
-		}
-		if(d.mandatElectifDto && d.mandatElectifDto.items && d.mandatElectifDto.items.items){
-			if(d.mandatElectifDto.items.items.motif){
-				d.mandatElectif.push(d.mandatElectifDto.items.items);
-			} else {
-				d.mandatElectif = d.mandatElectifDto.items.items;
-			}
-		}
-		if(d.participationDirigeantDto && d.participationDirigeantDto.items && d.participationDirigeantDto.items.items){
-			if(d.participationDirigeantDto.items.items.motif){
-				d.participationDirigeant.push(d.participationDirigeantDto.items.items);
-			} else {
-				d.participationDirigeant = d.participationDirigeantDto.items.items;
-			}
-		}
-		if(d.participationFinanciereDto && d.participationFinanciereDto.items && d.participationFinanciereDto.items.items){
-			if(d.participationFinanciereDto.items.items.motif){
-				d.participationFinanciere.push(d.participationFinanciereDto.items.items);
-			} else {
-				d.participationFinanciere = d.participationFinanciereDto.items.items;
-			}
+			d.parti_group_m = 'Autres';
 		}
 		
-		if(d.activCollaborateursDto && d.activCollaborateursDto.items && d.activCollaborateursDto.items.items){
-			if(d.activCollaborateursDto.items.items.motif){
-				d.activCollaborateurs.push(d.activCollaborateursDto.items.items);
-			} else {
-				d.activCollaborateurs = d.activCollaborateursDto.items.items;
-			}
-		}
+		//Search string
+		d.searchstring = d.name + " " + d.departement + " " + d.departement_n;
 		
-		if(d.participationFinanciere.length > 0){
-			d.partsoc = "OUI";
-		}
-
-		//Calculate activities and revenues
-		
-		function calcActRev(actArray){
-			if(actArray.length > 0){
-				actArray.forEach(function (x) {
-					//Count activity only if conservee
-					if(x.conservee && x.conservee == "true"){
-						d.activitiestot ++;
-					}
-					//Revenue sum for conservee activities
-					if(x.conservee == "true"){
-						if(x.remuneration && x.remuneration.montant.montant){
-							//If the revenue only has 1 entry the data structure is a bit different
-							if(x.remuneration.montant.montant.annee && x.remuneration.montant.montant.annee == currentYear){
-								d.revenuetot += Number(x.remuneration.montant.montant.montant);
-							} else if(x.remuneration.montant.montant.length > 0){
-								//If there are more entries, loop through revenue entries, 1 entry per year; pick the current year entry
-								x.remuneration.montant.montant.forEach(function (y) {
-									if(y.annee == currentYear){
-										d.revenuetot += Number(y.montant);
-									}
-								});
-							}
-						}
-						//Revenue sum average
-						var thisacttot = 0;
-						var thisactyears = 0;
-						if(x.remuneration && x.remuneration.montant.montant){
-							//If the revenue only has 1 entry the data structure is a bit different
-							if(x.remuneration.montant.montant.annee){
-								d.revenuetotAvg += Number(x.remuneration.montant.montant.montant);
-							} else if(x.remuneration.montant.montant.length > 0){
-								//If there are more entries, loop through revenue entries, 1 entry per year; sum the revenues and divide by years amount
-								x.remuneration.montant.montant.forEach(function (y) {
-									thisacttot += Number(y.montant);
-									thisactyears ++;
-								});
-							}
-						}
-						if(thisactyears > 0){
-							d.revenuetotAvg += Number(thisacttot)/Number(thisactyears);
-							//.toFixed(2)
-						}
-					}
-					//If any is kept, set activcons to OUI
-					if(x.conservee && x.conservee == "true"){
-						d.activcons = "OUI";
-					}
-				});
-			}
-		}
-		
-		
-		
-		calcActRev(d.activConsultant);
-		calcActRev(d.activProfCinqDerniere);
-		calcActRev(d.fonctionBenevole);
-		calcActRev(d.mandatElectif);
-		calcActRev(d.participationDirigeant);
-
-		
-		/* ENTRIES THAT SHOULD NOT BE COUNTED FOR ACTIVITIES COUNT - DO NOT DELETE */
-		/*
-		if(d.activProfConjoint.length > 0){
-			d.activProfConjoint.forEach(function (x) {
-			
-			});
-		}
-		if(d.participationFinanciere.length > 0){
-			d.participationFinanciere.forEach(function (x) {
-			
-			});
-		
-		*/
-		
-		d.activCollaborateurs.forEach(function (x) {
-			if((x.descriptionActivite || (x.employeur && x.employeur != "Néant")) && ((cleanstringSpecial(x.employeur) != "neant" && x.employeur != "Néant" && cleanstringSpecial(x.employeur) != "") || (cleanstringSpecial(x.descriptionActivite) != "" && cleanstringSpecial(x.descriptionActivite) != "neant")) && (x.descriptionActivite != "AUCUNE AUTRE ACTIVITE")){
-				d.collabNum ++;
-			}
-		});
-		
-		d.activities = d.activitiestot;
-
-		d.activities_range = "";
-		if(d.activitiestot == 0){
-			d.activities_range = "0";
-		} else if(d.activitiestot <= 1){
-			d.activities_range = "1";
-		} else if(d.activitiestot <= 5){
-			d.activities_range = "2 - 5";
-		} else if(d.activitiestot <= 10){
-			d.activities_range = "6 - 10";
-		} else if(d.activitiestot > 10){
-			d.activities_range = "> 10";
-		}	
-		
-		d.revenue = d.revenuetot;
-		d.revenue_n = d.revenuetot;
-		//Revenue ranges
 		if(d.revenue == '#N/D' || d.revenue == ''){
 			d.revenue_n = 0;
 			d.revenue_n2 = 0;
 		} else {
-			//d.revenue_n = d.revenue.replace(',','.');
+			d.revenue_n = d.revenue.replace(',','.');
 			d.revenue_n = parseFloat(d.revenue_n);
 			d.revenue_n2 = d.revenue_n.toFixed(0);
 		}
@@ -847,18 +481,20 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		}
 
 		d.revenue_n = d.revenue_n.toFixed(2);
-
-		
-	});
-	
-	data = declarations;
-	
-	data.forEach(function (d) {	
-		//Search string
-		d.searchstring = d.name + " " + d.departement + " " + d.departement_n;
-		
 		d.activities_word = d.activities;
-
+		if(d.activities == "#N/D" || d.activities == 0 ){
+			d.activities = 0;
+			d.activities_range = "0";
+		} else if(d.activities <= 1){
+			d.activities_range = "1";
+		} else if(d.activities <= 5){
+			d.activities_range = "2 - 5";
+		} else if(d.activities <= 10){
+			d.activities_range = "6 - 10";
+		} else if(d.activities > 10){
+			d.activities_range = "> 10";
+		}
+		
 		//Totals
 		totpeople ++;
 		totact += parseInt(d.activities);
@@ -883,7 +519,6 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	  type = ndx.dimension(function (d) {return d.mandat;}),
 	  parti = ndx.dimension(function (d) {return d.parti;}),
 	  partig = ndx.dimension(function (d) {return d.parti_group_m;}),
-	  partipie = ndx.dimension(function (d) {return d.parti_pie;}),
 	  civilite = ndx.dimension(function (d) {return d.civilite;}),
 	  name = ndx.dimension(function (d) {return d.name;}),
 	  activities = ndx.dimension(function (d) {return d.activities;}),
@@ -894,7 +529,6 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	  civiliteGroup = civilite.group().reduceSum(function(d) {return 1;}),
 	  partiGroup = parti.group().reduceSum(function(d) {return 1;}),
 	  partigGroup = partig.group().reduceSum(function(d) {return 1;}),
-	  partiPieGroup = partipie.group().reduceSum(function(d) {return 1;}),
 	  activitiesGroup = activities.group().reduceSum(function(d) {return d.activities;}),
 	  activitiesRangeGroup = activitiesRange.group().reduceSum(function(d) {return 1;}),
 	  revenueRangeGroup = revenueRange.group().reduceSum(function(d) {return 1;}),
@@ -1035,7 +669,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	
 	function drawMap() {
 	
-		d3.json("data/departements.topo.js", function (json) {
+		d3.json("departements.topo.js", function (json) {
 			var width=550;
 			var height=600;
 			//var projection = d3.geo.equirectangular()
@@ -1044,6 +678,45 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 			   .scale(width*2.8);
      var dpt = topojson.feature(json, json.objects.departements).features;
 
+			//Fix id
+			dpt.forEach(function (d) {
+				if(d.properties.code[0] == '0'){
+					d.properties.code = d.properties.code.substr(1);
+				}
+			});
+			
+			/*
+			$("#resetzoom").click(function () {
+				projection
+				   .scale(width*3.2)
+				   .center([10,43]);
+				franceMap.render();
+			});
+			
+			function zoomed() {
+				projection
+				.translate(d3.event.translate)
+				.scale(d3.event.scale);
+				franceMap.render();
+			}
+
+			var zoom = d3.behavior.zoom()
+				.translate(projection.translate())
+				.scale(projection.scale())
+				.scaleExtent([width*3.2, 16 * height])
+				.on("zoom", zoomed);
+			
+
+			var svg = d3.select("#france")
+				.attr("width", width)
+				.attr("height", height)
+				.call(zoom);
+				
+			*/
+			
+
+			   
+			
 			var centered;
 			
 			function clicked(d) {
@@ -1081,7 +754,6 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	
 	}
 	
-	/*
 	function drawRevenueBar() {
 		bar1
 			.width(550)
@@ -1097,7 +769,19 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 			.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
 			.group(revenueRangeGroup)
 			.x(d3.scale.ordinal().domain(["Aucun", "0 - 1000", "1001 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 - 100,000", "100,001 +"]))
-			.xUnits(dc.units.ordinal);			
+			.xUnits(dc.units.ordinal);
+		
+/*		
+		bar1.renderlet(function(chart){
+			var colors = d3.scale.ordinal().domain(["Aucun", "0 - 500", "501 - 10,000", "10,001 - 25,000", "25,001 - 50,000", "50,001 +"])
+				.range(["steelblue", "brown", "red", "green", "yellow", "grey"]);
+			chart.selectAll('rect.bar').each(function(d){
+				 d3.select(this).attr("style", "fill: " + colors(d.key)); // use key accessor if you are using a custom accessor
+			});
+		});
+		*/
+			
+
 			
 		bar1.on('filtered.monitor', function(chart, filter) {
 			RefreshTable();
@@ -1106,7 +790,6 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		bar1.render();
 		
 	}
-	*/
 	
 	function drawTypePie() {
 	
@@ -1196,8 +879,8 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		.height(240)
 		.slicesCap(8)
 		.innerRadius(50)
-		.dimension(partipie)
-		.group(partiPieGroup)
+		.dimension(partig)
+		.group(partigGroup)
 		.title(function (d) {return d.key + ': '+d.value + ' parlementaires'})
 		.colorCalculator(function(d, i) {
 			return parti_groups[d.key];
@@ -1276,7 +959,6 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	
 	
 	/*TABLE*/
-	var dtcount=0;
 	function drawTable () {
 		var count=0;
     //id,contact_country,sub_category,acronym,name,categorie,cost_min,cost_max,cost_absolute
@@ -1287,18 +969,14 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
               "orderable": false,
               "targets": 0,   
               data: function ( row, type, val, meta ) {
-                dtcount++;
-				//console.log(dtcount);
-				//return dtcount;
-                //return dtcount - totpeople;
-				return dtcount - rep.top(Infinity).length;
+                count++;
+                return count - totpeople;
               }
               },{
               "searchable": true,
               "orderable": true,
               "width":"30%",
 			  "type":"name-lastname",
-			  "sClass": "table-uppercase",
               "targets": 1,
               data: function (row, type, val, meta) { 
                 if (row.name) {
@@ -1320,12 +998,6 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
-              "targets": 3,
-              data: "mandat",  
-              },{
-              "defaultContent":"No data",
-              "searchable": false,
-              "orderable": true,
               "targets": 4,
               data: "parti"
               },{
@@ -1338,6 +1010,12 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
+              "targets": 3,
+              data: "mandat",  
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
               "type":"num",
               "targets": 6,
 			  "sClass": "alignright",
@@ -1346,23 +1024,19 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
-              "type":"num",
+			  "sClass": "alignright",
+              "type":"numeric-comma",
               "targets": 7,
-              data: "partsoc",  
-              },{
-              "defaultContent":"No data",
-              "searchable": false,
-              "orderable": true,
-              "type":"num",
-              "targets": 8,
-              data: "collabNum",  
+			  data: function (row, type, val, meta) { 
+				return addcommas(row.revenue_n2)
+			  }, 
               }
             ],
             "iDisplayLength" : 500,
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": false,
-            "order": [[ 6, "desc" ]],
+            "order": [[ 7, "desc" ]],
             "bSort": true,
             "bInfo": false,
             "bAutoWidth": false,
@@ -1370,7 +1044,6 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
             "aaData": rep.top(Infinity),
             "bDestroy": true,
         });
-		
 	
     
 
@@ -1430,135 +1103,19 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		var profile = getProfile(repdata.name,repdata.mandat,repdata.uid);
 		var hatvp = getHatvp(repdata.name);
 		
-		//Output X if the activity is conservée
-		function boolToX(conservee){
-			if(conservee == "true"){
-				return "X";
-			}
-			return "";
-		}
-		//Generate list of revenues inverting the order to have most recent on top
-		function revenusList(remuneration){
-			var remunerationText = "";
-			if(remuneration.montant.montant && remuneration.montant.montant.annee){
-				remunerationText = remuneration.montant.montant.annee + ': '+remuneration.montant.montant.montant+'<br />' + remunerationText;
-			} else if(remuneration.montant.montant && remuneration.montant.montant.length > 0){
-				remuneration.montant.montant.forEach(function (x) {
-					remunerationText = x.annee + ': '+x.montant+'<br />' + remunerationText;
-				});
-			}
-			return remunerationText;
-		}
-		
 		//Build modal body
 		var modalbody = '<div class="row"><div class="col-md-9">';
 		modalbody += '<div><label>Mandat:</label> '+repdata.mandat+'</div>';
 		modalbody += '<div><label>Département:</label> '+repdata.departement+' ('+repdata.departement_n+')</div>';
-		modalbody += '<div><label>Activités annexes conservées:</label> '+repdata.activities+'</div>';
+		modalbody += '<div><label>Total revenus annexes:</label> '+addcommas(repdata.revenue_n2)+' EUR</div>';
+		modalbody += '<div><label>Indemnité parlementaire nette:</label> 63.600 € (environ 5300€ par mois)';
+		modalbody += '<span class="infod"> <img src="img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc up10" style="display: none;">Au <a href="http://www.senat.fr/role/senateurs_info/statut.html" target="_blank">Sénat</a>, l’indemnité nette mensuelle s’élève à 5 366,32 €. A l’<a href="http://www2.assemblee-nationale.fr/decouvrir-l-assemblee/role-et-pouvoirs-de-l-assemblee-nationale/le-depute/la-situation-materielle-du-depute" target="_blank">Assemblée nationale</a>, les députés élus pour la première fois avant juin 2012 perçoivent 5 046,77 € ; les députés élus pour la première fois en juin 2012 ou après perçoivent 5 351,65 €.</p></div>';
+		modalbody += '<div><label>Activités annexes:</label> '+repdata.activities+'</div>';
+		modalbody += '<div><label>Activités législatives:</label> <a href="'+profile+'" target="_blank">Profil détaillé</a></div>';
 		modalbody += '<div><label>Déclaration originale:</label> <a href="'+hatvp+'" target="_blank">Profil sur le site de la Haute Autorité pour la Transparence de la Vie Publique (HATVP)</a></div>';
 		modalbody += '</div><div class="col-md-3">'+ photo + '</div></div>';
 		
 		
-		/* NEW DATA - ACT PROF 5 YEARS */
-		modalbody += '<span class="activitiestabletitle">ACTIVITÉS PROFESSIONNELLES RÉMUNÉRÉES EXERCEES À LA DATE DE L’ÉLECTION OU ANTERIEURES (5 ANS)</span>';
-		if(repdata.activProfCinqDerniere.length > 0){
-			modalbody += '<table class="activitiestable">';
-			modalbody += '<thead><tr><th>Description</th><th>Employeur</th><th>Durée</th><th>Activité Conservée</th><th>Revenus</th></tr></thead>';
-			repdata.activProfCinqDerniere.forEach(function (x) {
-				modalbody += '<tr><td>'+x.description+'</td><td>'+x.employeur+'</td><td>De '+x.dateDebut+' à '+x.dateFin+'</td><td>'+boolToX(x.conservee)+'</td><td>'+revenusList(x.remuneration)+'</td></tr>';
-			});
-			modalbody += '</table>';
-		} else {
-			modalbody += '/';
-		}
-		/* NEW DATA - ACT CONSULTANT */
-		modalbody += '<span class="activitiestabletitle">ACTIVITÉS DE CONSULTANT EXERCEE À LA DATE DE L’ÉLECTION OU ANTERIEURES (5 ANS)</span>';
-		if(repdata.activConsultant.length > 0){
-			modalbody += '<table class="activitiestable">';
-			modalbody += '<thead><tr><th>Description</th><th>Employeur</th><th>Durée</th><th>Activité Conservée</th><th>Revenus</th></tr></thead>';
-			repdata.activConsultant.forEach(function (x) {
-				modalbody += '<tr><td>'+x.description+'</td><td>'+x.employeur+'</td><td>De '+x.dateDebut+' à '+x.dateFin+'</td><td>'+boolToX(x.conservee)+'</td><td>'+revenusList(x.remuneration)+'</td></tr>';
-			});
-			modalbody += '</table>';
-		} else {
-			modalbody += '/';
-		}
-		/* NEW DATA - ORGANES DIRIGEANTS */
-		modalbody += '<span class="activitiestabletitle">ORGANES DIRIGEANTS (PUBLIC OU PRIVÉ)</span>';
-		if(repdata.participationDirigeant.length > 0){
-			modalbody += '<table class="activitiestable">';
-			modalbody += '<thead><tr><th>Activité</th><th>Organisme</th><th>Durée</th><th>Activité Conservée</th><th>Revenus</th></tr></thead>';
-			repdata.participationDirigeant.forEach(function (x) {
-				modalbody += '<tr><td>'+x.activite+'</td><td>'+x.nomSociete+'</td><td>De '+x.dateDebut+' à '+x.dateFin+'</td><td>'+boolToX(x.conservee)+'</td><td>'+revenusList(x.remuneration)+'</td></tr>';
-			});
-			modalbody += '</table>';
-		} else {
-			modalbody += '/';
-		}
-		/* NEW DATA - PARTICIPATIONS FINANCIERES */
-		modalbody += '<span class="activitiestabletitle">PARTICIPATIONS FINANCIÈRES</span>';
-		if(repdata.participationFinanciere.length > 0){
-			modalbody += '<table class="activitiestable">';
-			modalbody += '<thead><tr><th>Société</th><th>Evaluation</th><th>Nombre de parts</th><th>Pourcentage du capital détenu</th><th>Revenus (année précédente)</th></tr></thead>';
-			repdata.participationFinanciere.forEach(function (x) {
-				modalbody += '<tr><td>'+x.nomSociete+'</td><td>'+x.evaluation+' €</td><td>De '+x.nombreParts+'</td><td>'+x.capitalDetenu+'%</td><td>'+x.remuneration+'</td></tr>';
-			});
-			modalbody += '</table>';
-		} else {
-			modalbody += '/';
-		}
-		/* NEW DATA - CONJOINT */
-		modalbody += '<span class="activitiestabletitle">ACTIVITÉS DU CONJOINT</span>';
-		if(repdata.activProfConjoint.length > 0){
-			modalbody += '<table class="activitiestable">';
-			modalbody += '<thead><tr><th>Activité</th><th>Employeur</th></tr></thead>';
-			repdata.activProfConjoint.forEach(function (x) {
-				modalbody += '<tr><td>'+x.activiteProf+'</td><td>'+x.employeurConjoint+'</td></tr>';
-			});
-			modalbody += '</table>';
-		} else {
-			modalbody += '/';
-		}
-		/* NEW DATA - BENEVOLES */
-		modalbody += '<span class="activitiestabletitle">ACTIVITÉS BÉNÉVOLES</span>';
-		if(repdata.fonctionBenevole.length > 0){
-			modalbody += '<table class="activitiestable">';
-			modalbody += '<thead><tr><th>Activité</th><th>Organisme</th><th>Activité Conservée</tr></thead>';
-			repdata.fonctionBenevole.forEach(function (x) {
-				modalbody += '<tr><td>'+x.descriptionActivite+'</td><td>'+x.nomStructure+'</td><td>'+boolToX(x.conservee)+'</td></tr>';
-			});
-			modalbody += '</table>';
-		} else {
-			modalbody += '/';
-		}
-		/* NEW DATA - MANDAT */
-		modalbody += '<span class="activitiestabletitle">MANDAT</span>';
-		if(repdata.mandatElectif.length > 0){
-			modalbody += '<table class="activitiestable">';
-			modalbody += '<thead><tr><th>Mandat</th><th>Durée</th><th>Activité Conservée</th><th>Revenus</th></tr></thead>';
-			repdata.mandatElectif.forEach(function (x) {
-				modalbody += '<tr><td>'+x.descriptionMandat+'</td><td>De '+x.dateDebut+' à '+x.dateFin+'</td><td>'+boolToX(x.conservee)+'</td><td>'+revenusList(x.remuneration)+'</td></tr>';
-			});
-			modalbody += '</table>';
-		} else {
-			modalbody += '/';
-		}
-		/* NEW DATA - COLLAB */
-		modalbody += '<span class="activitiestabletitle">COLLABORATEURS ET LEURS ACTIVITÉS</span>';
-		if(repdata.activCollaborateurs.length > 0){
-			modalbody += '<table class="activitiestable">';
-			modalbody += '<thead><tr><th>Nom</th><th>Activité</th><th>Employeur</th></tr></thead>';
-			repdata.activCollaborateurs.forEach(function (x) {
-				modalbody += '<tr><td>'+x.nom+'</td><td>'+x.descriptionActivite+'</td><td>'+x.employeur+'</td></tr>';
-			});
-			modalbody += '</table>';
-		} else {
-			modalbody += '/';
-		}
-		$('#repModal .modal-body').html(modalbody);
-		
-		
-		/*
 		//modalbody += '<table class="details_table"><thead><td>Type</td><td>Description</td><td>Revenue</td><td></td></thead><tbody>';
 		var tableh = '<table class="details_table"><thead><td>Description</td><td>Organisation</td><td>Revenus</td><td></td></thead><tbody>';
 		var tablee = '</tbody></table>';
@@ -1586,8 +1143,8 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 						
 						modalbody += '<tr><td>' + d.description + '</td><td>' + d.company + '</td><td>' + d.amount + '</td>' ;
 						if( d["notes"] != '' || d["notes3"] != '' || d["notes4"] != ''){
-							//modalbody += '<img src="./img/info.svg" data-toggle="tooltip" title="'+d.notes+'" /></td></tr>';
-							modalbody += '<td class="infod"><img src="./img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes;
+							//modalbody += '<img src="img/info.svg" data-toggle="tooltip" title="'+d.notes+'" /></td></tr>';
+							modalbody += '<td class="infod"><img src="img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes;
 							if(d["notes3"] != ''){
 								modalbody += '<br />Début: '+d.notes3;
 							}
@@ -1606,8 +1163,6 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 			
 			modalbody += '</tbody></table>';
 			
-			
-			/*
 			d3.csv("collaborators.csv", function(coll) {
 			var colltb = 0;
 			var filteredData2 = coll.filter(function(d) 
@@ -1624,7 +1179,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 					modalbody += '<td>'+d.description+'</td>';
 					modalbody += '<td>'+d.employerother+'</td>';
 					if( d["notes"] != ''){
-						modalbody += '<td class="infod"><img src="./img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes;
+						modalbody += '<td class="infod"><img src="img/info.svg" onClick="$(\'p.pdesc\').slideUp(\'fast\');if(!$(this).hasClass(\'opened\')){$(this).parents(\'.infod\').find(\'p.pdesc\').slideDown(\'fast\');$(\'.infod img\').removeClass(\'opened\')}$(this).toggleClass(\'opened\');" /><p class="pdesc" style="display: none;">'+d.notes;
 						modalbody += '</p></div>';
 					} else {
 						modalbody += '<td></td></tr>';
@@ -1640,11 +1195,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 			
 			
 			
-			
-			
 		});
-		*/
-		$('#repModal .modal-body').html(modalbody);
 		
 		
     } );
@@ -1855,8 +1406,8 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	}
 
    function RefreshTable() {
-		dtcount=0
 		dc.events.trigger(function () {
+			console.log(datatable);
 			if(datatable != null){
 			alldata = rep.top(Infinity);
 			datatable.fnClearTable();
@@ -1931,7 +1482,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 			var filtered= c.group().value();
 			var disabled= (total == filtered);
 
-		  //RefreshTable();
+		  RefreshTable();
 
 			$(".resetall").attr("disabled",disabled);
 			//ga && ga('send', 'event', 'filter', 'subset', filtered);
@@ -1940,19 +1491,22 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 
 }
 	
+	
+	
+	
 	drawTable();
 	drawMap();
 	drawTypePie();
 	drawCivilitePie();
 	drawPartiPie();
 	drawActivitiesPie();
+	drawRevenueBar();
 	drawCounter();
-	$(".resetall").click();
+	
+	//setTimeout(drawCounter(), 5000)
 
-	});
-	})
-	})
-  }) 
+ 
+  
 })
 
 </script>

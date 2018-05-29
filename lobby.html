@@ -37,9 +37,6 @@ Who's lobbying the Assemblée Nationale and what do they spend? Check integrity 
 </head>
 <body>
 
-<div id="loader-container">
-	<div id="loader"></div>
-</div>
 
 <script>
 function getCost (d) { 
@@ -713,7 +710,6 @@ function eventpopup (epid) {
 				<ul class="nav navbar-nav">
 					<li><a href="index.html">Parlementaires en France</a></li>
 					<li class="active" id="bl_tool_btn"><a href="/">Lobbyistes en France</a></li>
-					<li><a href="./old_version/index.html">XIVe législature</a></li>
           <li class="dropdown">
             <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Integrity Watch Europe<span class="caret"></span></a>
              <ul class="dropdown-menu">
@@ -737,10 +733,8 @@ function eventpopup (epid) {
 			</div>
 			<div class="col-md-6 col-lg-6" id="about_content">
 				<p>
- Integrity Watch France est une base de données interactive sur le lobbying qui offre un aperçu unique des organisations inscrites sur le registre des représentants d’intérêts de l’Assemblée nationale.
- <br />
-	  NB : Le registre de l'Assemblée nationale a disparu au profit d'un nouveau registre des représentants d'intérêts, instauré par la loi du 9 décembre 2016 (dite "loi Sapin 2") et abrité auprès de la Haute Autorité pour la Transparence de la Vie Publique (HATVP). Les représentants d'intérêts devront publier, dès 2018, un rapport d'activité annuel. Integrity Watch France sera actualisé avec les données de ce registre dès que celles-ci seront disponibles. Les données issues du précédent registre de l'Assemblée nationale restent consultables ici.
-				<br /><br /><a href="about.html" class="more">En savoir plus</a></p>
+ Integrity Watch France est une base de données interactive sur le lobbying qui offre un aperçu unique des organisations inscrites sur le registre des représentants d’intérêts de l’Assemblée nationale. 
+				<br /><a href="about.html" class="more">En savoir plus</a></p>
 				<p>
       Simple d’utilisation, il suffit de cliquer sur les éléments des infographies pour filtrer, trier et classer les organisations.
         </p>
@@ -964,9 +958,8 @@ Attention : les conseils privés doivent, pour leur part, déclarer le chiffre d
 			//var dateFormat = d3.time.format("%Y-%m-%d");
 
 		});
-    d3.csv("data/representants.csv", function(d) {return d;}
+    d3.csv("representants.csv", function(d) {return d;}
       ,function (rows) {
-				$('#loader-container').hide();
         representatives = rows;
 				 _.each (representatives, function (d,i) {
 						//representatives[d.identification_code]=d;
