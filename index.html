@@ -280,7 +280,7 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 						<th class="header">Nom</th>
 						<th class="header">Département</th>
 						<th class="header">Mandat</th>
-						<th class="header">Parti politique</th>
+						<th class="header">Parti politique de rattachement</th>
 						<th class="header">Groupe parlementaire de rattachement</th>
 						<th class="header">Activités annexes conservées</th>
 						<th class="header">Détention de participations financières</th>
@@ -412,7 +412,7 @@ var rep = null;
 var dep = null;
 var representatives={};
 var declarations;
-var pardep;
+//var pardep;
 
 var parti_groups = {
 "PRG":"#ECB050",
@@ -492,21 +492,32 @@ function cleanstringSpecial(str) {
 }
 
 d3.csv("data/parlementaires.csv", function(error, data) {
-d3.json("data/declarations-2018-c.json", function(error2, data2) {
-d3.csv("data/parties-new.csv", function(error, data3) {
-d3.csv("data/parties-new-senate.csv", function(error, data4) {
-d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
+//d3.json("data/declarations-2018-c.json", function(error2, data2) {
+d3.json("data/declarations-filtered.json", function(error2, data2) {
+d3.csv("data/names_correspondences.csv", function(error, namescorrespondences) {
+d3.csv("data/parties-may-2018.csv", function(error, partiesfinal) {
+d3.csv("data/department-names.csv", function(error, departmentnames) {
+d3.csv("data/parties-names.csv", function(error, partiesnames) {
 
 	$('#loader-container').hide();
 	declarations = data2.declarations.declaration;
-	pardep = data3;
-	parsen = data4;
+	//pardep = data3;
+	//parsen = data4;
 	representatives = data;
 	var currentYear = "2017";
 	
+	/* GET ONLY DEPUTIES AND SENATOR */
 	/*
 	var declaration_filtered = _.filter(declarations, function(dec, index) {
 	  return dec.general.qualiteMandat.codTypeMandatFichier == 'depute' || dec.general.qualiteMandat.codTypeMandatFichier == 'senateur' || dec.general.mandat.label.trim() == 'Député ou sénateur';
+	});
+	declarations = declaration_filtered;
+	*/
+	
+	/* GET ONLY NON DEPUTIES AND NON SENATOR */
+	/*
+	var declaration_filtered = _.filter(declarations, function(dec, index) {
+	  return dec.general.qualiteMandat.codTypeMandatFichier !== 'depute' && dec.general.qualiteMandat.codTypeMandatFichier !== 'senateur' && dec.general.mandat.label.trim() !== 'Député ou sénateur';
 	});
 	declarations = declaration_filtered;
 	*/
@@ -540,9 +551,11 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	removeDuplicates();
 	removeDuplicates();
 	*/
+	
 
 	
 	//Prepare new data
+	//console.log(declarations.length);
 	declarations.forEach(function (d) {
 		//Prepare main variables
 		d.name = d.general.declarant.prenom + " " + d.general.declarant.nom;
@@ -559,14 +572,13 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		d.birth_date = d.general.declarant.dateNaissance;
 		d.revenue = 0;
 		d.activities = 0;
-		//d.departement = "";
-		//d.departement_n = "";
 		d.departement;
+
 		if(d.general.organe && d.general.organe.labelOrgane){
 			d.departement = d.general.organe.labelOrgane.split("(")[0];
 		}
 		if(d.general.organe){
-		d.departement_n = d.general.organe.codeOrgane;
+			d.departement_n = d.general.organe.codeOrgane;
 		}
 		d.region = "";
 		d.mandat2 = d.general.qualiteMandat.typeMandat;
@@ -582,66 +594,54 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		if(d.mandat == "Député ou sénateur"){
 			d.mandat = d.mandat2;
 		}
-		
-		
-		//Get additional data about party for senators
-		if(cleanstring(d.mandat) == 'sénateur'){
-			d.thispardep = _.find(parsen, function (m) {return cleanstring(m.name + ' ' + m.lastname)==cleanstring(d.name)});
-			if(!d.thispardep){
-				d.thispardep = _.find(parsen, function (m) {
-					//Special cases
-					if(d.name == "JOURDA Muriel"){
-						return (cleanstringSpecial(m.name) + ' ' + cleanstringSpecial(m.lastname))=="muriel jourda";
-					}
-					if(d.name == "BOCKEL JEAN-MARIE"){
-						return (cleanstringSpecial(m.name) + ' ' + cleanstringSpecial(m.lastname))=="jean marie bockel";
-					}
 
-					return (cleanstringSpecial(m.name) + ' ' + cleanstringSpecial(m.lastname))==cleanstringSpecial(d.name)
-				});
-			}
-			if(d.thispardep){
-				d.parti_group = d.thispardep.groupe.trim();
-				d.parti = d.thispardep.parti.trim();
-			}	
-		} else {
-		//Get additional data about party for deputies
-			d.thispardep = _.find(pardep, function (m) {return cleanstring(m.name)==cleanstring(d.name)});
-			if(!d.thispardep){
-				d.thispardep = _.find(pardep, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(d.name)});
-			}
-			if(d.thispardep){
-				d.parti_group = d.thispardep.groupe.trim();
-				d.parti = d.thispardep.parti.trim();
-				d.name_show = d.thispardep.nameShow;
-				d.name = d.thispardep.nameShow;
-			}
+		//Get alternative name if available
+		var thisaltname = '';
+		thisaltname =  _.find(namescorrespondences, function (m) {return cleanstringSpecial(m.declaration_name)==cleanstringSpecial(d.name);});
+		//console.log(thisaltname);
+		//Get parties and departments from dataset of June 1st 2018
+		var thispartydata = _.find(partiesfinal, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(d.name);});
+		if(thisaltname && thisaltname.name && thisaltname.name != ''){
+			thispartydata = _.find(partiesfinal, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(thisaltname.name);});
 		}
-		
-		
+		//console.log(cleanstringSpecial(d.name) + ': '+thispartydata);
+		if(thispartydata){
+			d.parti = thispartydata.parti.trim();
+			d.parti_group = thispartydata.groupe.trim();
+			d.name_show = thispartydata.name;
+			d.departement_n = thispartydata.departement.trim();
+		}
 
-		//Get missing parties and departments (new data April 2018)
-		if(d.departement_n == "" || d.departement_n == "No data" || !d.departement_n || d.parti == "" || !d.parti){
-			var thisentry = _.find(partidepartments, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(d.name);});
-			if(thisentry){
-				d.departement_n = thisentry.departement.trim();
-				d.parti = thisentry.parti.trim();
-				d.parti_group = thisentry.groupe.trim();
+		if(!d.department || d.department == '' || d.department == undefined){
+			var thisdepname = _.find(departmentnames, function (m) {return d.departement_n==m.code;});
+			if(thisdepname){
+				d.department = thisdepname.name;
 			}
 		}
 
 		d.parti_group_m = d.parti_group;
 
+		d.parti_acronym = '';
+		var pacronym = _.find(partiesnames, function (m) {return cleanstringSpecial(m.party)==cleanstringSpecial(d.parti);});
+		if(pacronym){
+			d.parti_acronym = pacronym.abbreviation;
+		}
+
 		//Party for pie
 		var partiespielist = ['rem','lr','modem','lc','ng','fi','gdr','ni','ps'];
 		//'pcf'
-		if(partiespielist.indexOf(d.parti.toLowerCase()) < 0){
+		if(partiespielist.indexOf(d.parti_acronym.toLowerCase()) < 0){
 			d.parti_pie = 'Others';
 		} else {
-			d.parti_pie = d.parti;
+			d.parti_pie = d.parti_acronym;
 		}
 		//d.parti_pie = d.parti;
 		
+
+		//Deparment number fix
+		if(d.departement_n == '099' || d.departement_n == '998' || d.departement_n == 998){
+			d.departement_n = 99;
+		}
 		
 		//Calculate activities number and revenue
 		
@@ -879,7 +879,13 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	
   var ndx = crossfilter(data),  
 	  searchDim = ndx.dimension(function (d) {return d.searchstring;}),
-	  circ = ndx.dimension(function (d) {return d.departement_n;}),
+	  circ = ndx.dimension(function (d) {
+		if(d.departement_n && d.departement_n.length == 1){
+			return '0'+d.departement_n;
+		} else {
+			return d.departement_n;
+		}
+	  }),
 	  type = ndx.dimension(function (d) {return d.mandat;}),
 	  parti = ndx.dimension(function (d) {return d.parti;}),
 	  partig = ndx.dimension(function (d) {return d.parti_group_m;}),
@@ -1296,7 +1302,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
               },{
               "searchable": true,
               "orderable": true,
-              "width":"30%",
+              "width":"26%",
 			  "type":"name-lastname",
 			  "sClass": "table-uppercase",
               "targets": 1,
@@ -1453,7 +1459,11 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 		//Build modal body
 		var modalbody = '<div class="row"><div class="col-md-9">';
 		modalbody += '<div><label>Mandat:</label> '+repdata.mandat+'</div>';
-		modalbody += '<div><label>Département:</label> '+repdata.departement+' ('+repdata.departement_n+')</div>';
+		if(repdata.departement){
+			modalbody += '<div><label>Département:</label> '+repdata.departement+' ('+repdata.departement_n+')</div>';
+		} else {
+			modalbody += '<div><label>Département:</label> '+repdata.departement_n+'</div>';
+		}
 		modalbody += '<div><label>Activités annexes conservées:</label> '+repdata.activities+'</div>';
 		modalbody += '<div><label>Déclaration originale:</label> <a href="'+hatvp+'" target="_blank">Profil sur le site de la Haute Autorité pour la Transparence de la Vie Publique (HATVP)</a></div>';
 		modalbody += '</div><div class="col-md-3">'+ photo + '</div></div>';
@@ -1950,6 +1960,7 @@ d3.csv("data/parties-departments-2018.csv", function(error, partidepartments) {
 	$(".resetall").click();
 
 	});
+	})
 	})
 	})
   }) 
