@@ -493,11 +493,11 @@ function cleanstringSpecial(str) {
 
 d3.csv("data/parlementaires.csv", function(error, data) {
 //d3.json("data/declarations-2018-c.json", function(error2, data2) {
-d3.json("data/declarations-filtered.json", function(error2, data2) {
+d3.json("data/declarations-fixed.json", function(error2, data2) {
 d3.csv("data/names_correspondences.csv", function(error, namescorrespondences) {
-d3.csv("data/parties-may-2018.csv", function(error, partiesfinal) {
 d3.csv("data/department-names.csv", function(error, departmentnames) {
 d3.csv("data/parties-names.csv", function(error, partiesnames) {
+d3.csv("data/list-final.csv", function(error, listfinal) {
 
 	$('#loader-container').hide();
 	declarations = data2.declarations.declaration;
@@ -505,7 +505,41 @@ d3.csv("data/parties-names.csv", function(error, partiesnames) {
 	//parsen = data4;
 	representatives = data;
 	var currentYear = "2017";
+
+	/*
+	var listedPeople = ["Damien Abad","Caroline Abadie","Bérangère Abba","Jean-Félix Acquaviva","Damien Adam","Lénaïck Adam","Philippe Adnot","Saïd Ahamada","Éric Alauzet","Louis Aliot","Aude Amadou","Michel Amiel","Patrice Anato","François André","Pieyre-Alexandre Anglade","Emmanuelle Anthoine","Maurice Antiste","Jean-Philippe Ardouin","Christophe Arend","Stéphane Artano","Viviane Artigalas","Éliane Assassi","David Assouline","Gabriel Attal","Julien Aubert","Sophie Auconie","Clémentine Autain","Laetitia Avia","Joël Aviragnet","Serge Babary","Florian Bachelier","Delphine Bagarry","Didier Baichère","Erwan Balanant","Géraldine Bannier","Jean-Pierre Bansard","Frédéric Barbier","Ericka Bareigts","Julien Bargeton","Jean-Noël Barrot","Philippe Bas","Jérôme Bascher","Nathalie Bassire","Delphine Batho","Marie-Noëlle Battistel","Xavier Batut","Arnaud Bazin","Valérie Bazin-Malgras","Thibault Bazin","Sophie Beaudouin-Hubiere","Valérie Beauvais","Olivier Becht","Belkhir Belhaddad","Huguette Bello","Esther Benbassa","Justine Benin","Thierry Benoit","Aurore Bergé","Ugo Bernalicis","Philippe Berta","Martine Berthet","Alain Bertrand","Anne-Marie Bertrand","Hervé Berville","Grégory Besson-Moreau","Barbara Bessot Ballot","Gisèle Biémouret","Jacques Bigot","Joël Bigot","Bruno Bilde","Annick Billon","Jean Bizet","Anne Blanc","Christophe Blanchet","Yves Blein","Jean-Marie Bockel","Éric Bocquet","Pascal Bois","Philippe Bolo","Christine Bonfanti-Dossat","François Bonhomme","Bernard Bonne","Philippe Bonnecarrère","Bruno Bonnell","Émilie Bonnivard","Aude Bono-Vandorme","Jean-Yves Bony","Pascale Bories","Julien Borowczyk","Éric Bothorel","Yannick Botrel","Ian Boucard","Gilbert Bouchet","Jean-Claude Bouchet","Florent Boudié","Christophe Bouillon","Céline Boulay- Espéronnier","Brigitte Bourguignon","Jean-Louis Bourlanges","Pierre-Yves Bournazel","Bertrand Bouyx","Jean-Marc Boyer","Pascale Boyer","Valérie Boyer","Yaël Braun-Pivet","Marine Brenier","Xavier Breton","Guy Bricout","Jean-Louis Bricout","Jean-Jacques Bridey","Max Brisson","Blandine Brocard","Bernard Brochand","Moetai Brotherson","Vincent Bru","Anne Brugnera","Marie-Thérèse Bruguière","Danielle Brulebois","Fabrice Brun","Alain Bruneel","Anne-France Brunet","Stéphane Buchou","François-Noël Buffet","Marie-George Buffet","Carole Bureau-Bonnard","Henri Cabanel","Pierre Cabaré","Olivier Cadic","François Calvet","Céline Calvez","Christian Cambon","Agnès Canayer","Michel Canevet","Vincent Capo-Canellas","Emmanuel Capus","Thierry Carcenac","Jean-Noël Cardoux","Émilie Cariou","Maryse Carrère","Gilles Carrez","Luc Carvounas","Michel Castellani","Joseph Castelli","Anne-Laure Cattelot","Jacques Cattin","Lionel Causse","Alain Cazabonne","Danièle Cazarian","Samantha Cazebonne","Jean-René Cazeneuve","Sébastien Cazenove","Anthony Cellier","Jean-François Cesarini","Anne Chain-Larché","Patrick Chaize","Émilie Chalas","Philippe Chalumeau","Annie Chapelier","Pierre Charon","Sylvie Charrière","Fannette Charvier","André Chassaigne","Philippe Chassaing","Daniel Chasseing","Alain Chatillon","Marie-Christine Chauvin","Sébastien Chenu","Gérard Cherpion","Guillaume Chevrollier","Guillaume Chiche","Paul Christophe","Olivier Cigolotti","Dino Cinieri","Éric Ciotti","Stéphane Claireaux","Mireille Clapot","Jean-Michel Clément","Christine Cloarec","Laurence Cohen","Jean-Charles Colas-Roy","Fabienne Colboc","Gilbert Collard","Paul-André Colombani","Catherine Conconne","Hélène Conway-Mouret","Éric Coquerel","Alexis Corbière","Jean-Pierre Corbisez","Pierre Cordier","François Cormier-Bouligeon","Josiane Corneloup","Gérard Cornu","François Cornut-Gentille","Josiane Costes","Bérangère Couillard","Édouard Courtial","Michèle Crouzet","Jean-Pierre Cubertafon","Cécile Cukierman","Pierre Cuypers","Dominique Da Silva","Michel Dagbert","Philippe Dallier","Marie-Christine Dalloz","Olivier Damaisin","Yves Daniel","Ronan Dantec","Laure Darcos","Mathieu Darnaud","Olivier Dassault","Marc-Philippe Daubresse","Yves Daudigny","Alain David","Dominique David","Arnaud De Belenet","Marta De Cidrac","Charles de Courson","Yolaine de Courson","Claude de Ganay","Marie-Pierre De La Gontrie","Sonia De La Provôté","Laure de La Raudière","Charles de la Verpillière","Célia de Lavergne","Dominique De Legge","Amélie de Montchalin","Albéric De Montgolfier","Louis-Jean De Nicolaÿ","François de Rugy","Marielle de Sarnez","Jennifer De Temmerman","Michèle de Vaucouleurs","Jean-Pierre Decool","Bernard Deflesselles","Typhanie Degois","Vincent Delahaye","Marc Delatte","Rémi Delatte","Nathalie Delattre","Bernard Delcros","Annie Delmont-Koropoulis","Michel Delpon","Stéphane Demilly","Nicolas Démoulin","Michel Dennemont","Marguerite Deprez-Audebert","Catherine Deroche","Béatrice Descamps","Vincent Descoeur","Frédéric Descrozaille","Chantal Deseyne","Yves Détraigne","Gilbert-Luc Devinaz","Pierre Dharréville","Fabien Di Filippo","Catherine Di Folco","Christophe Di Pompeo","Éric Diard","Nassimah Dindar","Benjamin Dirx","Julien Dive","Jean-Baptiste Djebbari","Stéphanie Do","Élisabeth Doineau","Loïc Dombreval","Philippe Dominati","Jean-Pierre Door","Jeanine Dubié","Daniel Dubois","Jacqueline Dubois","Marianne Dubois","Christelle Dubos","Coralie Dubost","Nicole Dubré-Chirat","Virginie Duby-Muller","Audrey Dufeu Schubert","Jean-Paul Dufrègne","Catherine Dumas","Françoise Dumas","Frédérique Dumas","Laurence Dumont","Pierre-Henri Dumont","Philippe Dunoyer","Laurent Duplomb","Nicolas Dupont-Aignan","Stella Dupont","Jérôme Durain","Alain Duran","Bruno Duvergé","Vincent Éblé","M'jid El Guerrab","Sarah El Haïry","Jean-François Eliaou","Nathalie Elimas","Jean-Paul Émorine","Sophie Errante","Frédérique Espagnac","Nadia Essayan","Dominique Estrosi Sassone","Jacqueline Eustache-Brinio","Christophe Euzet","José Evrard","Catherine Fabre","Élise Fajgeles","Olivier Falorni","Michel Fanget","Daniel Fasquelle","Elsa Faucillon","Valéria Faure-Muntian","Olivier Faure","Jean-Michel Fauvergue","Yannick Favennec Becot","Françoise Férat","Rémi Féraud","Richard Ferrand","Jean-Jacques Ferrara","Marc Fesneau","Caroline Fiat","Jean-Luc Fichet","Jean-Marie Fiévet","Martine Filleul","Agnès Firmin Le Bodo","Isabelle Florennes","Philippe Folliot","Emmanuelle Fontaine-Domeizel","Pascale Fontenel-Personne","Michel Forissier","Nicolas Forissier","Paula Forteza","Bernard Fournier","Catherine Fournier","Alexandre Freschi","Pierre Frogier","Bruno Fuchs","Jean-Luc Fugit","Laurent Furst","Jean-Marc Gabouty","Olivier Gaillard","Albane Gaillot","Grégory Galbadon","Patricia Gallerneau","Laurent Garcia","Guillaume Garot","Joëlle Garriaud-Maylam","Thomas Gassilloud","Françoise Gatel","André Gattolin","Jean-Jacques Gaultier","Raphaël Gauvain","Fabien Gay","Laurence Gayte","Jacques Genest","Anne Genetet","Annie Genevard","Raphaël Gérard","Jordi Ginesta","Séverine Gipson","Éric Girardin","Joël Giraud","Colette Giudicelli","Olga Givernet","Claude Goasguen","Éric Gold","Philippe Gomès","Valérie Gomez-Bassac","Guillaume Gontard","Philippe Gosselin","Guillaume Gouffier-Cha","Nathalie Goulet","Perrine Goulet","Fabien Gouttefarde","Sylvie Goy-Chavent","Jean-Pierre Grand","Carole Grandjean","Florence Granjus","Romain Grau","Michelle Gréaume","Olivia Gregoire","Nadine Grelet-Certenais","Jean-Carles Grelier","François Grosdidier","Pascale Gruny","Émilie Guerel","Stanislas Guerini","Joël Guerriau","Marie Guévenoux","Jocelyne Guidez","Didier Guillaume","Annie Guillemot","Véronique Guillotin","Claire Guion-Firmin","David Habib","Meyer Habib","Nadia Hai","Véronique Hammerer","Brahim Hammouche","Laurence Harribey","Abdallah Hassani","Yannick Haury","Christine Hennion","Olivier Henno","Pierre Henriet","Michel Herbillon","Danièle Hérin","Antoine Herth","Christine Herzog","Patrick Hetzel","Alexandre Holroyd","Dimitri Houbron","Sacha Houlié","Jean-Michel Houllegatte","Alain Houpert","Jean-Raymond Hugonet","Philippe Huppé","Jean-François Husson","Christian Hutin","Sébastien Huyghe","Xavier Iacovelli","Monique Iborra","Corinne Imbert","Cyrille Isaac-Sibille","Christian Jacob","Jean-Michel Jacques","Élodie Jacquier-Laforge","Olivier Jacquin","Jean-Marie Janssens","Caroline Janvier","Victoire Jasmin","Yves Jégo","Christophe Jerretie","Sophie Joissains","François Jolivet","Patrice Joly","Bernard Jomier","Bruno Joncour","Sandrine Josso","Muriel Jourda","Mireille Jouve","Alain Joyandet","Régis Juanico","Hubert Julien-Laferriere","Sébastien Jumel","Mansour Kamardine","Catherine Kamowski","Patrick Kanner","Marietta Karamanli","Roger Karoutchi","Guillaume Kasbarian","Claudine Kauffmann","Stéphanie Kerbarh","Yannick Kerlogot","Claude Kern","Éric Kerrouche","Loïc Kervran","Fadila Khattabi","Anissa Khedher","Rodrigue Kokouendo","Jacques Krabal","Sonia Krimi","Aina Kuric","Brigitte Kuster","Mustapha Laabid","Daniel Labaronne","Joël Labbé","Bastien Lachaud","Valérie Lacroute","Laurent Lafon","Jean-Christophe Lagarde","Jean-Luc Lagleize","Jean-Louis Lagourgue","Fabien Lainé","Amal-Amélia Lakrafi","Bernard Lalande","François-Michel Lambert","Jérôme Lambert","Marc Laménie","Christine Lanfranchi Dorgal","Anne-Christine Lang","Mohamed Laqhila","Gérard Larcher","Frédérique Lardet","Michel Larive","Guillaume Larrivé","Jean-Charles Larsonneur","Jean Lassalle","Florence Lassarade","Florence Lasserre-David","Philippe Latombe","Michel Laugier","Daniel Laurent","Pierre Laurent","Nuihau Laurey","Michel Lauzzana","Christine Lavarde","Fiona Lazaar","Gaël Le Bohec","Sandrine Le Feur","Stéphane Le Foll","Marc Le Fur","Didier Le Gac","Gilles Le Gendre","Ronan Le Gleut","Constance Le Grip","Annaïg Le Meur","Jacques Le Nay","Nicole Le Peih","Marine Le Pen","Fabrice Le Vigoureux","Marie Lebec","Jean-Claude Leclabart","Sébastien Leclerc","Charlotte Lecocq","Jean-Yves Leconte","Jean-Paul Lecoq","Vincent Ledoux","Antoine Lefèvre","Martine Leguille-Balloy","Christophe Lejeune","Marion Lenne","Olivier Léonhardt","Henri Leroy","Maurice Leroy","Roland Lescure","Valérie Létard","Serge Letchimy","Martin Lévrier","Geneviève Levy","Brigitte Lherbier","Marie-Noëlle Lienemann","Monique Limon","Richard Lioger","Brigitte Liso","Anne-Catherine Loisier","Gérard Longuet","Vivette Lopez","Marie-France Lorho","David Lorion","Pierre Louault","Alexandra Louis","Véronique Louwagie","Jean-Jacques Lozach","Monique Lubin","Jean-Claude Luche","Aude Luquet","Victorin Lurel","Gilles Lurton","Marie-Ange Magne","Jacques-Bernard Magner","Lise Magnier","Sylvain Maillard","Laurence Maillart-Méhaignerie","Jacques Maire","Viviane Malet","Claude Malhuret","Josette Manin","Emmanuel Maquet","Jacqueline Maquet","Alain Marc","Frédéric Marchand","Didier Marie","Jacques Marilossian","Olivier Marleix","Franck Marlin","Sandra Marsaud","Hervé Marseille","Didier Martin","Denis Masséglia","Jean Louis Masson","Jean-Louis Masson","Max Mathiasin","Fabien Matras","Jean-Paul Mattei","Sereine Mauborgne","Hervé Maurey","Stéphane Mazars","Jean François Mbaye","Pierre Médevielle","Graziella Melchior","Jean-Luc Mélenchon","Colette Mélot","Emmanuelle Ménard","Ludovic Mendes","Franck Menonville","Gérard Menuel","Marie Mercier","Thomas Mesnier","Sophie Mette","Frédérique Meunier","Michelle Meunier","Sébastien Meurant","Marjolaine Meynier-Millefert","Philippe Michel-Kleisbauer","Monica Michel","Thierry Michels","Brigitte Micouleau","Patrick Mignola","Bruno Millienne","Alain Milon","Maxime Minot","Patricia Mirallès","Jean-Michel Mis","Jean-Marie Mizzon","Jean-Pierre Moga","Thani Mohamed Soilihi","Paul Molac","Marie-Pierre Monier","Franck Montaugé","Sandrine Mörch","Jean-Baptiste Moreau","Pierre Morel-À-L'Huissier","Adrien Morenas","Patricia Morhet-Richaud","Catherine Morin-Desailly","Jean-Marie Morisset","Cendra Motin","Philippe Mouiller","Naïma Moutchou","Cécile Muschotti","Philippe Nachbar","Sébastien Nadot","Christophe Naegelen","Jean-Philippe Nilor","Napole Polutele","Sébastien Leroux","Mickaël Nogal","Claude Nougein","Jérôme Nury","Delphine O","Claire O'Petit","Danièle Obono","Valérie Oppelt","Matthieu Orphelin","Catherine Osson","Pierre Ouzoulias","Olivier Paccaud","Jimmy Pahun","Ludovic Pajot","Xavier Paluszkiewicz","Bertrand Pancher","Sophie Panonacle","Mathilde Panot","Jean-Jacques Panunzi","Jean-François Parigi","Didier Paris","Zivka Park","Georges Patient","George Pau-Langevin","Éric Pauget","Philippe Paul","Cyril Pellevat","Hervé Pellois","Guillaume Peltier","Philippe Pemezec","Alain Perea","Marie-Françoise Perol-Dumont","Cédric Perrin","Patrice Perrot","Bernard Perrut","Pierre Person","Anne-Laurence Petel","Frédéric Petit","Maud Petit","Valérie Petit","Stéphane Peu","Bénédicte Peyrol","Michèle Peyron","Damien Pichereau","Stéphane Piednoir","Laurent Pietraszewski","François Pillet","Sylvia Pinel","Christine Pires Beaune","Béatrice Piron","Claire Pitollat","Gérard Poadja","Rémy Pointereau","Bérengère Poletti","Barbara Pompili","Jean-Pierre Pont","Jean-François Portarrieu","Dominique Potier","Benoit Potterie","Josy Poueyto","Éric Poulliat","Natalia Pouzyreff","Aurélien Pradié","Angèle Préville","Sophie Primas","Jean-Paul Prince","Christophe Priou","Catherine Procaccia","Loïc Prud'homme","Ramlati Ali","Joaquim Pueyo","Frédérique Puissat","François Pupponi","Adrien Quatennens","Didier Quentin","Bruno Questel","Valérie Rabault","Cathy Racon-Bouzon","Isabelle Raimond-Pavero","Michel Raison","Alain Ramadier","Nadia Ramassamy","Didier Rambaud","Richard Ramos","Pierre-Alain Raphan","Jean-François Rapin","Jean-Hugues Ratenon","Isabelle Rauch","Noëlle Rauscent","Stéphane Ravier","Claude Raynal","Rémy Rebeyrotte","Robin Reda","Frédéric Reiss","Jean-Luc Reitzer","Évelyne Renaud-Garabedian","Hugues Renson","Jean-Claude Requier","Muriel Ressiguier","Bruno Retailleau","Charles Revet","Bernard Reynès","Alain Richard","Franck Riester","Cécile Rilhac","Véronique Riotton","Stéphanie Rist","Marie-Pierre Rixain","Mireille Robert","Sylvie Robert","Thierry Robert","Gilbert Roger","Vincent Rolland","Laëtitia Romeiro Dias","Xavier Roseren","Laurianne Rossi","Laurence Rossignol","Gwendal Rouillard","Cédric Roussel","Fabien Roussel","Sabine Rubin","Thomas Rudigoz","François Ruffin","Pacôme Rupin","Martial Saddier","Maina Sage","Laurent Saint-Martin","Laetitia Saint-Paul","Denise Saint-Pé","Nicole Sanquer","Nathalie Sarles","Hervé Saulignac","Hugues Saury","René-Paul Savary","Jacques Savatier","Michel Savin","Pascal Savoldelli","Raphaël Schellenberger","Alain Schmitz","Jean-Bernard Sempastous","Jean-Marie Sermier","Olivier Serva","Gabriel Serville","Bruno Sido","Benoit Simian","Jean Sol","Thierry Solère","Nadia Sollogoub","Denis Sommer","Joachim Son-Forget","Bertrand Sorre","Éric Straumann","Bruno Studer","Jean-Pierre Sueur","Sira Sylla","Michèle Tabarot","Aurélien Taché","Sophie Taillé-Polian","Marie Tamarelle-Verhaeghe","Buon Tan","Liliana Tanguy","Adrien Taquet","Jean-Charles Taugourdeau","Bénédicte Taurine","Guy Teissier","Rachid Temal","Jean Terlier","Stéphane Testé","Lana Tetuanui","Dominique Théophile","Vincent Thiébaut","Agnès Thill","Sabine Thillaye","Claudine Thomas","Valérie Thomas","Alice Thourot","Huguette Tiegna","Jean-Claude Tissot","Nelly Tocqueville","Jean-Marc Todeschini","Jean-Louis Touraine","Alain Tourret","Élisabeth Toutut-Picard","Laurence Trastour-Isnart","Nicole Trisse","Catherine Troendlé","Stéphane Trompille","Frédérique Tuffnell","Nicolas Turquois","Cécile Untermaier","Hélène Vainqueur-Christophe","Isabelle Valentin","Alexandra Valetta Ardisson","Raymond Vall","Boris Vallaud","André Vallini","Manuel Valls","Sabine Van Heghe","Laurence Vanceunebrock-Mialon","Jean-Marie Vanlerenberghe","Michel Vaspart","Pierre Vatin","Yannick Vaugrenard","Olivier Véran","Francis Vercamer","Patrice Verchère","Marie-Christine Verdier-Jouclas","Sylvie Vermeillet","Arnaud Viala","Michel Vialay","Laurence Vichnievsky","Annie Vidal","Jean-Pierre Vigier","Philippe Vigier","Patrick Vignal","Corinne Vignon","Cédric Villani","André Villiers","Stéphane Viry","Jean Pierre Vogel","Guillaume Vuilletet","Michèle Vullien","Jean-Luc Warsmann","Sylvain Waserman","Dominique Watrin","Dany Wattebled","Éric Woerth","Martine Wonner","Hubert Wulfranc","Hélène Zannier","Jean-Marc Zulesi","Michel Zumkeller"];
 	
+	listedPeople.forEach(function (d) {
+		var thisaltname1 =  _.find(namescorrespondences, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(d);});
+		if(thisaltname1){
+			listedPeople.push(thisaltname1.declaration_name);
+		}
+	});
+	*/
+
+	var timestamps = [];
+	var matchedtimestamps = [];
+
+	listfinal.forEach(function (d) {
+		timestamps.push(d.timestamp);
+	});
+
+	/* GET ONLY PEOPLE FROM LISTED TIMESTAMPS */
+	var declaration_filtered = _.filter(declarations, function(dec, index) {
+	  return timestamps.indexOf(dec.dateDepot) > -1;
+	});
+	declarations = declaration_filtered;
+
+	/* GET ONLY PEOPLE FROM LIST */
+	/*
+	var missing = [];
+	var declaration_filtered = _.filter(declarations, function(dec, index) {
+	  return listedPeople.indexOf(dec.general.declarant.prenom + " " + dec.general.declarant.nom) > -1;
+	});
+	declarations = declaration_filtered;
+	*/
+
+
 	/* GET ONLY DEPUTIES AND SENATOR */
 	/*
 	var declaration_filtered = _.filter(declarations, function(dec, index) {
@@ -552,13 +586,19 @@ d3.csv("data/parties-names.csv", function(error, partiesnames) {
 	removeDuplicates();
 	*/
 	
+	/*
+	missinglist.forEach(function (d, index){
+		console.log(d);
+		missinglist[index] = cleanstringSpecial(d);
+	});
+	*/
 
-	
 	//Prepare new data
 	//console.log(declarations.length);
 	declarations.forEach(function (d) {
 		//Prepare main variables
 		d.name = d.general.declarant.prenom + " " + d.general.declarant.nom;
+
 		d.name_show = d.name;
 		d.civilite = cleanstring(d.general.declarant.civilite);
 
@@ -595,6 +635,7 @@ d3.csv("data/parties-names.csv", function(error, partiesnames) {
 			d.mandat = d.mandat2;
 		}
 
+		/*
 		//Get alternative name if available
 		var thisaltname = '';
 		thisaltname =  _.find(namescorrespondences, function (m) {return cleanstringSpecial(m.declaration_name)==cleanstringSpecial(d.name);});
@@ -604,6 +645,11 @@ d3.csv("data/parties-names.csv", function(error, partiesnames) {
 		if(thisaltname && thisaltname.name && thisaltname.name != ''){
 			thispartydata = _.find(partiesfinal, function (m) {return cleanstringSpecial(m.name)==cleanstringSpecial(thisaltname.name);});
 		}
+		*/
+
+		
+		var thispartydata = _.find(listfinal, function (m) {return m.timestamp == d.dateDepot;});
+
 		//console.log(cleanstringSpecial(d.name) + ': '+thispartydata);
 		if(thispartydata){
 			d.parti = thispartydata.parti.trim();
@@ -850,7 +896,15 @@ d3.csv("data/parties-names.csv", function(error, partiesnames) {
 
 		
 	});
-	
+
+	var unmatched = [];
+	timestamps.forEach(function (tt) {
+		if(matchedtimestamps.indexOf(tt) < 0){
+			unmatched.push(tt);
+		}
+	});
+	console.log(unmatched);
+
 	data = declarations;
 	
 	data.forEach(function (d) {	
