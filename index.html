@@ -630,10 +630,6 @@ d3.csv("data/list-final.csv", function(error, listfinal) {
 		d.partsoc = "NON";
 		
 		d.collabNum = 0;
-		
-		if(d.mandat == "Député ou sénateur"){
-			d.mandat = d.mandat2;
-		}
 
 		/*
 		//Get alternative name if available
@@ -656,6 +652,18 @@ d3.csv("data/list-final.csv", function(error, listfinal) {
 			d.parti_group = thispartydata.groupe.trim();
 			d.name_show = thispartydata.name;
 			d.departement_n = thispartydata.departement.trim();
+			if(!d.general.qualiteMandat.typeMandat){
+				//console.log(thispartydata.mandatHATPV);
+				d.mandat2 = thispartydata.mandatHATPV;
+				if(d.mandat2 == 'depute'){
+					d.mandat2 = 'Député';
+				} else if(d.mandat2 == 'senateur'){
+					d.mandat2 = 'Sénateur';
+				}
+			}
+		}
+		if(d.mandat == "Député ou sénateur"){
+			d.mandat = d.mandat2;
 		}
 
 		if(!d.department || d.department == '' || d.department == undefined){
@@ -897,13 +905,14 @@ d3.csv("data/list-final.csv", function(error, listfinal) {
 		
 	});
 
+	/*
 	var unmatched = [];
 	timestamps.forEach(function (tt) {
 		if(matchedtimestamps.indexOf(tt) < 0){
 			unmatched.push(tt);
 		}
 	});
-	console.log(unmatched);
+	*/
 
 	data = declarations;
 	
@@ -1813,7 +1822,7 @@ d3.csv("data/list-final.csv", function(error, listfinal) {
 		if(type[0] == 'S'){
 			var photourl = "http://www.nossenateurs.fr/senateur/photo/"+slug+"/180";
 			copyr = "©Sénat – 2015";
-		} else if(type[0] == 'A'){
+		} else if(type[0] == 'D'){
 			var photourl = "http://www.nosdeputes.fr/depute/photo/"+slug+"/180";
 			copyr = "©Assemblée-nationale – 2015";
 		}
