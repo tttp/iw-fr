@@ -493,14 +493,16 @@ function cleanstringSpecial(str) {
 }
 
 d3.csv("data/parlementaires.csv", function(error, data) {
-d3.json("data/declarations-fixed.json", function(error2, data2) {
+d3.json("data/declarations-timestampfiltered-2019.json", function(error2, data2) {
+//d3.json("data/declarations.json", function(error2, data2) {
 d3.csv("data/department-names.csv", function(error, departmentnames) {
 d3.csv("data/parties-names.csv", function(error, partiesnames) {
-d3.csv("data/list-final.csv", function(error, listfinal) {
+d3.csv("data/list-final-300119.csv", function(error, listfinal) {
 d3.csv("data/missing-senators.csv", function(error, missingsenators) {
 
 	$('#loader-container').hide();
 	declarations = data2.declarations.declaration;
+	
 	representatives = data;
 	var currentYear = "2017";
 
@@ -512,10 +514,12 @@ d3.csv("data/missing-senators.csv", function(error, missingsenators) {
 	});
 
 	/* GET ONLY PEOPLE FROM LISTED TIMESTAMPS */
+	
 	var declaration_filtered = _.filter(declarations, function(dec, index) {
 	  return timestamps.indexOf(dec.dateDepot) > -1;
 	});
 	declarations = declaration_filtered;
+	console.log(declarations.length);
 
 	//Adding missing senators from csv to json structure
 	missingsenators.forEach(function (d) {
@@ -538,8 +542,6 @@ d3.csv("data/missing-senators.csv", function(error, missingsenators) {
 			"departement_n": d.departement,
 			"convertedFromCSV": true
 		};
-		console.log(newObj);
-		console.log(d.departement);
 		declarations.push(newObj);
 
 	});
@@ -582,8 +584,6 @@ d3.csv("data/missing-senators.csv", function(error, missingsenators) {
 			d.parti_group = "";
 		}
 		
-
-		
 		d.activcons = "NON";
 		d.partsoc = "NON";
 		
@@ -597,7 +597,6 @@ d3.csv("data/missing-senators.csv", function(error, missingsenators) {
 			d.name_show = thispartydata.name;
 			d.departement_n = thispartydata.departement.trim();
 			if(!d.general.qualiteMandat.typeMandat){
-				//console.log(thispartydata.mandatHATPV);
 				d.mandat2 = thispartydata.mandatHATPV;
 			}
 		}
@@ -657,62 +656,62 @@ d3.csv("data/missing-senators.csv", function(error, missingsenators) {
 		d.participationFinanciere = [];
 		
 		d.activCollaborateurs = [];
+
+		if(d.activConsultantDto && d.activConsultantDto.items && d.activConsultantDto.items[0] && d.activConsultantDto.items[0].items){
+			if(d.activConsultantDto.items[0].items.motif){
+				d.activConsultant.push(d.activConsultantDto.items[0].items);
+			} else {
+				d.activConsultant = d.activConsultantDto.items[0].items;
+			}
+		}
+		if(d.activProfCinqDerniereDto && d.activProfCinqDerniereDto.items && d.activProfCinqDerniereDto.items[0] && d.activProfCinqDerniereDto.items[0].items){
+			if(d.activProfCinqDerniereDto.items[0].items.motif){
+				d.activConsultant.push(d.activProfCinqDerniereDto.items[0].items);
+			} else {
+				d.activProfCinqDerniere = d.activProfCinqDerniereDto.items[0].items;
+			}
+		}
+		if(d.activProfConjointDto && d.activProfConjointDto.items && d.activProfConjointDto.items[0] && d.activProfConjointDto.items[0].items){
+			if(d.activProfConjointDto.items[0].items.motif){
+				d.activProfConjoint.push(d.activProfConjointDto.items[0].items);
+			} else {
+				d.activProfConjoint = d.activProfConjointDto.items[0].items;
+			}
+		}
+		if(d.fonctionBenevoleDto && d.fonctionBenevoleDto.items && d.fonctionBenevoleDto.items[0] && d.fonctionBenevoleDto.items[0].items){
+			if(d.fonctionBenevoleDto.items[0].items.motif){
+				d.fonctionBenevole.push(d.fonctionBenevoleDto.items[0].items);
+			} else {
+				d.fonctionBenevole = d.fonctionBenevoleDto.items[0].items;
+			}
+		}
+		if(d.mandatElectifDto && d.mandatElectifDto.items && d.mandatElectifDto.items[0] && d.mandatElectifDto.items[0].items){
+			if(d.mandatElectifDto.items[0].items.motif){
+				d.mandatElectif.push(d.mandatElectifDto.items[0].items);
+			} else {
+				d.mandatElectif = d.mandatElectifDto.items[0].items;
+			}
+		}
+		if(d.participationDirigeantDto && d.participationDirigeantDto.items && d.participationDirigeantDto.items[0] && d.participationDirigeantDto.items[0].items){
+			if(d.participationDirigeantDto.items[0].items.motif){
+				d.participationDirigeant.push(d.participationDirigeantDto.items[0].items);
+			} else {
+				d.participationDirigeant = d.participationDirigeantDto.items[0].items;
+			}
+		}
+		if(d.participationFinanciereDto && d.participationFinanciereDto.items && d.participationFinanciereDto.items[0] && d.participationFinanciereDto.items[0].items){
+			if(d.participationFinanciereDto.items[0].items.motif){
+				d.participationFinanciere.push(d.participationFinanciereDto.items[0].items);
+			} else {
+				d.participationFinanciere = d.participationFinanciereDto.items[0].items;
+			}
+		}
 		
-		if(d.activConsultantDto && d.activConsultantDto.items && d.activConsultantDto.items.items){
-			if(d.activConsultantDto.items.items.motif){
-				d.activConsultant.push(d.activConsultantDto.items.items);
+		if(d.activCollaborateursDto && d.activCollaborateursDto.items && d.activCollaborateursDto.items[0] && d.activCollaborateursDto.items[0].items){
+			if(d.activCollaborateursDto.items[0].items.motif){
+				d.activCollaborateurs.push(d.activCollaborateursDto.items[0].items);
 			} else {
-				d.activConsultant = d.activConsultantDto.items.items;
-			}
-		}
-		if(d.activProfCinqDerniereDto && d.activProfCinqDerniereDto.items && d.activProfCinqDerniereDto.items.items){
-			if(d.activProfCinqDerniereDto.items.items.motif){
-				d.activConsultant.push(d.activProfCinqDerniereDto.items.items);
-			} else {
-				d.activProfCinqDerniere = d.activProfCinqDerniereDto.items.items;
-			}
-		}
-		if(d.activProfConjointDto && d.activProfConjointDto.items && d.activProfConjointDto.items.items){
-			if(d.activProfConjointDto.items.items.motif){
-				d.activProfConjoint.push(d.activProfConjointDto.items.items);
-			} else {
-				d.activProfConjoint = d.activProfConjointDto.items.items;
-			}
-		}
-		if(d.fonctionBenevoleDto && d.fonctionBenevoleDto.items && d.fonctionBenevoleDto.items.items){
-			if(d.fonctionBenevoleDto.items.items.motif){
-				d.fonctionBenevole.push(d.fonctionBenevoleDto.items.items);
-			} else {
-				d.fonctionBenevole = d.fonctionBenevoleDto.items.items;
-			}
-		}
-		if(d.mandatElectifDto && d.mandatElectifDto.items && d.mandatElectifDto.items.items){
-			if(d.mandatElectifDto.items.items.motif){
-				d.mandatElectif.push(d.mandatElectifDto.items.items);
-			} else {
-				d.mandatElectif = d.mandatElectifDto.items.items;
-			}
-		}
-		if(d.participationDirigeantDto && d.participationDirigeantDto.items && d.participationDirigeantDto.items.items){
-			if(d.participationDirigeantDto.items.items.motif){
-				d.participationDirigeant.push(d.participationDirigeantDto.items.items);
-			} else {
-				d.participationDirigeant = d.participationDirigeantDto.items.items;
-			}
-		}
-		if(d.participationFinanciereDto && d.participationFinanciereDto.items && d.participationFinanciereDto.items.items){
-			if(d.participationFinanciereDto.items.items.motif){
-				d.participationFinanciere.push(d.participationFinanciereDto.items.items);
-			} else {
-				d.participationFinanciere = d.participationFinanciereDto.items.items;
-			}
-		}
-		
-		if(d.activCollaborateursDto && d.activCollaborateursDto.items && d.activCollaborateursDto.items.items){
-			if(d.activCollaborateursDto.items.items.motif){
-				d.activCollaborateurs.push(d.activCollaborateursDto.items.items);
-			} else {
-				d.activCollaborateurs = d.activCollaborateursDto.items.items;
+				d.activCollaborateurs = d.activCollaborateursDto.items[0].items;
 			}
 		}
 		
