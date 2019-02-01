@@ -523,6 +523,8 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 
 	//Adding missing senators from csv to json structure
 	missingsenators.forEach(function (d) {
+		var thisname = d.name.split(' ')[0];
+		var thislastname = d.name.split(' ')[1];
 		var newObj = {
 			"general": {
 				"mandat": { "label": "Député ou sénateur" },
@@ -531,8 +533,8 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 				},
 				"declarant": {
 					"civilite": d.civilite,
-					"nom": d.name,
-					"prenom": "",
+					"nom": thislastname,
+					"prenom": thisname,
 					"dateNaissance": "",
 				}
 			},
@@ -588,10 +590,16 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 		d.partsoc = "NON";
 		
 		d.collabNum = 0;
+		d.name_url = '';
 		
 		var thispartydata = _.find(listfinal, function (m) {return m.timestamp == d.dateDepot;});
 
+
 		if(thispartydata){
+			d.name_url = thispartydata.file.split('-dia')[0];
+			if(thispartydata.file.indexOf('romeiro-dias-laetitia') > -1){
+				d.name_url = 'romeiro-dias-laetitia';
+			}
 			d.parti = thispartydata.parti.trim();
 			d.parti_group = thispartydata.groupe.trim();
 			d.name_show = thispartydata.name;
@@ -1449,7 +1457,7 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 		$('#repModal .modal-title').html(repdata.name);
 		var photo = getPhoto(repdata.name,repdata.mandat);
 		var profile = getProfile(repdata.name,repdata.mandat,repdata.uid);
-		var hatvp = getHatvp(repdata.name);
+		var hatvp = getHatvp(repdata.name, repdata.name_url);
 		
 		//Output X if the activity is conservée
 		function boolToX(conservee){
@@ -1747,15 +1755,18 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 		return url;
 	}
 	
-	var getHatvp = function(name){
-		var plainname = removeDiacritics(name);
-		
-		var name1 = plainname.substr(0,plainname.indexOf(' '));
-		var name2 = plainname.substr(plainname.indexOf(' ')+1);
-		var name2 = name2.replace(/ /g, '-');
-		var slug = name2+'-'+name1;		
-
-		slug = slug.toLowerCase();
+	var getHatvp = function(name, name_url){
+		var slug = '';
+		if(name_url.length > 1){
+			slug = name_url;
+		} else {
+			var plainname = removeDiacritics(name);
+			var name1 = plainname.substr(0,plainname.indexOf(' '));
+			var name2 = plainname.substr(plainname.indexOf(' ')+1);
+			var name2 = name2.replace(/ /g, '-');
+			slug = name2+'-'+name1;		
+			slug = slug.toLowerCase();
+		}
 		if(slug == 'yonnet-salvator-evelyne'){
 		 slug = 'yonnet-evelyne';
 		}
