@@ -493,15 +493,16 @@ function cleanstringSpecial(str) {
 }
 
 d3.csv("data/parlementaires.csv", function(error, data) {
-d3.json("data/declarations-timestampfiltered-2019.json", function(error2, data2) {
+d3.json("data/declarations-filtered-2019.json", function(error2, data2) {
 //d3.json("data/declarations.json", function(error2, data2) {
 d3.csv("data/department-names.csv", function(error, departmentnames) {
 d3.csv("data/parties-names.csv", function(error, partiesnames) {
-d3.csv("data/list-final-300119.csv", function(error, listfinal) {
+d3.csv("data/list-final-040219.csv", function(error, listfinal) {
 d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 
 	$('#loader-container').hide();
 	declarations = data2.declarations.declaration;
+	console.log(declarations.length);
 	
 	representatives = data;
 	var currentYear = "2017";
@@ -519,7 +520,7 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 	  return timestamps.indexOf(dec.dateDepot) > -1;
 	});
 	declarations = declaration_filtered;
-	console.log(declarations.length);
+	console.log(declarations);
 
 	//Adding missing senators from csv to json structure
 	missingsenators.forEach(function (d) {
