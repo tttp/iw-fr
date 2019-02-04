@@ -46,6 +46,28 @@
 tr.header th.header {
 	font-size: 12px;
 }
+.table-info-btn {
+	display: block;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background: rgb(93, 93, 93);
+	color: rgb(255, 255, 255);
+	border-radius: 30px;
+	font-style: italic;
+	width: 19px;
+	height: 19px;
+	padding: 0px 6px;
+	font-size: 14px;
+}
+#table-info-modal .details_modal_body {
+	text-align: center;
+	font-size: 20px;
+	padding-top: 10px;
+}
+#table-info-modal .modal-content {
+	padding: 5px;
+}
 </style>
 
 </head>
@@ -210,7 +232,6 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 			<div class="parti-ni">NI</div>
 			<div class="ni">Autres/Unknown</div>
 			
-			
 		</div>
 		<br class="clear" />
 	</div>
@@ -281,11 +302,12 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 						<th class="header">Nom</th>
 						<th class="header">Département</th>
 						<th class="header">Mandat</th>
-						<th class="header">Parti politique de rattachement</th>
-						<th class="header">Groupe parlementaire de rattachement</th>
+						<th class="header">Parti politique de rattachement <span class="table-info-btn">i</span></th>
+						<th class="header">Groupe parlementaire de rattachement <span class="table-info-btn">i</span></th>
 						<th class="header">Activités annexes conservées</th>
 						<th class="header">Détention de participations financières</th>
-						<th class="header">Activités annexes des collaborateurs</th>						
+						<th class="header">Activités annexes des collaborateurs</th>	
+						<th class="header">Date de dépôt de la dernière déclaration</th>	
 					</tr>
 				</thead>
 			</table>
@@ -297,7 +319,6 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 <!-- Modal -->
 <div id="repModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
-
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header details_modal">
@@ -311,7 +332,21 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
+  </div>
+</div>
 
+<!-- Modal table info -->
+<div id="table-info-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header details_modal">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body details_modal_body">
+        <a href="about.html#source">Sources des données</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -356,6 +391,10 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     }
 } );
 
+$('.table-info-btn').click(function() {
+//Source des données
+$('#table-info-modal').modal('show');
+});
 
 $('#view_charts').click(function(ev) {
 	ev.preventDefault();
@@ -1308,7 +1347,7 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
               },{
               "searchable": true,
               "orderable": true,
-              "width":"26%",
+              "width":"22%",
 			  "type":"name-lastname",
 			  "sClass": "table-uppercase",
               "targets": 1,
@@ -1384,6 +1423,18 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 					return "";
 				} else {
 					return row.collabNum;
+				}
+                } 
+              },{
+              "defaultContent":"No data",
+              "searchable": false,
+              "orderable": true,
+              "targets": 9,
+              data: function (row, type, val, meta) { 
+				if(row.dateDepot){
+					return row.dateDepot.split(' ')[0];
+				} else {
+					return '/';
 				}
                 } 
               }
