@@ -82,7 +82,23 @@ tr.header th.header {
 	color: #eee;
 }
 </style>
-
+<script type="text/javascript">
+	var dmy = d3.time.format("%d/%m/%Y");
+	//var dmy = d3.time.format("%m/%d/%Y");
+	jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+		"date-eu-pre": function ( date ) {
+			return dmy.parse(date);
+		},
+	
+		"date-eu-asc": function ( a, b ) {
+			return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+		},
+	
+		"date-eu-desc": function ( a, b ) {
+			return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+		}
+	});
+</script>
 </head>
 
 <body>
@@ -1445,12 +1461,13 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
               "defaultContent":"No data",
               "searchable": false,
               "orderable": true,
+			  "type":"date-eu",
               "targets": 9,
               data: function (row, type, val, meta) { 
 				if(row.dateDepot){
 					return row.dateDepot.split(' ')[0];
 				} else {
-					return '/';
+					return '';
 				}
                 } 
               }
