@@ -72,6 +72,7 @@ tr.header th.header {
 	background: rgb(107, 174, 214);;
 	color: #000;
 	padding: 3px 10px;
+  text-align: right;
 }
 .above-table-bar a {
 	color: #fff;
@@ -325,7 +326,7 @@ Simple d’utilisation, il suffit de cliquer sur les éléments des infographies
 				</div>
 			</div>
 			<div class="above-table-bar">
-				<a href="about.html#recommandations">Que signifie ces données et comment les interpréter ?</a>
+				<a href="about.html#recommandations">Que signifient ces données et comment les interpréter ?</a>
 			</div>
 			<table class="table table-hover dc-data-grid tablesorter-bootstrap">
 				<thead>
@@ -624,6 +625,10 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 	declarations.forEach(function (d) {
 		//Prepare main variables
 		d.name = d.general.declarant.prenom + " " + d.general.declarant.nom;
+    if(d.name == 'Robert Del'){
+      d.name = 'Robert Del Picchia';
+    }
+    
 
 		d.name_show = d.name;
 		d.civilite = cleanstring(d.general.declarant.civilite);
@@ -974,7 +979,7 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 	  revenueRange = ndx.dimension(function (d) {return d.revenue_range;}),
 	  typeGroup = type.group().reduceSum(function(d) {return 1;}),
 	  circGroup = circ.group().reduceSum(function(d) {return 1;}),
-	  civiliteGroup = civilite.group().reduceSum(function(d) {return 1;}),
+	  civiliteGroup = civilite.group().reduceSum(function(d) { return 1; }),
 	  partiGroup = parti.group().reduceSum(function(d) {return 1;}),
 	  partigGroup = partig.group().reduceSum(function(d) {return 1;}),
 	  partiPieGroup = partipie.group().reduceSum(function(d) {return 1;}),
@@ -1263,6 +1268,9 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 			}
 		})
 		*/
+    .data(function(group) {
+      return group.all().filter(function(kv) { return kv.key != ""; });
+    })
 		.group(civiliteGroup);
 		
 	  pie2.on('filtered.monitor', function(chart, filter) {
@@ -1855,6 +1863,9 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 		if(slug == 'yonnet-salvator-evelyne'){
 		 slug = 'yonnet-evelyne';
 		}
+    if(slug == 'anthoine-emmanuelle'){
+      slug = 'anthoine-emmanuelle-571';
+    }
 		//var url = "http://www.hatvp.fr/page-nominative/?urldeclaration="+slug+'.html';
 		var url = "http://www.hatvp.fr/fiche-nominative/?declarant="+slug;
 		return url;
