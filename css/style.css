@@ -1198,8 +1198,9 @@ div.range .pie-slice {fill:#333 ;}
 }
 
 #menu li{
-	margin-bottom: .5em;
+	margin-bottom: 0;
 	list-style: none;
+  font-size: 12px;
 }
 
 #menu li a{
@@ -1477,7 +1478,7 @@ noneedanymore.categorie svg {height:340px;}
 	  margin: 30px 0 15px 0;
   }
   .about-page h1 {
-	  margin-top: 40px !important;
+	  margin-top: 0px !important;
   }
   
  
