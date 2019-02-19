@@ -1560,12 +1560,29 @@ d3.csv("data/missing-senators-2019.csv", function(error, missingsenators) {
 			return "";
 		}
 		//Generate list of revenues inverting the order to have most recent on top
+    //Commented out variant for structure montant.montant that changed to montant[0].montant[0] ...
+    /*
 		function revenusList(remuneration){
+      console.log(remuneration);
 			var remunerationText = "";
 			if(remuneration.montant.montant && remuneration.montant.montant.annee){
 				remunerationText = remuneration.montant.montant.annee + ': '+remuneration.montant.montant.montant+'<br />' + remunerationText;
 			} else if(remuneration.montant.montant && remuneration.montant.montant.length > 0){
 				remuneration.montant.montant.forEach(function (x) {
+					remunerationText = x.annee + ': '+x.montant+'<br />' + remunerationText;
+				});
+			}
+			return remunerationText;
+		}
+    */
+
+    function revenusList(remuneration){
+      console.log(remuneration);
+			var remunerationText = "";
+			if(remuneration.montant[0].montant && remuneration.montant[0].montant.annee){
+				remunerationText = remuneration.montant[0].montant.annee + ': '+remuneration.montant[0].montant.montant+'<br />' + remunerationText;
+			} else if(remuneration.montant[0].montant && remuneration.montant[0].montant.length > 0){
+				remuneration.montant[0].montant.forEach(function (x) {
 					remunerationText = x.annee + ': '+x.montant+'<br />' + remunerationText;
 				});
 			}
